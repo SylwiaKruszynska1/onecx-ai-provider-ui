@@ -1,4 +1,4 @@
-import { DataTableColumn } from '@onecx/portal-integration-angular'
+import { DataTableColumn } from '@onecx/angular-accelerator'
 import { Provider } from 'src/app/shared/generated'
 import { ProviderSearchCriteria } from './provider-search.parameters'
 

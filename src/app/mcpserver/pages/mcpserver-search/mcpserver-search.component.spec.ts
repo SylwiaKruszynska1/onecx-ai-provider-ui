@@ -11,14 +11,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import {
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  ColumnType,
-  DiagramType,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { BreadcrumbService, ColumnType, DiagramType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { MCPServerSearchActions } from './mcpserver-search.actions'
@@ -48,8 +43,8 @@ describe('MCPServerSearchComponent', () => {
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -103,7 +98,7 @@ describe('MCPServerSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [MCPServerSearchComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
@@ -292,7 +287,6 @@ describe('MCPServerSearchComponent', () => {
     })
     component.mcpserverSearchFormGroup = formValue
 
-
     component.search(formValue)
 
     expect(store.dispatch).toHaveBeenCalledWith(
@@ -356,9 +350,7 @@ describe('MCPServerSearchComponent', () => {
 
     await editButtons[0].click()
 
-    expect(store.dispatch).toHaveBeenCalledWith(
-      MCPServerSearchActions.detailsButtonClicked({ id: '1' })
-    )
+    expect(store.dispatch).toHaveBeenCalledWith(MCPServerSearchActions.detailsButtonClicked({ id: '1' }))
   })
 
   it('should dispatch diagramComponentStateChanged action on diagram mode changes', async () => {
@@ -400,7 +392,7 @@ describe('MCPServerSearchComponent', () => {
     store.refreshState()
 
     const interactiveDataView = await mcpserverSearch.getSearchResults()
-      ; (await (await interactiveDataView.getDataLayoutSelection()).getTableLayoutSelectionButton())?.click()
+    ;(await (await interactiveDataView.getDataLayoutSelection()).getTableLayoutSelectionButton())?.click()
 
     const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
     expect(columnGroupSelector).toBeTruthy()

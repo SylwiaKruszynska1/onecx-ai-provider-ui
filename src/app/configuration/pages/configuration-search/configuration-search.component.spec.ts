@@ -10,15 +10,10 @@ import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import {
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  ColumnType,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule,
-  RowListGridData,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { BreadcrumbService, ColumnType, RowListGridData } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ConfigurationSearchActions } from './configuration-search.actions'
@@ -40,7 +35,7 @@ describe('ConfigurationSearchComponent', () => {
 
   const baseConfigurationSearchViewModel: ConfigurationSearchViewModel = {
     columns: configurationSearchColumns,
-    searchCriteria: {    
+    searchCriteria: {
       name: '',
       description: ''
     },
@@ -58,7 +53,7 @@ describe('ConfigurationSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ConfigurationSearchComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
@@ -240,7 +235,6 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch editConfigurationButtonClicked action on item edit click', async () => {
-
     store.overrideSelector(selectConfigurationSearchViewModel, {
       ...baseConfigurationSearchViewModel,
       results: [
@@ -281,7 +275,6 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch createConfigurationButtonClicked action on create click', async () => {
-
     const header = await ConfigurationSearch.getHeader()
     const createButton = await (await header.getPageHeader()).getInlineActionButtonByIcon(PrimeIcons.PLUS)
 
@@ -293,7 +286,9 @@ describe('ConfigurationSearchComponent', () => {
 
   it('should dispatch navigateToProvidersButtonClicked', async () => {
     const header = await ConfigurationSearch.getHeader()
-    const navigateToProvidersButton = await (await header.getPageHeader()).getInlineActionButtonByIcon(PrimeIcons.ANDROID)
+    const navigateToProvidersButton = await (
+      await header.getPageHeader()
+    ).getInlineActionButtonByIcon(PrimeIcons.ANDROID)
 
     expect(navigateToProvidersButton).toBeTruthy()
     await navigateToProvidersButton?.click()
@@ -344,17 +339,14 @@ describe('ConfigurationSearchComponent', () => {
         component.search(component.configurationSearchFormGroup)
 
         const calls = (store.dispatch as jest.Mock).mock.calls
-        const found = calls.some(call => {
+        const found = calls.some((call) => {
           const action = call[0]
           return (
             action.type === '[ConfigurationSearch] Search button clicked' &&
             action.searchCriteria &&
-            (
-              (action.searchCriteria.name instanceof Date
-                ? action.searchCriteria.name.toISOString()
-                : action.searchCriteria.name
-              ) === expected.name
-            )
+            (action.searchCriteria.name instanceof Date
+              ? action.searchCriteria.name.toISOString()
+              : action.searchCriteria.name) === expected.name
           )
         })
         expect(found).toBe(true)
@@ -393,7 +385,7 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   describe('actions dispatch', () => {
-    [
+    ;[
       {
         method: 'resultComponentStateChanged',
         action: ConfigurationSearchActions.resultComponentStateChanged,
@@ -411,14 +403,13 @@ describe('ConfigurationSearchComponent', () => {
       }
     ].forEach(({ method, action, payload }) => {
       it(`should dispatch ${action.type} when ${method} is called`, () => {
-        (component as any)[method](payload)
+        ;(component as any)[method](payload)
         expect(store.dispatch).toHaveBeenCalledWith(action(payload))
       })
     })
   })
 
   it('should export csv data on export action click', async () => {
-
     const results = [
       {
         id: '1',
@@ -453,14 +444,12 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch viewModeChanged action on view mode changes', async () => {
-
     component.viewModeChanged('advanced')
 
     expect(store.dispatch).toHaveBeenCalledWith(ConfigurationSearchActions.viewModeChanged({ viewMode: 'advanced' }))
   })
 
   it('should dispatch displayedColumnsChanged on data view column change', async () => {
-
     fixture = TestBed.createComponent(ConfigurationSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -520,7 +509,6 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch chartVisibilityToggled on show/hide chart header', async () => {
-
     store.overrideSelector(selectConfigurationSearchViewModel, {
       ...baseConfigurationSearchViewModel,
       chartVisible: false

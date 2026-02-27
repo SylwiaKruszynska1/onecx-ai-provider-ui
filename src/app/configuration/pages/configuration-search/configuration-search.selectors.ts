@@ -1,19 +1,22 @@
 import { createSelector } from '@ngrx/store'
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
-import { DataTableColumn, RowListGridData } from '@onecx/portal-integration-angular'
+import { DataTableColumn, RowListGridData } from '@onecx/angular-accelerator'
 import { configurationFeature } from '../../configuration.reducers'
 import { initialState } from './configuration-search.reducers'
 import { ConfigurationSearchViewModel } from './configuration-search.viewmodel'
 
 export const configurationSearchSelectors = createChildSelectors(configurationFeature.selectSearch, initialState)
 
-export const selectResults = createSelector(configurationSearchSelectors.selectResults, (results): RowListGridData[] => {
-  return results.map((item) => ({
-    imagePath: '',
-    ...item,
-    id: item.id || ''
-  }))
-})
+export const selectResults = createSelector(
+  configurationSearchSelectors.selectResults,
+  (results): RowListGridData[] => {
+    return results.map((item) => ({
+      imagePath: '',
+      ...item,
+      id: item.id || ''
+    }))
+  }
+)
 
 export const selectDisplayedColumns = createSelector(
   configurationSearchSelectors.selectColumns,

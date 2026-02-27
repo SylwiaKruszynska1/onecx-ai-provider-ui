@@ -4,7 +4,7 @@ import {
   InteractiveDataViewComponentState,
   RowListGridData,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { MCPServerSearchCriteria } from './mcpserver-search.parameters'
 
 export interface MCPServerSearchViewModel {

@@ -1,10 +1,11 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing'
 import { ActivatedRoute } from '@angular/router'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { AppComponent } from './app.component'
 import { provideHttpClient } from '@angular/common/http'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 describe('AppComponent', () => {
   const mockActivatedRoute = {}
@@ -13,7 +14,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         TranslateTestingModule.withTranslations('en', require('./../assets/i18n/en.json')).withTranslations(
           'de',
@@ -25,7 +26,8 @@ describe('AppComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents()
   })
 

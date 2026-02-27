@@ -8,13 +8,10 @@ import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import {
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PrimeIcons } from 'primeng/api'
 import { of } from 'rxjs'
@@ -45,8 +42,8 @@ describe('MCPServerDetailsComponent', () => {
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -69,11 +66,11 @@ describe('MCPServerDetailsComponent', () => {
     }
   }
   const baseMCPServerDetailsViewModel: MCPServerDetailsViewModel = {
-    details: {      
-      apiKey: "",
-      description: "",
-      name: "",
-      url: ""      
+    details: {
+      apiKey: '',
+      description: '',
+      name: '',
+      url: ''
     },
     detailsLoadingIndicator: false,
     detailsLoaded: true,
@@ -87,7 +84,7 @@ describe('MCPServerDetailsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [MCPServerDetailsComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         FormsModule,
         BrowserAnimationsModule,
@@ -112,7 +109,7 @@ describe('MCPServerDetailsComponent', () => {
       ]
     }).compileComponents()
     const userServiceMock = TestBed.inject(UserService)
-    userServiceMock.permissions$.next(["MCPSERVER#BACK"])
+    userServiceMock.permissions$.next(['MCPSERVER#BACK'])
 
     translateService = TestBed.inject(TranslateService)
     translateService.use('en')
@@ -261,9 +258,11 @@ describe('MCPServerDetailsComponent', () => {
     const saveAction = await pageHeader.getInlineActionButtonByIcon(PrimeIcons.SAVE)
     await saveAction?.click()
 
-    expect(store.dispatch).toHaveBeenCalledWith(MCPServerDetailsActions.saveButtonClicked({
-      details: baseMCPServerDetailsViewModel.details!
-    }))
+    expect(store.dispatch).toHaveBeenCalledWith(
+      MCPServerDetailsActions.saveButtonClicked({
+        details: baseMCPServerDetailsViewModel.details!
+      })
+    )
   })
 
   it('cancel clicked should dispatch cancel action', async () => {
@@ -315,9 +314,9 @@ describe('MCPServerDetailsComponent', () => {
     store.overrideSelector(selectMCPServerDetailsViewModel, {
       ...baseMCPServerDetailsViewModel,
       details: {
-        id: "my-id",
-        name: "my-name",
-        apiKey: "my-apikey"
+        id: 'my-id',
+        name: 'my-name',
+        apiKey: 'my-apikey'
       }
     })
     store.refreshState()

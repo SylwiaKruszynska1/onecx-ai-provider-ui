@@ -4,17 +4,17 @@
   *ngrxLet="viewModel$; let vm"
 >
   <ocx-search-header
-    [headline]="'CONFIGURATION_SEARCH.HEADER' | translate"
+    [header]="'CONFIGURATION_SEARCH.HEADER' | translate"
     [subheader]="'CONFIGURATION_SEARCH.SUB_HEADER' | translate"
     (searched)="search(configurationSearchFormGroup)"
     (resetted)="resetSearch()"
     [manualBreadcrumbs]="true"
     [actions]="(headerActions$ | async) ?? []"
-    (componentStateChanged)="searchHeaderComponentStateChanged($event)"
+    (componentStateChanged)="searchHeaderComponentStateChanged($any($event))"
     [viewMode]="vm.searchHeaderComponentState?.activeViewMode ?? 'basic'"
   >
     <form [formGroup]="configurationSearchFormGroup">
-      <div class="grid mt-0 p-fluid">        
+      <div class="grid mt-0 p-fluid">
         <div class="col-12 md:col-6">
           <span class="p-float-label">
             <input
@@ -47,18 +47,17 @@
   <ocx-content-container layout="horizontal">
     <ocx-content class="w-full">
       <ocx-interactive-data-view
-        (deleteItem)="delete($event)"
+        (deleteItem)="delete($any($event))"
         deletePermission="CONFIGURATION#DELETE"
-        (editItem)="edit($event)"
+        (editItem)="edit($any($event))"
         editPermission="CONFIGURATION#EDIT"
-        (viewItem)="details($event)"
+        (viewItem)="details($any($event))"
         viewPermission="CONFIGURATION#VIEW"
         [data]="vm.results"
         [columns]="vm.columns"
         [emptyResultsMessage]="'CONFIGURATION_SEARCH.EMPTY_RESULTS' | translate"
-        (displayedColumnsChange)="onDisplayedColumnsChange($event)"
+        (displayedColumnsChange)="onDisplayedColumnsChange($any($event))"
         [layout]="vm.resultComponentState?.layout ?? 'table'"
-        [displayedColumns]="vm.resultComponentState?.displayedColumns ?? []"
         [supportedViewLayouts]="['table']"
         [page]="vm.resultComponentState?.activePage ?? 0"
         [pageSize]="vm.resultComponentState?.pageSize"
@@ -76,8 +75,7 @@
       class="w-full lg:w-3"
       *ngIf="vm.results.length > 0 &&
         vm.chartVisible &&
-        (diagramColumn$ | async)
-    "
+        (diagramColumn$ | async)"
     >
       <div class="flex flex-column md:flex-row lg:flex-column justify-content-center">
         <ocx-group-by-count-diagram
@@ -86,7 +84,7 @@
           [column]="diagramColumn"
           sumKey="CONFIGURATION_SEARCH.DIAGRAM.SUM"
           [diagramType]="vm.diagramComponentState?.activeDiagramType ?? defaultDiagramType"
-          (componentStateChanged)="diagramComponentStateChanged($event)"
+          (componentStateChanged)="diagramComponentStateChanged($any($event))"
         ></ocx-group-by-count-diagram>
       </div>
     </ocx-content>

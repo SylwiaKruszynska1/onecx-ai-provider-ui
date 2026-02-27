@@ -4,13 +4,13 @@
   *ngrxLet="viewModel$; let vm"
 >
   <ocx-search-header
-    [headline]="'PROVIDER_SEARCH.HEADER' | translate"
+    [header]="'PROVIDER_SEARCH.HEADER' | translate"
     [subheader]="'PROVIDER_SEARCH.SUB_HEADER' | translate"
     (searched)="search(ProviderSearchFormGroup)"
     (resetted)="resetSearch()"
     [manualBreadcrumbs]="true"
     [actions]="(headerActions$ | async) ?? []"
-    (viewModeChanged)="viewModeChanged($event)"
+    (viewModeChanged)="viewModeChanged($any($event))"
     [viewMode]="vm.viewMode"
   >
     <form [formGroup]="ProviderSearchFormGroup">
@@ -86,11 +86,11 @@
   <ocx-content-container layout="horizontal">
     <ocx-content class="w-full">
       <ocx-interactive-data-view
-        (deleteItem)="delete($event)"
+        (deleteItem)="delete($any($event))"
         deletePermission="PROVIDER#DELETE"
-        (editItem)="edit($event)"
+        (editItem)="edit($any($event))"
         editPermission="PROVIDER#EDIT"
-        (viewItem)="details($event)"
+        (viewItem)="details($any($event))"
         viewPermission="PROVIDER#VIEW"
         [data]="vm.results"
         [columns]="vm.columns"

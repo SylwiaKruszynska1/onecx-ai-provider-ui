@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core'
+import { isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { LetDirective } from '@ngrx/component'
@@ -8,18 +8,12 @@ import { EffectsModule } from '@ngrx/effects'
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { StoreModule } from '@ngrx/store'
 import { provideStoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { KeycloakAuthModule } from '@onecx/keycloak-auth'
-import {
-  APP_CONFIG,
-  AppStateService,
-  ConfigurationService,
-  createTranslateLoader,
-  PortalCoreModule,
-  providePortalDialogService,
-  translateServiceInitializer,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { AngularAuthModule } from '@onecx/angular-auth'
+import { createTranslateLoader, provideTranslationPathFromMeta, provideThemeConfig } from '@onecx/angular-utils'
+import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
+import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
+import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { environment } from 'src/environments/environment'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -31,17 +25,18 @@ import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
 export const commonImports = [CommonModule]
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [],
   imports: [
     ...commonImports,
-    KeycloakAuthModule,
+    AngularAuthModule,
+    AppComponent,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     LetDirective,
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
-
+    StandaloneShellModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: !isDevMode(),
@@ -49,8 +44,9 @@ export const commonImports = [CommonModule]
       trace: false,
       traceLimit: 75
     }),
+    StandaloneShellModule,
     EffectsModule.forRoot([]),
-    PortalCoreModule.forRoot('onecx-ai-provider-ui-app'),
+    AngularAcceleratorModule,
     TranslateModule.forRoot({
       extend: true,
       loader: {
@@ -69,12 +65,9 @@ export const commonImports = [CommonModule]
       useFactory: apiConfigProvider,
       deps: [ConfigurationService, AppStateService]
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: translateServiceInitializer,
-      multi: true,
-      deps: [UserService, TranslateService]
-    },
+    provideStandaloneProviders(),
+    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
+    provideThemeConfig(),
 
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
@@ -84,7 +77,6 @@ export const commonImports = [CommonModule]
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
       connectInZone: true // If set to true, the connection is established within the Angular zone
     })
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
-export class AppModule { }
+export class AppModule {}

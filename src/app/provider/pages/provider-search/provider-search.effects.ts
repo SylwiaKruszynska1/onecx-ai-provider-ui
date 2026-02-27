@@ -9,12 +9,8 @@ import {
   filterOutOnlyQueryParamsChanged,
   filterOutQueryParamsHaveNotChanged
 } from '@onecx/ngrx-accelerator'
-import {
-  DialogState,
-  ExportDataService,
-  PortalDialogService,
-  PortalMessageService
-} from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { DialogState, ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
 import equal from 'fast-deep-equal'
 import { PrimeIcons } from 'primeng/api'
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
@@ -37,7 +33,7 @@ export class ProviderSearchEffects {
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
-  ) { }
+  ) {}
 
   syncParamsToUrl$ = createEffect(
     () => {
@@ -211,7 +207,7 @@ export class ProviderSearchEffects {
         if (!result) {
           throw new Error('DialogResult was not set as expected!')
         }
-        const itemToEditId = result.id ?? ""
+        const itemToEditId = result.id ?? ''
         const itemToEdit = {
           ...result
         } as UpdateProviderRequest
@@ -314,29 +310,31 @@ export class ProviderSearchEffects {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   performSearch(searchCriteria: Record<string, any>) {
-    return this.providerService.findProviderBySearchCriteria({
-      ...Object.entries(searchCriteria).reduce(
-        (acc, [key, value]) => ({
-          ...acc,
-          [key]: value instanceof Date ? value.toISOString() : value
-        }),
-        {}
-      )
-    }).pipe(
-      map(({ stream, totalElements }) =>
-        ProviderSearchActions.providerSearchResultsReceived({
-          results: stream,
-          totalNumberOfResults: totalElements
-        })
-      ),
-      catchError((error) =>
-        of(
-          ProviderSearchActions.providerSearchResultsLoadingFailed({
-            error
+    return this.providerService
+      .findProviderBySearchCriteria({
+        ...Object.entries(searchCriteria).reduce(
+          (acc, [key, value]) => ({
+            ...acc,
+            [key]: value instanceof Date ? value.toISOString() : value
+          }),
+          {}
+        )
+      })
+      .pipe(
+        map(({ stream, totalElements }) =>
+          ProviderSearchActions.providerSearchResultsReceived({
+            results: stream,
+            totalNumberOfResults: totalElements
           })
+        ),
+        catchError((error) =>
+          of(
+            ProviderSearchActions.providerSearchResultsLoadingFailed({
+              error
+            })
+          )
         )
       )
-    )
   }
 
   rehydrateChartVisibility$ = createEffect(() => {

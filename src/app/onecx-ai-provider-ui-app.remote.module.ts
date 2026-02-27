@@ -1,5 +1,5 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
+import { DoBootstrap, inject, Injector, isDevMode, NgModule, provideAppInitializer } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { Router, RouterModule } from '@angular/router'
@@ -9,16 +9,12 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
-import { provideTranslationPathFromMeta } from '@onecx/angular-utils'
+import { provideThemeConfig, provideTranslationPathFromMeta } from '@onecx/angular-utils'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import { provideNavigatedEventStoreConnector } from '@onecx/ngrx-accelerator'
-import {
-  AppStateService,
-  ConfigurationService,
-  createTranslateLoader,
-  PortalCoreModule
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
+import { createTranslateLoader } from '@onecx/angular-utils'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
 import { commonImports } from './app.module'
@@ -33,14 +29,14 @@ const effectProvidersForWorkaround = [EffectsRunner, EffectSources, Actions]
 effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
 
 @NgModule({
-  declarations: [AppEntrypointComponent],
+  declarations: [],
   imports: [
     ...commonImports,
-    PortalCoreModule.forMicroFrontend(),
-    RouterModule.forRoot(addInitializeModuleGuard(routes)),
+    AngularAcceleratorModule,
+    AppEntrypointComponent,
+    RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       extend: true,
-      isolate: false,
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
@@ -69,19 +65,18 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       useFactory: apiConfigProvider,
       deps: [ConfigurationService, AppStateService]
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeRouter,
-      multi: true,
-      deps: [Router, AppStateService]
-    },
+    provideAppInitializer(() => {
+      const initializerFn = initializeRouter(inject(Router), inject(AppStateService))
+      return initializerFn()
+    }),
     provideHttpClient(withInterceptorsFromDi()),
     provideNavigatedEventStoreConnector(),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
+    provideThemeConfig()
   ]
 })
 export class OnecxAiUiProviderModule implements DoBootstrap {
-  constructor(private readonly injector: Injector) { }
+  constructor(private readonly injector: Injector) {}
 
   ngDoBootstrap(): void {
     createAppEntrypoint(AppEntrypointComponent, 'onecx-ai-provider-ui-webcomponent', this.injector)

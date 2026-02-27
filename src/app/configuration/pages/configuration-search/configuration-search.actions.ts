@@ -4,7 +4,7 @@ import {
   GroupByCountDiagramComponentState,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { Configuration } from '../../../shared/generated'
 import { ConfigurationSearchCriteria } from './configuration-search.parameters'
 

@@ -10,7 +10,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AlwaysGrantPermissionChecker, BreadcrumbService, ColumnType, HAS_PERMISSION_CHECKER, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { BreadcrumbService, ColumnType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -40,7 +42,7 @@ describe('ProviderSearchComponent', () => {
       description: undefined,
       llmUrl: undefined,
       modelName: undefined,
-      id: undefined,
+      id: undefined
     },
     results: [],
     displayedColumns: [],
@@ -52,7 +54,7 @@ describe('ProviderSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ProviderSearchComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
@@ -353,14 +355,16 @@ describe('ProviderSearchComponent', () => {
 
     it('should map valid Date value to UTC ISO string in searchCriteria', () => {
       const localDate = new Date(2023, 7, 14, 12, 30, 45)
-      const expectedIso = new Date(Date.UTC(
-        localDate.getFullYear(),
-        localDate.getMonth(),
-        localDate.getDate(),
-        localDate.getHours(),
-        localDate.getMinutes(),
-        localDate.getSeconds()
-      )).toISOString()
+      const expectedIso = new Date(
+        Date.UTC(
+          localDate.getFullYear(),
+          localDate.getMonth(),
+          localDate.getDate(),
+          localDate.getHours(),
+          localDate.getMinutes(),
+          localDate.getSeconds()
+        )
+      ).toISOString()
 
       const formValue = formBuilder.group({ modelName: localDate })
       component.search(formValue)
@@ -375,8 +379,3 @@ describe('ProviderSearchComponent', () => {
     })
   })
 })
-
-
-
-
-

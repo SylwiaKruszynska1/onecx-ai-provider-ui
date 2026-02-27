@@ -6,7 +6,9 @@ import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, PortalCoreModule, UserService } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ProviderDetailsComponent } from './provider-details.component'
 import { ProviderDetailsHarness } from './provider-details.harness'
@@ -48,7 +50,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
     await TestBed.configureTestingModule({
       declarations: [ProviderDetailsComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -108,7 +110,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
     await fixture.whenStable()
 
     const actions = await firstValueFrom(component.headerActions$)
-    const deleteAction = actions.find(a => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
+    const deleteAction = actions.find((a) => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
     expect(deleteAction).toBeDefined()
     deleteAction!.actionCallback()
     expect(deleteSpy).toHaveBeenCalledWith('')
@@ -161,7 +163,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
     await fixture.whenStable()
 
     const actions = await firstValueFrom(component.headerActions$)
-    const deleteAction = actions.find(a => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
+    const deleteAction = actions.find((a) => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
 
     expect(deleteAction).toBeDefined()
     deleteAction!.actionCallback()
@@ -188,7 +190,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
 
   it('should patch form fields with empty string if details fields are undefined', async () => {
     store.overrideSelector(selectProviderDetailsViewModel, {
-      details: {id: '', name: '', modelName: ''},
+      details: { id: '', name: '', modelName: '' },
       editMode: false,
       isApiKeyHidden: false
     })
@@ -211,16 +213,12 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
   it('should dispatch editProviderDetailsButtonClicked action on edit()', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch')
     component.edit('123')
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      ProviderSearchActions.editProviderDetailsButtonClicked({ id: '123' })
-    )
+    expect(dispatchSpy).toHaveBeenCalledWith(ProviderSearchActions.editProviderDetailsButtonClicked({ id: '123' }))
   })
   it('should dispatch deleteProviderButtonClicked action on delete()', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch')
     component.delete('456')
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      ProviderSearchActions.deleteProviderButtonClicked({ id: '456' })
-    )
+    expect(dispatchSpy).toHaveBeenCalledWith(ProviderSearchActions.deleteProviderButtonClicked({ id: '456' }))
   })
 
   it('should enable form and dispatch editMode true on toggleEditMode(true)', () => {
@@ -229,9 +227,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
 
     component.toggleEditMode(true)
 
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      ProviderDetailsActions.providerDetailsEditModeSet({ editMode: true })
-    )
+    expect(dispatchSpy).toHaveBeenCalledWith(ProviderDetailsActions.providerDetailsEditModeSet({ editMode: true }))
     expect(component.formGroup.enabled).toBe(true)
   })
 
@@ -240,9 +236,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
 
     component.toggleEditMode(false)
 
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      ProviderDetailsActions.providerDetailsEditModeSet({ editMode: false })
-    )
+    expect(dispatchSpy).toHaveBeenCalledWith(ProviderDetailsActions.providerDetailsEditModeSet({ editMode: false }))
     expect(component.formGroup.disabled).toBe(true)
   })
 
@@ -256,8 +250,6 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
   it('should dispatch apiKeyVisibilityToggled action on toggleApiKeyVisibility()', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch')
     component.toggleApiKeyVisibility()
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      ProviderDetailsActions.apiKeyVisibilityToggled()
-    )
+    expect(dispatchSpy).toHaveBeenCalledWith(ProviderDetailsActions.apiKeyVisibilityToggled())
   })
 })

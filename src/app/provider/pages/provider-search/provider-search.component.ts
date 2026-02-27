@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { isValidDate } from '@onecx/accelerator'
 import {
@@ -7,19 +7,35 @@ import {
   BreadcrumbService,
   DataTableColumn,
   ExportDataService,
-  RowListGridData
-} from '@onecx/portal-integration-angular'
+  RowListGridData,
+  AngularAcceleratorModule
+} from '@onecx/angular-accelerator'
 import { PrimeIcons } from 'primeng/api'
 import { map, Observable } from 'rxjs'
 import { ProviderSearchActions } from './provider-search.actions'
 import { ProviderSearchCriteria, ProviderSearchCriteriasSchema } from './provider-search.parameters'
 import { selectProviderSearchViewModel } from './provider-search.selectors'
 import { ProviderSearchViewModel } from './provider-search.viewmodel'
+import { TranslateModule } from '@ngx-translate/core'
+import { CommonModule } from '@angular/common'
+import { LetDirective } from '@ngrx/component'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
   selector: 'app-provider-search',
   templateUrl: './provider-search.component.html',
-  styleUrls: ['./provider-search.component.scss']
+  styleUrls: ['./provider-search.component.scss'],
+  imports: [
+    AngularAcceleratorModule,
+    TranslateModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LetDirective,
+    InputTextModule,
+    PortalPageComponent
+  ]
 })
 export class ProviderSearchComponent implements OnInit {
   viewModel$!: Observable<ProviderSearchViewModel>
@@ -145,7 +161,8 @@ export class ProviderSearchComponent implements OnInit {
     )
   }
 
-  onDisplayedColumnsChange(displayedColumns: DataTableColumn[]) {
+  onDisplayedColumnsChange(event: Event): void {
+    const displayedColumns = (event as CustomEvent<DataTableColumn[]>).detail
     this.store.dispatch(ProviderSearchActions.displayedColumnsChanged({ displayedColumns }))
   }
 

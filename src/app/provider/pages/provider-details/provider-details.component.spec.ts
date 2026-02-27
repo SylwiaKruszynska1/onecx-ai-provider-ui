@@ -6,7 +6,9 @@ import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { AlwaysGrantPermissionChecker, BreadcrumbService, HAS_PERMISSION_CHECKER, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ProviderDetailsComponent } from './provider-details.component'
 import { ProviderDetailsHarness } from './provider-details.harness'
@@ -33,12 +35,11 @@ describe('ProviderDetailsComponent', () => {
   }
 
   window.postMessage = (m: any) => {
-
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -78,7 +79,7 @@ describe('ProviderDetailsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ProviderDetailsComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -172,7 +173,7 @@ describe('ProviderDetailsComponent', () => {
         name: 'Test name',
         description: 'Test description',
         llmUrl: 'Test llmUrl',
-        modelName: 'Test modelName',                
+        modelName: 'Test modelName',
         apiKey: 'TestAPIKey'
       })
     })

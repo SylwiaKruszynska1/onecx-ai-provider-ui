@@ -6,45 +6,50 @@ import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreModule } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
-import {  
-  PortalCoreModule,
-  providePortalDialogService
-} from '@onecx/portal-integration-angular'
-import { CalendarModule } from 'primeng/calendar'
+import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
+import { DatePickerModule } from 'primeng/datepicker'
 import { TableModule } from 'primeng/table'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { AutoCompleteModule } from 'primeng/autocomplete'
-import { DropdownModule } from 'primeng/dropdown'
+import { TooltipModule } from 'primeng/tooltip'
+import { SelectModule } from 'primeng/select'
 import { SharedModule } from '../shared/shared.module'
 import { configurationFeature } from './configuration.reducers'
 import { routes } from './configuration.routes'
-
+import { PortalPageComponent } from '@onecx/angular-utils'
 import { ConfigurationSearchComponent } from './pages/configuration-search/configuration-search.component'
 import { ConfigurationSearchEffects } from './pages/configuration-search/configuration-search.effects'
 import { ConfigurationCreateUpdateComponent } from './pages/configuration-search/dialogs/configuration-create-update/configuration-create-update.component'
 import { ConfigurationDetailsComponent } from './pages/configuration-details/configuration-details.component'
 import { ConfigurationDetailsEffects } from './pages/configuration-details/configuration-details.effects'
-import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
+import { provideTranslationConnectionService } from '@onecx/angular-utils'
+import { provideStandaloneProviders, StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
-  providers: [providePortalDialogService()],
-  declarations: [ConfigurationDetailsComponent, ConfigurationCreateUpdateComponent, ConfigurationSearchComponent],
+  providers: [providePortalDialogService(), provideTranslationConnectionService(), provideStandaloneProviders()],
+  declarations: [],
   imports: [
     CommonModule,
+    ConfigurationDetailsComponent,
+    ConfigurationCreateUpdateComponent,
+    ConfigurationSearchComponent,
     SharedModule,
     LetDirective,
-    PortalCoreModule.forMicroFrontend(),
-    RouterModule.forChild(addInitializeModuleGuard(routes)),
+    AngularAcceleratorModule,
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
-    CalendarModule,
+    DatePickerModule,
     TableModule,
     MultiSelectModule,
-    DropdownModule,
+    TooltipModule,
+    SelectModule,
     AutoCompleteModule,
     StoreModule.forFeature(configurationFeature),
     EffectsModule.forFeature([ConfigurationDetailsEffects, ConfigurationSearchEffects]),
-    TranslateModule
+    TranslateModule,
+    StandaloneShellModule,
+    PortalPageComponent
   ]
 })
 export class ConfigurationModule {}

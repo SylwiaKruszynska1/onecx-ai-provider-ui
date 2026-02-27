@@ -1,22 +1,39 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { Action, BreadcrumbService, UserService } from '@onecx/portal-integration-angular'
+import { Action, AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { map, Observable } from 'rxjs'
-
 import { PrimeIcons } from 'primeng/api'
 import { selectProviderDetailsViewModel } from './provider-details.selectors'
 import { ProviderDetailsViewModel } from './provider-details.viewmodel'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ProviderSearchActions } from '../provider-search/provider-search.actions'
 import { ProviderDetailsActions } from './provider-details.actions'
+import { TranslateModule } from '@ngx-translate/core'
+import { CommonModule } from '@angular/common'
+import { LetDirective } from '@ngrx/component'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { InputTextModule } from 'primeng/inputtext'
+import { TooltipModule } from 'primeng/tooltip'
 
 @Component({
   selector: 'app-provider-details',
   templateUrl: './provider-details.component.html',
-  styleUrls: ['./provider-details.component.scss']
+  styleUrls: ['./provider-details.component.scss'],
+  imports: [
+    AngularAcceleratorModule,
+    CommonModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LetDirective,
+    InputTextModule,
+    PortalPageComponent,
+    TooltipModule
+  ]
 })
 export class ProviderDetailsComponent implements OnInit {
-  viewModel$!: Observable<ProviderDetailsViewModel> 
+  viewModel$!: Observable<ProviderDetailsViewModel>
   headerActions$!: Observable<Action[]>
   public formGroup: FormGroup
 
@@ -28,15 +45,15 @@ export class ProviderDetailsComponent implements OnInit {
     this.formGroup = new FormGroup({
       name: new FormControl(null, [Validators.maxLength(255)]),
       description: new FormControl(null, [Validators.maxLength(255)]),
-      llmUrl: new FormControl(null, [Validators.maxLength(255)]),      
-      modelName: new FormControl(null, [Validators.maxLength(255)]),      
+      llmUrl: new FormControl(null, [Validators.maxLength(255)]),
+      modelName: new FormControl(null, [Validators.maxLength(255)]),
       apiKey: new FormControl(null, [Validators.maxLength(255)])
     })
   }
 
   ngOnInit(): void {
     this.viewModel$ = this.store.select(selectProviderDetailsViewModel)
-    
+
     this.headerActions$ = this.viewModel$.pipe(
       map((vm) => {
         const actions: Action[] = [
@@ -72,7 +89,7 @@ export class ProviderDetailsComponent implements OnInit {
             showCondition: !vm.editMode,
             actionCallback: () => {
               this.delete(vm.details?.id ?? '')
-            },
+            }
           },
           {
             titleKey: 'PROVIDER_DETAILS.GENERAL.CANCEL',
@@ -96,7 +113,7 @@ export class ProviderDetailsComponent implements OnInit {
               this.edit(vm.details?.id ?? '')
               this.toggleEditMode(false)
             }
-          }   
+          }
         ]
         return actions
       })
@@ -123,22 +140,22 @@ export class ProviderDetailsComponent implements OnInit {
     ])
   }
 
-  edit(id : string ) {
-      this.store.dispatch(ProviderSearchActions.editProviderDetailsButtonClicked({ id }))
-    }
-  
-  delete(id : string ) {
-      this.store.dispatch(ProviderSearchActions.deleteProviderButtonClicked({ id }))
+  edit(id: string) {
+    this.store.dispatch(ProviderSearchActions.editProviderDetailsButtonClicked({ id }))
+  }
+
+  delete(id: string) {
+    this.store.dispatch(ProviderSearchActions.deleteProviderButtonClicked({ id }))
   }
 
   toggleEditMode(value: boolean) {
-    this.store.dispatch(ProviderDetailsActions.providerDetailsEditModeSet({editMode: value}))
+    this.store.dispatch(ProviderDetailsActions.providerDetailsEditModeSet({ editMode: value }))
     if (!value) {
       this.formGroup.disable()
     } else {
       this.formGroup.enable()
     }
-    if(!this.user.hasPermission('PROVIDER#CHANGE_API_KEY')) {
+    if (!this.user.hasPermission('PROVIDER#CHANGE_API_KEY')) {
       this.formGroup.get('apiKey')?.disable()
     }
   }

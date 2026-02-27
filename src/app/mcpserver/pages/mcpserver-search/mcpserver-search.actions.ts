@@ -3,7 +3,7 @@ import {
   GroupByCountDiagramComponentState,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { MCPServer } from '../../../shared/generated'
 import { MCPServerSearchCriteria } from './mcpserver-search.parameters'
 

@@ -11,7 +11,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AlwaysGrantPermissionChecker, ColumnType, HAS_PERMISSION_CHECKER, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { ColumnType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -40,7 +42,7 @@ describe('ProviderSearchComponent effects', () => {
       name: undefined,
       llmUrl: undefined,
       modelName: undefined,
-      id: undefined,
+      id: undefined
     },
     results: [],
     displayedColumns: [],
@@ -52,7 +54,7 @@ describe('ProviderSearchComponent effects', () => {
     await TestBed.configureTestingModule({
       declarations: [ProviderSearchComponent],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
@@ -93,8 +95,6 @@ describe('ProviderSearchComponent effects', () => {
     fixture.detectChanges()
     ProviderSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, ProviderSearchHarness)
   })
-
-
 
   it('should dispatch resetButtonClicked action on resetSearch', async () => {
     const doneFn = jest.fn()
@@ -271,9 +271,7 @@ describe('ProviderSearchComponent effects', () => {
   it('should dispatch editProviderButtonClicked action on edit()', () => {
     jest.spyOn(store, 'dispatch')
     component.edit({ id: '123', imagePath: '' })
-    expect(store.dispatch).toHaveBeenCalledWith(
-      ProviderSearchActions.editProviderButtonClicked({ id: '123' })
-    )
+    expect(store.dispatch).toHaveBeenCalledWith(ProviderSearchActions.editProviderButtonClicked({ id: '123' }))
   })
   it('should call create() when headerActions$ actionCallback is triggered', (done) => {
     jest.spyOn(component, 'create')
@@ -281,7 +279,7 @@ describe('ProviderSearchComponent effects', () => {
 
     component.ngOnInit()
     component.headerActions$.subscribe((actions) => {
-      const createAction = actions.find(a => a.labelKey === 'PROVIDER_CREATE_UPDATE.ACTION.CREATE')
+      const createAction = actions.find((a) => a.labelKey === 'PROVIDER_CREATE_UPDATE.ACTION.CREATE')
       expect(createAction).toBeTruthy()
       createAction!.actionCallback()
       expect(component.create).toHaveBeenCalled()

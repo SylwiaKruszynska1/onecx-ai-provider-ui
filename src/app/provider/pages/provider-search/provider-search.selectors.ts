@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store'
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
-import { DataTableColumn, RowListGridData } from '@onecx/portal-integration-angular'
+import { DataTableColumn, RowListGridData } from '@onecx/angular-accelerator'
 import { ProviderFeature } from '../../provider.reducers'
 import { initialState } from './provider-search.reducers'
 import { ProviderSearchViewModel } from './provider-search.viewmodel'
@@ -14,7 +14,7 @@ export const selectResults = createSelector(ProviderSearchSelectors.selectResult
     name: item.name,
     description: item.description,
     llmUrl: item.llmUrl,
-    modelName: item.modelName,
+    modelName: item.modelName
   }))
 })
 

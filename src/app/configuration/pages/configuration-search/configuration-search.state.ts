@@ -3,7 +3,7 @@ import {
   DiagramComponentState,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
 import { Configuration } from 'src/app/shared/generated'
 import { ConfigurationSearchCriteria } from './configuration-search.parameters'
 

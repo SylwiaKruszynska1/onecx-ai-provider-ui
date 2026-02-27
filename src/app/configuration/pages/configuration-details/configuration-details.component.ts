@@ -1,21 +1,38 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { Action, BreadcrumbService, ObjectDetailItem } from '@onecx/portal-integration-angular'
+import { Action, AngularAcceleratorModule, BreadcrumbService, ObjectDetailItem } from '@onecx/angular-accelerator'
 import { map, Observable, BehaviorSubject, combineLatest } from 'rxjs'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { PrimeIcons } from 'primeng/api'
 import { ConfigurationDetailsActions } from './configuration-details.actions'
 import { ConfigurationDetailsViewModel } from './configuration-details.viewmodel'
 import { selectConfigurationDetailsViewModel } from './configuration-details.selectors'
-import {
-  MCPServer,
-  Provider
-} from 'src/app/shared/generated'
+import { MCPServer, Provider } from 'src/app/shared/generated'
+import { CommonModule } from '@angular/common'
+import { TranslateModule } from '@ngx-translate/core'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { LetDirective } from '@ngrx/component'
+import { InputTextModule } from 'primeng/inputtext'
+import { TooltipModule } from 'primeng/tooltip'
+import { AutoCompleteModule } from 'primeng/autocomplete'
 
 @Component({
   selector: 'app-configuration-details',
   templateUrl: './configuration-details.component.html',
-  styleUrls: ['./configuration-details.component.scss']
+  styleUrls: ['./configuration-details.component.scss'],
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    CommonModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LetDirective,
+    InputTextModule,
+    PortalPageComponent,
+    TooltipModule,
+    AutoCompleteModule
+  ]
 })
 export class ConfigurationDetailsComponent implements OnInit {
   viewModel$: Observable<ConfigurationDetailsViewModel> = this.store.select(selectConfigurationDetailsViewModel)
@@ -108,33 +125,31 @@ export class ConfigurationDetailsComponent implements OnInit {
   ) {
     this.filteredProviders$ = combineLatest([this.providerQuery$, this.viewModel$]).pipe(
       map(([query, vm]) => {
-        const suggestions = [...(vm.details?.llmProvider ? [vm.details.llmProvider] : []), ...vm.Providers ?? []]
-        return suggestions.filter((p) =>
-          p.name.toLowerCase().includes(query.toLowerCase())
-          && vm.details?.llmProvider?.id !== p.id)
+        const suggestions = [...(vm.details?.llmProvider ? [vm.details.llmProvider] : []), ...(vm.Providers ?? [])]
+        return suggestions.filter(
+          (p) => p.name.toLowerCase().includes(query.toLowerCase()) && vm.details?.llmProvider?.id !== p.id
+        )
       })
     )
 
     this.mcpServerQuery$ = new BehaviorSubject<string>('')
-    this.filteredMCPServers$ = combineLatest([
-      this.mcpServerQuery$,
-      this.viewModel$
-    ]).pipe(
+    this.filteredMCPServers$ = combineLatest([this.mcpServerQuery$, this.viewModel$]).pipe(
       map(([query, vm]) => {
-        const suggestions = [...(vm.details?.mcpServers ?? []), ...vm.MCPServers ?? []]
-        return suggestions.filter((mcp) =>
-          (mcp.name ?? '').toLowerCase().includes(query.toLowerCase())
-          && vm.details?.mcpServers?.every(selected => selected.id !== mcp.id)
+        const suggestions = [...(vm.details?.mcpServers ?? []), ...(vm.MCPServers ?? [])]
+        return suggestions.filter(
+          (mcp) =>
+            (mcp.name ?? '').toLowerCase().includes(query.toLowerCase()) &&
+            vm.details?.mcpServers?.every((selected) => selected.id !== mcp.id)
         )
       })
     )
 
     this.formGroup = new FormGroup({
-      id: new FormControl('', [Validators.maxLength(255)]),      
+      id: new FormControl('', [Validators.maxLength(255)]),
       name: new FormControl('', [Validators.required]),
       description: new FormControl(''),
       mcpServers: new FormControl(undefined),
-      llmProvider: new FormControl(undefined),
+      llmProvider: new FormControl(undefined)
     })
     this.formGroup.disable()
 
@@ -145,7 +160,7 @@ export class ConfigurationDetailsComponent implements OnInit {
           name: vm.details?.name || '',
           description: vm.details?.description || '',
           mcpServers: vm.details?.mcpServers,
-          llmProvider: vm.details?.llmProvider,
+          llmProvider: vm.details?.llmProvider
         })
 
         this.formGroup.markAsPristine()

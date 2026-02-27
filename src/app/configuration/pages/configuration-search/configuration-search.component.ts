@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { isValidDate } from '@onecx/accelerator'
 import {
@@ -12,19 +12,35 @@ import {
   ExportDataService,
   InteractiveDataViewComponentState,
   RowListGridData,
-  SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+  SearchHeaderComponentState,
+  AngularAcceleratorModule
+} from '@onecx/angular-accelerator'
 import { PrimeIcons } from 'primeng/api'
 import { map, Observable } from 'rxjs'
 import { ConfigurationSearchActions } from './configuration-search.actions'
 import { ConfigurationSearchCriteria, configurationSearchCriteriasSchema } from './configuration-search.parameters'
 import { selectConfigurationSearchViewModel } from './configuration-search.selectors'
 import { ConfigurationSearchViewModel } from './configuration-search.viewmodel'
+import { TranslateModule } from '@ngx-translate/core'
+import { CommonModule } from '@angular/common'
+import { LetDirective } from '@ngrx/component'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
   selector: 'app-configuration-search',
   templateUrl: './configuration-search.component.html',
-  styleUrls: ['./configuration-search.component.scss']
+  styleUrls: ['./configuration-search.component.scss'],
+  imports: [
+    AngularAcceleratorModule,
+    CommonModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LetDirective,
+    InputTextModule,
+    PortalPageComponent
+  ]
 })
 export class ConfigurationSearchComponent implements OnInit {
   viewModel$: Observable<ConfigurationSearchViewModel> = this.store.select(selectConfigurationSearchViewModel)
@@ -94,7 +110,7 @@ export class ConfigurationSearchComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     @Inject(LOCALE_ID) public readonly locale: string,
     private readonly exportDataService: ExportDataService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.breadcrumbService.setItems([
@@ -125,15 +141,15 @@ export class ConfigurationSearchComponent implements OnInit {
         ...acc,
         [key]: isValidDate(value)
           ? new Date(
-            Date.UTC(
-              value.getFullYear(),
-              value.getMonth(),
-              value.getDate(),
-              value.getHours(),
-              value.getMinutes(),
-              value.getSeconds()
+              Date.UTC(
+                value.getFullYear(),
+                value.getMonth(),
+                value.getDate(),
+                value.getHours(),
+                value.getMinutes(),
+                value.getSeconds()
+              )
             )
-          )
           : value || undefined
       }),
       {}
@@ -181,7 +197,8 @@ export class ConfigurationSearchComponent implements OnInit {
     )
   }
 
-  onDisplayedColumnsChange(displayedColumns: DataTableColumn[]) {
+  onDisplayedColumnsChange(event: Event): void {
+    const displayedColumns = (event as CustomEvent<DataTableColumn[]>).detail
     this.store.dispatch(ConfigurationSearchActions.displayedColumnsChanged({ displayedColumns }))
   }
 
