@@ -12,7 +12,7 @@ import { DatePickerModule } from 'primeng/datepicker'
 import { TooltipModule } from 'primeng/tooltip'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { SharedModule } from '../shared/shared.module'
-import { PortalPageComponent } from '@onecx/angular-utils'
+import { PortalPageComponent, providePermissionService } from '@onecx/angular-utils'
 import { ProviderFeature } from './provider.reducers'
 import { routes } from './provider.routes'
 import { ProviderDetailsComponent } from './pages/provider-details/provider-details.component'
@@ -23,7 +23,7 @@ import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/p
 import { provideTranslationConnectionService } from '@onecx/angular-utils'
 
 @NgModule({
-  providers: [providePortalDialogService(), provideTranslationConnectionService()],
+  providers: [providePortalDialogService(), provideTranslationConnectionService(), ...providePermissionService()],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [],
   imports: [
