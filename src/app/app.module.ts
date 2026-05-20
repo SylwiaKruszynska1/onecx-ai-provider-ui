@@ -12,13 +12,11 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createTranslateLoader, provideTranslationPathFromMeta, provideThemeConfig } from '@onecx/angular-utils'
 import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
-import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
 import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { environment } from 'src/environments/environment'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { metaReducers, reducers } from './app.reducers'
-
 import { APIConfiguration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
 
@@ -36,7 +34,6 @@ export const commonImports = [CommonModule]
     LetDirective,
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
-    StandaloneShellModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: !isDevMode(),
@@ -44,7 +41,6 @@ export const commonImports = [CommonModule]
       trace: false,
       traceLimit: 75
     }),
-    StandaloneShellModule,
     EffectsModule.forRoot([]),
     AngularAcceleratorModule,
     TranslateModule.forRoot({
@@ -65,7 +61,6 @@ export const commonImports = [CommonModule]
       useFactory: apiConfigProvider,
       deps: [ConfigurationService, AppStateService]
     },
-    provideStandaloneProviders(),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideThemeConfig(),
 
