@@ -5,12 +5,13 @@ import { map } from 'rxjs'
 import { Provider } from 'src/app/shared/generated'
 import { ProviderCreateUpdateViewModel } from './provider-create-update.viewmodel'
 import { TranslateModule } from '@ngx-translate/core'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-provider-create-update',
   templateUrl: './provider-create-update.component.html',
   styleUrls: ['./provider-create-update.component.scss'],
-  imports: [TranslateModule, ReactiveFormsModule]
+  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule]
 })
 export class ProviderCreateUpdateComponent
   implements

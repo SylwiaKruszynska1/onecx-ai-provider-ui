@@ -19,7 +19,7 @@
       <div class="surface-section mt-3 mb-1 mx-3">
         <form [formGroup]="formGroup" errorTailor>
           <div class="mt-3 mb-1">
-            <span class="p-float-label mb-1" controlErrorAnchor>
+            <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
               <input
                 pInputText
                 type="text"
@@ -30,10 +30,10 @@
               <label class="ocx-required-label" for="configuration_detail_name">
                 {{ 'CONFIGURATION_DETAILS.FORM.NAME' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
           <div class="mt-3 mb-1">
-            <span class="p-float-label mb-1" controlErrorAnchor>
+            <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
               <input
                 pInputText
                 type="text"
@@ -45,11 +45,11 @@
               <label class="ocx-required-label" for="configuration_detail_description">
                 {{ 'CONFIGURATION_DETAILS.FORM.DESCRIPTION' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
 
           <div class="mt-3 mb-1">
-            <span class="p-float-label mb-1 p-fluid" controlErrorAnchor>
+            <p-floatlabel class="mb-1 p-fluid" variant="on" controlErrorAnchor>
               <p-autoComplete
                 id="configuration_detail_mcpServer"
                 formControlName="mcpServers"
@@ -66,11 +66,11 @@
               <label class="ocx-required-label" for="configuration_detail_mcpServer">
                 {{ 'CONFIGURATION_DETAILS.FORM.MCP_SERVER' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
 
           <div class="mt-3 mb-1">
-            <span class="p-float-label mb-1" controlErrorAnchor>
+            <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
               <p-autoComplete
                 id="configuration_detail_llmProvider"
                 formControlName="llmProvider"
@@ -86,7 +86,7 @@
               <label class="ocx-required-label" for="configuration_detail_llmProvider">
                 {{ 'CONFIGURATION_DETAILS.FORM.PROVIDER' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
         </form>
       </div>

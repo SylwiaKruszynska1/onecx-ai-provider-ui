@@ -27,6 +27,7 @@ import { PortalPageComponent } from '@onecx/angular-utils'
 import { LetDirective } from '@ngrx/component'
 import { TooltipModule } from 'primeng/tooltip'
 import { InputTextModule } from 'primeng/inputtext'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-mcpserver-search',
@@ -37,6 +38,7 @@ import { InputTextModule } from 'primeng/inputtext'
     CommonModule,
     TranslateModule,
     FormsModule,
+    FloatLabelModule,
     ReactiveFormsModule,
     LetDirective,
     InputTextModule,

@@ -15,7 +15,7 @@
     <div class="surface-section mt-3 mb-1 mx-3">
       <form [formGroup]="formGroup" errorTailor>
         <div class="mt-3 mb-1">
-          <span class="p-float-label mb-1" controlErrorAnchor>
+          <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
             <input
               pInputText
               type="text"
@@ -26,10 +26,10 @@
             <label class="ocx-required-label" for="Provider_detail_name">
               {{ 'PROVIDER_DETAILS.FORM.NAME' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="mt-3 mb-1">
-          <span class="p-float-label mb-1" controlErrorAnchor>
+          <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
             <input
               pInputText
               type="text"
@@ -40,10 +40,10 @@
             <label class="ocx-required-label" for="Provider_detail_description">
               {{ 'PROVIDER_DETAILS.FORM.DESCRIPTION' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="mt-3 mb-1">
-          <span class="p-float-label mb-1" controlErrorAnchor>
+          <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
             <input
               pInputText
               type="text"
@@ -54,10 +54,10 @@
             <label class="ocx-required-label" for="Provider_detail_llmUrl">
               {{ 'PROVIDER_DETAILS.FORM.LLMURL' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="mt-3 mb-1">
-          <span class="p-float-label mb-1" controlErrorAnchor>
+          <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
             <input
               pInputText
               type="text"
@@ -68,11 +68,11 @@
             <label class="ocx-required-label" for="Provider_detail_modelName">
               {{ 'PROVIDER_DETAILS.FORM.MODELNAME' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
         </div>
         <div *ocxIfPermission="'PROVIDER#CHANGE_API_KEY'">
           <div class="p-inputgroup mt-3 mb-1">
-            <span class="p-float-label" controlErrorAnchor>
+            <p-floatlabel class="mb-1" variant="on" controlErrorAnchor>
               <input
                 pInputText
                 [type]="vm.isApiKeyHidden ? 'password' : 'text'"
@@ -81,7 +81,7 @@
                 formControlName="apiKey"
               />
               <label for="Provider_detail_apiKey">{{ 'PROVIDER_DETAILS.FORM.APIKEY' | translate }} </label>
-            </span>
+            </p-floatlabel>
             <a
               class="p-inputgroup-addon bg-primary pseudo-button pi pi-eye"
               [ngClass]="{

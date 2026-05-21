@@ -16,7 +16,7 @@
     <form [formGroup]="ProviderSearchFormGroup">
       <div class="grid mt-0 p-fluid">
         <div class="col-12 md:col-3">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="name"
               pInputText
@@ -26,10 +26,10 @@
               [ngModel]="vm.searchCriteria.name"
             />
             <label for="name">{{ 'PROVIDER_SEARCH.CRITERIA.NAME' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="col-12 md:col-3">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="description"
               pInputText
@@ -39,10 +39,10 @@
               [ngModel]="vm.searchCriteria.description"
             />
             <label for="description">{{ 'PROVIDER_SEARCH.CRITERIA.DESCRIPTION' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="col-12 md:col-3">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="llmUrl"
               pInputText
@@ -52,10 +52,10 @@
               [ngModel]="vm.searchCriteria.llmUrl"
             />
             <label for="llmUrl">{{ 'PROVIDER_SEARCH.CRITERIA.LLMURL' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="col-12 md:col-3">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="modelName"
               pInputText
@@ -65,10 +65,10 @@
               [ngModel]="vm.searchCriteria.modelName"
             />
             <label for="modelName">{{ 'PROVIDER_SEARCH.CRITERIA.MODELNAME' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="col-12 md:col-3">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="type"
               pInputText
@@ -78,7 +78,7 @@
               [ngModel]="vm.searchCriteria.type"
             />
             <label for="type">{{ 'PROVIDER_SEARCH.CRITERIA.TYPE' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
       </div>
     </form>

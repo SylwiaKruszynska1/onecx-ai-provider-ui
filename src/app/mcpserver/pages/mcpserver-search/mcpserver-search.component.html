@@ -16,7 +16,7 @@
     <form [formGroup]="mcpserverSearchFormGroup">
       <div class="grid mt-0 p-fluid">
         <div class="col-12 md:col-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               pInputText
               id="name"
@@ -28,11 +28,11 @@
               tooltipEvent="hover"
             />
             <label for="name" style="white-space: nowrap"> {{ 'MCPSERVER_SEARCH.CRITERIA.NAME' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               pInputText
               id="description"
@@ -46,11 +46,11 @@
             <label for="description" style="white-space: nowrap">
               {{ 'MCPSERVER_SEARCH.CRITERIA.DESCRIPTION' | translate }}</label
             >
-          </span>
+          </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               pInputText
               id="url"
@@ -62,7 +62,7 @@
               tooltipEvent="hover"
             />
             <label for="url" style="white-space: nowrap"> {{ 'MCPSERVER_SEARCH.CRITERIA.URL' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
       </div>
     </form>

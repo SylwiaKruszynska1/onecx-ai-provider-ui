@@ -15,6 +15,7 @@ import { LetDirective } from '@ngrx/component'
 import { PortalPageComponent } from '@onecx/angular-utils'
 import { InputTextModule } from 'primeng/inputtext'
 import { TooltipModule } from 'primeng/tooltip'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-provider-details',
@@ -25,6 +26,7 @@ import { TooltipModule } from 'primeng/tooltip'
     CommonModule,
     TranslateModule,
     FormsModule,
+    FloatLabelModule,
     ReactiveFormsModule,
     LetDirective,
     InputTextModule,

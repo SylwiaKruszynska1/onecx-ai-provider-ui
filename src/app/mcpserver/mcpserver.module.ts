@@ -11,7 +11,7 @@ import { DatePickerModule } from 'primeng/datepicker'
 import { TooltipModule } from 'primeng/tooltip'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { SharedModule } from '../shared/shared.module'
-import { PortalPageComponent } from '@onecx/angular-utils'
+import { PortalPageComponent, providePermissionService } from '@onecx/angular-utils'
 import { mcpserverFeature } from './mcpserver.reducers'
 import { routes } from './mcpserver.routes'
 import { MCPServerDetailsComponent } from './pages/mcpserver-details/mcpserver-details.component'
@@ -22,7 +22,7 @@ import { provideTranslationConnectionService } from '@onecx/angular-utils'
 import { provideStandaloneProviders, StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
-  providers: [providePortalDialogService(), provideTranslationConnectionService(), provideStandaloneProviders()],
+  providers: [providePortalDialogService(), provideTranslationConnectionService(), provideStandaloneProviders(), ...providePermissionService()],
   declarations: [],
   imports: [
     CommonModule,

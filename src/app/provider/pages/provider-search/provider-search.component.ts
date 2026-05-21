@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common'
 import { LetDirective } from '@ngrx/component'
 import { PortalPageComponent } from '@onecx/angular-utils'
 import { InputTextModule } from 'primeng/inputtext'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-provider-search',
@@ -31,6 +32,7 @@ import { InputTextModule } from 'primeng/inputtext'
     TranslateModule,
     CommonModule,
     FormsModule,
+    FloatLabelModule,
     ReactiveFormsModule,
     LetDirective,
     InputTextModule,

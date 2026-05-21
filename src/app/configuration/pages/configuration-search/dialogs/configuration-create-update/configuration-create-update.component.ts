@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { CommonModule } from '@angular/common'
 import { InputTextModule } from 'primeng/inputtext'
 import { TooltipModule } from 'primeng/tooltip'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-configuration-create-update',
@@ -23,6 +24,7 @@ import { TooltipModule } from 'primeng/tooltip'
     CommonModule,
     TranslateModule,
     FormsModule,
+    FloatLabelModule,
     ReactiveFormsModule,
     InputTextModule,
     TooltipModule

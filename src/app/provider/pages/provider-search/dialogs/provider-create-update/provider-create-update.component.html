@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup">
   <div class="flex flex-wrap flex-column gap-4 justify-content-between mt-2">
     <div [title]="'PROVIDER_CREATE_UPDATE.FORM.NAME' | translate">
-      <span class="p-float-label" controlErrorAnchor>
+      <p-floatlabel variant="on" controlErrorAnchor>
         <input
           pInputText
           type="text"
@@ -12,10 +12,10 @@
         <label class="ocx-required-label" for="provider_detail_form_name">
           {{ 'PROVIDER_CREATE_UPDATE.FORM.NAME' | translate }}</label
         >
-      </span>
+      </p-floatlabel>
     </div>
     <div [title]="'PROVIDER_CREATE_UPDATE.FORM.DESCRIPTION' | translate">
-      <span class="p-float-label" controlErrorAnchor>
+      <p-floatlabel variant="on" controlErrorAnchor>
         <input
           pInputText
           type="text"
@@ -27,10 +27,10 @@
         <label class="ocx-required-label" for="provider_detail_form_description">
           {{ 'PROVIDER_CREATE_UPDATE.FORM.DESCRIPTION' | translate }}</label
         >
-      </span>
+      </p-floatlabel>
     </div>
     <div [title]="'PROVIDER_CREATE_UPDATE.FORM.MODELNAME' | translate">
-      <span class="p-float-label" controlErrorAnchor>
+      <p-floatlabel variant="on" controlErrorAnchor>
         <input
           pInputText
           type="text"
@@ -42,10 +42,10 @@
         <label class="ocx-required-label" for="provider_detail_form_modelName">
           {{ 'PROVIDER_CREATE_UPDATE.FORM.MODELNAME' | translate }}</label
         >
-      </span>
+      </p-floatlabel>
     </div>
     <div [title]="'PROVIDER_CREATE_UPDATE.FORM.LLMURL' | translate">
-      <span class="p-float-label" controlErrorAnchor>
+      <p-floatlabel variant="on" controlErrorAnchor>
         <input
           pInputText
           type="text"
@@ -56,10 +56,10 @@
         />
         <label class="ocx-required-label" for="provider_detail_form_llmUrl">
           {{ 'PROVIDER_CREATE_UPDATE.FORM.LLMURL' | translate }}</label>        
-      </span>
+      </p-floatlabel>
     </div>
     <div [title]="'PROVIDER_CREATE_UPDATE.FORM.APIKEY' | translate">
-      <span class="p-float-label" controlErrorAnchor>
+      <p-floatlabel variant="on" controlErrorAnchor>
         <input
           pInputText
           type="text"
@@ -70,7 +70,7 @@
         />
         <label class="ocx-required-label" for="provider_detail_form_apiKey">
           {{ 'PROVIDER_CREATE_UPDATE.FORM.APIKEY' | translate }}</label>
-      </span>
+      </p-floatlabel>
     </div>
   </div>
 </form>

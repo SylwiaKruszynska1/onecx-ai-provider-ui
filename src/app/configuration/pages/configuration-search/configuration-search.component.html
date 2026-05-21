@@ -16,7 +16,7 @@
     <form [formGroup]="configurationSearchFormGroup">
       <div class="grid mt-0 p-fluid">
         <div class="col-12 md:col-6">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="name"
               pInputText
@@ -26,10 +26,10 @@
               [ngModel]="vm.searchCriteria.name"
             />
             <label for="name">{{ 'CONFIGURATION_SEARCH.INPUT_FIELDS.NAME' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
         <div class="col-12 md:col-6">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="description"
               pInputText
@@ -39,7 +39,7 @@
               [ngModel]="vm.searchCriteria.description"
             />
             <label for="description">{{ 'CONFIGURATION_SEARCH.INPUT_FIELDS.DESCRIPTION' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
       </div>
     </form>

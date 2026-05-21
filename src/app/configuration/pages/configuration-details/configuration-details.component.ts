@@ -15,6 +15,7 @@ import { LetDirective } from '@ngrx/component'
 import { InputTextModule } from 'primeng/inputtext'
 import { TooltipModule } from 'primeng/tooltip'
 import { AutoCompleteModule } from 'primeng/autocomplete'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-configuration-details',
@@ -26,6 +27,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete'
     CommonModule,
     TranslateModule,
     FormsModule,
+    FloatLabelModule,
     ReactiveFormsModule,
     LetDirective,
     InputTextModule,

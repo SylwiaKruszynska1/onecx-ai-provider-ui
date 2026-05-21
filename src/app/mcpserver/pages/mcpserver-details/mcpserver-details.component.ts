@@ -11,12 +11,13 @@ import { selectMCPServerDetailsViewModel } from './mcpserver-details.selectors'
 import { MCPServerDetailsViewModel } from './mcpserver-details.viewmodel'
 import { CommonModule } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-mcpserver-details',
   templateUrl: './mcpserver-details.component.html',
   styleUrls: ['./mcpserver-details.component.scss'],
-  imports: [AngularAcceleratorModule, CommonModule, TranslateModule, ReactiveFormsModule, PortalPageComponent]
+  imports: [AngularAcceleratorModule, CommonModule, FloatLabelModule, TranslateModule, ReactiveFormsModule, PortalPageComponent]
 })
 export class MCPServerDetailsComponent implements OnInit {
   viewModel$: Observable<MCPServerDetailsViewModel> = this.store.select(selectMCPServerDetailsViewModel)
