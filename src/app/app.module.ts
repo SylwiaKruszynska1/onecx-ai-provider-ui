@@ -10,7 +10,7 @@ import { StoreModule } from '@ngrx/store'
 import { provideStoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta, provideThemeConfig } from '@onecx/angular-utils'
+import { createTranslateLoader, provideTranslationPathFromMeta, provideThemeConfig, provideTranslationConnectionService } from '@onecx/angular-utils'
 import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { environment } from 'src/environments/environment'
@@ -61,6 +61,7 @@ export const commonImports = [CommonModule]
       useFactory: apiConfigProvider,
       deps: [ConfigurationService, AppStateService]
     },
+    ...provideTranslationConnectionService(),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideThemeConfig(),
 

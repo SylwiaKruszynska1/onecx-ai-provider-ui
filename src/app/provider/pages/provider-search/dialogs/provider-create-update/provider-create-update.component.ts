@@ -6,12 +6,13 @@ import { Provider } from 'src/app/shared/generated'
 import { ProviderCreateUpdateViewModel } from './provider-create-update.viewmodel'
 import { TranslateModule } from '@ngx-translate/core'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
   selector: 'app-provider-create-update',
   templateUrl: './provider-create-update.component.html',
   styleUrls: ['./provider-create-update.component.scss'],
-  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule]
+  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule, InputTextModule]
 })
 export class ProviderCreateUpdateComponent
   implements

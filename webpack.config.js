@@ -142,8 +142,8 @@ module.exports = {
     ...config.module,
     parser: {
       javascript: {
-        importMeta: false
-      }
-    }
-  }
+        importMeta: false,
+      },
+    },
+  },
 }
