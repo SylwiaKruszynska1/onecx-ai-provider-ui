@@ -20,6 +20,11 @@
           {
             "glob": "**/*",
             "input": "public"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@onecx/angular-accelerator/assets/",
+            "output": "/onecx-angular-accelerator/assets/"
           }
         ],
         "styles": [

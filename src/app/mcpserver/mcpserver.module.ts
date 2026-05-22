@@ -18,11 +18,10 @@ import { MCPServerDetailsComponent } from './pages/mcpserver-details/mcpserver-d
 import { MCPServerSearchComponent } from './pages/mcpserver-search/mcpserver-search.component'
 import { MCPServerDetailsEffects } from './pages/mcpserver-details/mcpserver-details.effects'
 import { MCPServerSearchEffects } from './pages/mcpserver-search/mcpserver-search.effects'
-import { provideTranslationConnectionService } from '@onecx/angular-utils'
-import { provideStandaloneProviders, StandaloneShellModule } from '@onecx/angular-standalone-shell'
+import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
-  providers: [providePortalDialogService(), provideTranslationConnectionService(), provideStandaloneProviders(), ...providePermissionService()],
+  providers: [providePortalDialogService(), ...providePermissionService()],
   declarations: [],
   imports: [
     CommonModule,

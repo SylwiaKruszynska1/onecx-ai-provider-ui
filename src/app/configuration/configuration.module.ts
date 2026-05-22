@@ -22,11 +22,10 @@ import { ConfigurationSearchEffects } from './pages/configuration-search/configu
 import { ConfigurationCreateUpdateComponent } from './pages/configuration-search/dialogs/configuration-create-update/configuration-create-update.component'
 import { ConfigurationDetailsComponent } from './pages/configuration-details/configuration-details.component'
 import { ConfigurationDetailsEffects } from './pages/configuration-details/configuration-details.effects'
-import { provideTranslationConnectionService } from '@onecx/angular-utils'
-import { provideStandaloneProviders, StandaloneShellModule } from '@onecx/angular-standalone-shell'
+import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
-  providers: [providePortalDialogService(), provideTranslationConnectionService(), provideStandaloneProviders(), ...providePermissionService()],
+  providers: [providePortalDialogService(), ...providePermissionService()],
   declarations: [],
   imports: [
     CommonModule,

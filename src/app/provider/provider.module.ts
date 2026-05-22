@@ -20,10 +20,9 @@ import { ProviderDetailsEffects } from './pages/provider-details/provider-detail
 import { ProviderSearchComponent } from './pages/provider-search/provider-search.component'
 import { ProviderSearchEffects } from './pages/provider-search/provider-search.effects'
 import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/provider-create-update/provider-create-update.component'
-import { provideTranslationConnectionService } from '@onecx/angular-utils'
 
 @NgModule({
-  providers: [providePortalDialogService(), provideTranslationConnectionService(), ...providePermissionService()],
+  providers: [providePortalDialogService(), ...providePermissionService()],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [],
   imports: [
