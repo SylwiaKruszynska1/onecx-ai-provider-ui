@@ -17,7 +17,14 @@ import { FloatLabelModule } from 'primeng/floatlabel'
   selector: 'app-mcpserver-details',
   templateUrl: './mcpserver-details.component.html',
   styleUrls: ['./mcpserver-details.component.scss'],
-  imports: [AngularAcceleratorModule, CommonModule, FloatLabelModule, TranslateModule, ReactiveFormsModule, PortalPageComponent]
+  imports: [
+    AngularAcceleratorModule,
+    CommonModule,
+    FloatLabelModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    PortalPageComponent
+  ]
 })
 export class MCPServerDetailsComponent implements OnInit {
   viewModel$: Observable<MCPServerDetailsViewModel> = this.store.select(selectMCPServerDetailsViewModel)

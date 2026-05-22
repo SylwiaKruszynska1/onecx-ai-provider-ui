@@ -207,7 +207,7 @@ export class ProviderSearchEffects {
         if (!result) {
           throw new Error('DialogResult was not set as expected!')
         }
-        const itemToEditId = result.id ?? ''
+        const itemToEditId = result.id ?? ""
         const itemToEdit = {
           ...result
         } as UpdateProviderRequest
@@ -310,31 +310,29 @@ export class ProviderSearchEffects {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   performSearch(searchCriteria: Record<string, any>) {
-    return this.providerService
-      .findProviderBySearchCriteria({
-        ...Object.entries(searchCriteria).reduce(
-          (acc, [key, value]) => ({
-            ...acc,
-            [key]: value instanceof Date ? value.toISOString() : value
-          }),
-          {}
-        )
-      })
-      .pipe(
-        map(({ stream, totalElements }) =>
-          ProviderSearchActions.providerSearchResultsReceived({
-            results: stream,
-            totalNumberOfResults: totalElements
-          })
-        ),
-        catchError((error) =>
-          of(
-            ProviderSearchActions.providerSearchResultsLoadingFailed({
-              error
+    return this.providerService.findProviderBySearchCriteria({
+      ...Object.entries(searchCriteria).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: value instanceof Date ? value.toISOString() : value
+        }),
+        {}
+      )
+    }).pipe(
+      map(({ stream, totalElements }) =>
+        ProviderSearchActions.providerSearchResultsReceived({
+          results: stream,
+          totalNumberOfResults: totalElements
+        }),
+      catchError((error) =>
+        of(
+          ProviderSearchActions.providerSearchResultsLoadingFailed({
+            error
             })
           )
         )
       )
+    )
   }
 
   rehydrateChartVisibility$ = createEffect(() => {

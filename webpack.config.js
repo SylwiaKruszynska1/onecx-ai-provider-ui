@@ -46,26 +46,27 @@ const config = withModuleFederationPlugin({
     },
     '@onecx/accelerator': {
       requiredVersion: 'auto',
+      includeSecondaries: true
     },
     '@onecx/angular-accelerator': {
       requiredVersion: 'auto',
-      includeSecondaries: true,
+      includeSecondaries: true
     },
     '@onecx/angular-auth': {
       requiredVersion: 'auto',
-      includeSecondaries: true,
+      includeSecondaries: true
     },
     '@onecx/angular-remote-components': {
       requiredVersion: 'auto',
-      includeSecondaries: true,
+      includeSecondaries: true
     },
     '@onecx/angular-webcomponents': {
       requiredVersion: 'auto',
-      includeSecondaries: true,
+      includeSecondaries: true
     },
     '@onecx/integration-interface': {
       requiredVersion: 'auto',
-      includeSecondaries: true,
+      includeSecondaries: true
     },
     '@ngx-translate/core': {
       requiredVersion: 'auto'

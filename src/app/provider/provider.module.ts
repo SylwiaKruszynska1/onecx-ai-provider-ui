@@ -9,10 +9,8 @@ import { TranslateModule } from '@ngx-translate/core'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { providePortalDialogService } from '@onecx/angular-accelerator'
 import { DatePickerModule } from 'primeng/datepicker'
-import { TooltipModule } from 'primeng/tooltip'
-import { MultiSelectModule } from 'primeng/multiselect'
 import { SharedModule } from '../shared/shared.module'
-import { PortalPageComponent, providePermissionService } from '@onecx/angular-utils'
+import { providePermissionService } from '@onecx/angular-utils'
 import { ProviderFeature } from './provider.reducers'
 import { routes } from './provider.routes'
 import { ProviderDetailsComponent } from './pages/provider-details/provider-details.component'
@@ -34,9 +32,6 @@ import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/p
     FormsModule,
     ReactiveFormsModule,
     DatePickerModule,
-    TooltipModule,
-    MultiSelectModule,
-    PortalPageComponent,
     ProviderCreateUpdateComponent,
     ProviderDetailsComponent,
     ProviderSearchComponent,

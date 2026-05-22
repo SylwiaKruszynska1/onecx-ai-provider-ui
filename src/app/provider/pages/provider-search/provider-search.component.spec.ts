@@ -355,8 +355,7 @@ describe('ProviderSearchComponent', () => {
 
     it('should map valid Date value to UTC ISO string in searchCriteria', () => {
       const localDate = new Date(2023, 7, 14, 12, 30, 45)
-      const expectedIso = new Date(
-        Date.UTC(
+      const expectedIso = new Date(Date.UTC(
           localDate.getFullYear(),
           localDate.getMonth(),
           localDate.getDate(),
