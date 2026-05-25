@@ -18,6 +18,7 @@ import { ProviderDetailsEffects } from './pages/provider-details/provider-detail
 import { ProviderSearchComponent } from './pages/provider-search/provider-search.component'
 import { ProviderSearchEffects } from './pages/provider-search/provider-search.effects'
 import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/provider-create-update/provider-create-update.component'
+import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
   providers: [providePortalDialogService(), ...providePermissionService()],
@@ -37,7 +38,8 @@ import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/p
     ProviderSearchComponent,
     StoreModule.forFeature(ProviderFeature),
     EffectsModule.forFeature([ProviderDetailsEffects, ProviderSearchEffects]),
-    TranslateModule
+    TranslateModule,
+    StandaloneShellModule
   ]
 })
 export class ProviderModule {}

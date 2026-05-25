@@ -122,7 +122,13 @@ export class ConfigurationSearchComponent implements OnInit {
         routerLink: '/configuration'
       }
     ])
-    this.viewModel$.subscribe((vm) => this.configurationSearchFormGroup.patchValue(vm.searchCriteria))
+    this.viewModel$.subscribe((vm) => {
+      if (!vm.searchCriteria || Object.keys(vm.searchCriteria).length === 0) {
+        this.configurationSearchFormGroup.reset()
+      } else {
+        this.configurationSearchFormGroup.patchValue(vm.searchCriteria)
+      }
+    })
   }
 
   resultComponentStateChanged(state: InteractiveDataViewComponentState) {

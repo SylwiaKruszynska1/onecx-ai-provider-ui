@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { AngularAcceleratorModule, ColumnType } from '@onecx/angular-accelerator'
+import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -54,6 +55,7 @@ describe('ProviderSearchComponent', () => {
       declarations: [],
       imports: [
         AngularAcceleratorModule,
+        StandaloneShellModule,
         LetDirective,
         ProviderSearchComponent,
         ReactiveFormsModule,
