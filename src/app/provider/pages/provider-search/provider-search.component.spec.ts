@@ -10,9 +10,8 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { BreadcrumbService, ColumnType } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { AngularAcceleratorModule, ColumnType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -52,10 +51,11 @@ describe('ProviderSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderSearchComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
         LetDirective,
+        ProviderSearchComponent,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
         // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -67,6 +67,7 @@ describe('ProviderSearchComponent', () => {
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { Provider: { search: initialState } }
@@ -177,7 +178,7 @@ describe('ProviderSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -186,9 +187,9 @@ describe('ProviderSearchComponent', () => {
     expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
     const searchHeader = await ProviderSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
-    const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
+    const headerText = await pageHeader.getHeaderText()
 
-    expect(await searchBreadcrumbItem!.getText()).toEqual('Search')
+    expect(headerText).toBe('Provider Search')
   })
 
   it('should export csv data on export action click', async () => {

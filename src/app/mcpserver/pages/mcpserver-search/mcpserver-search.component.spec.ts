@@ -12,8 +12,8 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
-import { BreadcrumbService, ColumnType, DiagramType } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { ColumnType, DiagramType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { MCPServerSearchActions } from './mcpserver-search.actions'
@@ -96,14 +96,14 @@ describe('MCPServerSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MCPServerSearchComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
         LetDirective,
+        MCPServerSearchComponent,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
         FormsModule,
-        ReactiveFormsModule,
         TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
           'de',
           require('./../../../../assets/i18n/de.json')
@@ -112,6 +112,7 @@ describe('MCPServerSearchComponent', () => {
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { mcpserver: { search: initialState } }
@@ -178,8 +179,7 @@ describe('MCPServerSearchComponent', () => {
       doneFn()
     })
 
-    const searchHeader = await mcpserverSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
@@ -264,7 +264,7 @@ describe('MCPServerSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -387,12 +387,14 @@ describe('MCPServerSearchComponent', () => {
       ...baseMCPServerSearchViewModel,
       results: [],
       columns: columns,
-      displayedColumns: columns
+      resultComponentState: {
+        layout: 'table',
+        displayedColumns: columns
+      }
     })
     store.refreshState()
 
     const interactiveDataView = await mcpserverSearch.getSearchResults()
-    ;(await (await interactiveDataView.getDataLayoutSelection()).getTableLayoutSelectionButton())?.click()
 
     const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
     expect(columnGroupSelector).toBeTruthy()

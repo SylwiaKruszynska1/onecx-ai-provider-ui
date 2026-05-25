@@ -12,8 +12,9 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
+      declarations: [],
       imports: [
+        AppComponent,
         AngularAcceleratorModule,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         TranslateTestingModule.withTranslations('en', require('./../assets/i18n/en.json')).withTranslations(

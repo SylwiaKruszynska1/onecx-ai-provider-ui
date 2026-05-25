@@ -36,8 +36,8 @@ describe('ConfigurationCreateUpdateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationCreateUpdateComponent],
       imports: [
+        ConfigurationCreateUpdateComponent,
         AngularAcceleratorModule,
         FormsModule,
         ReactiveFormsModule,

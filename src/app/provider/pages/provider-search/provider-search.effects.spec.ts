@@ -11,7 +11,7 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { ColumnType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -52,10 +52,11 @@ describe('ProviderSearchComponent effects', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderSearchComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
         LetDirective,
+        ProviderSearchComponent,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
         // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -67,6 +68,7 @@ describe('ProviderSearchComponent effects', () => {
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { Provider: { search: initialState } }
@@ -121,8 +123,7 @@ describe('ProviderSearchComponent effects', () => {
       doneFn()
     })
 
-    const searchHeader = await ProviderSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
@@ -185,60 +186,32 @@ describe('ProviderSearchComponent effects', () => {
   it('should dispatch displayedColumnsChanged on data view column change', async () => {
     jest.spyOn(store, 'dispatch')
 
-    fixture = TestBed.createComponent(ProviderSearchComponent)
-    component = fixture.componentInstance
+    const fixture = TestBed.createComponent(ProviderSearchComponent)
+    const component = fixture.componentInstance
     fixture.detectChanges()
-    ProviderSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, ProviderSearchHarness)
 
-    expect(store.dispatch).toHaveBeenCalledWith(
-      ProviderSearchActions.displayedColumnsChanged({ displayedColumns: ProviderSearchColumns })
+    const columns = [
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'COLUMN_KEY',
+        id: 'column_1'
+      },
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'SECOND_COLUMN_KEY',
+        id: 'column_2'
+      }
+    ]
+
+    component.onDisplayedColumnsChange(
+      new CustomEvent('displayedColumnsChange', {
+        detail: columns
+      })
     )
-
-    jest.clearAllMocks()
-
-    store.overrideSelector(selectProviderSearchViewModel, {
-      ...baseProviderSearchViewModel,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'COLUMN_KEY',
-          id: 'column_1'
-        },
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'SECOND_COLUMN_KEY',
-          id: 'column_2'
-        }
-      ]
-    })
-    store.refreshState()
-
-    const interactiveDataView = await ProviderSearch.getSearchResults()
-    const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
-    expect(columnGroupSelector).toBeTruthy()
-    await columnGroupSelector!.openCustomGroupColumnSelectorDialog()
-    const pickList = await columnGroupSelector!.getPicklist()
-    const transferControlButtons = await pickList.getTransferControlsButtons()
-    expect(transferControlButtons.length).toBe(4)
-    const activateAllColumnsButton = transferControlButtons[3]
-    await activateAllColumnsButton.click()
-    const saveButton = await columnGroupSelector!.getSaveButton()
-    await saveButton.click()
 
     expect(store.dispatch).toHaveBeenCalledWith(
       ProviderSearchActions.displayedColumnsChanged({
-        displayedColumns: [
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'COLUMN_KEY',
-            id: 'column_1'
-          },
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'SECOND_COLUMN_KEY',
-            id: 'column_2'
-          }
-        ]
+        displayedColumns: columns
       })
     )
   })

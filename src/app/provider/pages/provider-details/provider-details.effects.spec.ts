@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ProviderDetailsComponent } from './provider-details.component'
@@ -48,10 +48,11 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderDetailsComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
         LetDirective,
+        ProviderDetailsComponent,
         ReactiveFormsModule,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
@@ -61,6 +62,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
         )
       ],
       providers: [
+        ...providePermissionService(),
         provideMockStore({
           initialState: { Provider: { details: initialState } }
         }),
@@ -76,7 +78,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
     }).compileComponents()
 
     const userService = TestBed.inject(UserService)
-    userService.hasPermission = () => true
+    userService.hasPermission = async () => true
     const translateService = TestBed.inject(TranslateService)
     translateService.use('en')
 
@@ -223,7 +225,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
 
   it('should enable form and dispatch editMode true on toggleEditMode(true)', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch')
-    jest.spyOn(component['user'], 'hasPermission').mockReturnValue(true)
+    jest.spyOn(component['user'], 'hasPermission').mockResolvedValue(true)
 
     component.toggleEditMode(true)
 
@@ -241,12 +243,13 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
   })
 
   it('should disable apiKey field if user lacks permission', () => {
-    jest.spyOn(component['user'], 'hasPermission').mockReturnValue(false)
+    jest.spyOn(component['user'], 'hasPermission').mockReturnValue(false as unknown as Promise<boolean>)
 
     component.toggleEditMode(true)
 
     expect(component.formGroup.get('apiKey')?.disabled).toBe(true)
   })
+  
   it('should dispatch apiKeyVisibilityToggled action on toggleApiKeyVisibility()', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch')
     component.toggleApiKeyVisibility()

@@ -10,7 +10,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { Action, BreadcrumbService, PortalDialogService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PrimeIcons } from 'primeng/api'
@@ -71,7 +71,6 @@ describe('ConfigurationDetailsComponent', () => {
   let component: ConfigurationDetailsComponent
   let fixture: ComponentFixture<ConfigurationDetailsComponent>
   let store: MockStore<Store>
-  let breadcrumbService: BreadcrumbService
   let ConfigurationDetails: ConfigurationDetailsHarness
   let effects: ConfigurationDetailsEffects
   let actions$: ReplaySubject<any>
@@ -203,8 +202,9 @@ describe('ConfigurationDetailsComponent', () => {
     } as unknown as jest.Mocked<Router>
 
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationDetailsComponent],
+      declarations: [],
       imports: [
+        ConfigurationDetailsComponent,
         AngularAcceleratorModule,
         LetDirective,
         FormsModule,
@@ -218,6 +218,7 @@ describe('ConfigurationDetailsComponent', () => {
         )
       ],
       providers: [
+        ...providePermissionService(),
         ConfigurationDetailsEffects,
         provideMockStore({
           initialState: { Configuration: { details: initialState, backNavigationPossible: true } }
@@ -250,7 +251,6 @@ describe('ConfigurationDetailsComponent', () => {
 
     fixture = TestBed.createComponent(ConfigurationDetailsComponent)
     component = fixture.componentInstance
-    breadcrumbService = TestBed.inject(BreadcrumbService)
     fixture.detectChanges()
     ConfigurationDetails = await TestbedHarnessEnvironment.harnessForFixture(fixture, ConfigurationDetailsHarness)
   })
@@ -261,6 +261,7 @@ describe('ConfigurationDetailsComponent', () => {
     })
 
     it('should display correct breadcrumbs', async () => {
+      const breadcrumbService = component['breadcrumbService']
       jest.spyOn(breadcrumbService, 'setItems')
 
       component.ngOnInit()
@@ -491,7 +492,7 @@ describe('ConfigurationDetailsComponent', () => {
     })
 
     it('should call breadcrumbService.setItems on ngOnInit', () => {
-      const breadcrumbSpy = jest.spyOn(breadcrumbService, 'setItems')
+      const breadcrumbSpy = jest.spyOn(component['breadcrumbService'], 'setItems')
       component.ngOnInit()
       expect(breadcrumbSpy).toHaveBeenCalledWith([
         {

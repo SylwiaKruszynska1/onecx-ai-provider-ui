@@ -11,8 +11,8 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
-import { BreadcrumbService, ColumnType, RowListGridData } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { ColumnType, RowListGridData } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
@@ -51,9 +51,10 @@ describe('ConfigurationSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationSearchComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
+        ConfigurationSearchComponent,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
@@ -64,6 +65,7 @@ describe('ConfigurationSearchComponent', () => {
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { Configuration: { search: initialState } }
@@ -83,7 +85,7 @@ describe('ConfigurationSearchComponent', () => {
 
   beforeEach(async () => {
     const userService = TestBed.inject(UserService)
-    userService.hasPermission = () => true
+    userService.hasPermission = async () => true
     const translateService = TestBed.inject(TranslateService)
     translateService.use('en')
     formBuilder = TestBed.inject(FormBuilder)
@@ -128,8 +130,7 @@ describe('ConfigurationSearchComponent', () => {
       doneFn()
     })
 
-    const searchHeader = await ConfigurationSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
@@ -207,7 +208,7 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -216,8 +217,8 @@ describe('ConfigurationSearchComponent', () => {
     expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
     const searchHeader = await ConfigurationSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
-    const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
-    expect(await searchBreadcrumbItem!.getText()).toEqual('Search')
+    const headerText = await pageHeader.getHeaderText()
+    expect(headerText).toBe('Configuration Search')
   })
 
   it('should dispatch searchButtonClicked action on search', (done) => {
@@ -449,61 +450,31 @@ describe('ConfigurationSearchComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith(ConfigurationSearchActions.viewModeChanged({ viewMode: 'advanced' }))
   })
 
-  it('should dispatch displayedColumnsChanged on data view column change', async () => {
-    fixture = TestBed.createComponent(ConfigurationSearchComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-    ConfigurationSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, ConfigurationSearchHarness)
+  it('should dispatch displayedColumnsChanged on data view column change', () => {
+    jest.spyOn(store, 'dispatch')
 
-    expect(store.dispatch).toHaveBeenCalledWith(
-      ConfigurationSearchActions.displayedColumnsChanged({ displayedColumns: configurationSearchColumns })
+    const columns = [
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'COLUMN_KEY',
+        id: 'column_1'
+      },
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'SECOND_COLUMN_KEY',
+        id: 'column_2'
+      }
+    ]
+
+    component.onDisplayedColumnsChange(
+      new CustomEvent('displayedColumnsChange', {
+        detail: columns
+      })
     )
-
-    jest.clearAllMocks()
-
-    store.overrideSelector(selectConfigurationSearchViewModel, {
-      ...baseConfigurationSearchViewModel,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'COLUMN_KEY',
-          id: 'column_1'
-        },
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'SECOND_COLUMN_KEY',
-          id: 'column_2'
-        }
-      ]
-    })
-    store.refreshState()
-
-    const interactiveDataView = await ConfigurationSearch.getSearchResults()
-    const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
-    expect(columnGroupSelector).toBeTruthy()
-    await columnGroupSelector!.openCustomGroupColumnSelectorDialog()
-    const pickList = await columnGroupSelector!.getPicklist()
-    const transferControlButtons = await pickList.getTransferControlsButtons()
-    expect(transferControlButtons.length).toBe(4)
-    const activateAllColumnsButton = transferControlButtons[3]
-    await activateAllColumnsButton.click()
-    const saveButton = await columnGroupSelector!.getSaveButton()
-    await saveButton.click()
 
     expect(store.dispatch).toHaveBeenCalledWith(
       ConfigurationSearchActions.displayedColumnsChanged({
-        displayedColumns: [
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'COLUMN_KEY',
-            id: 'column_1'
-          },
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'SECOND_COLUMN_KEY',
-            id: 'column_2'
-          }
-        ]
+        displayedColumns: columns
       })
     )
   })

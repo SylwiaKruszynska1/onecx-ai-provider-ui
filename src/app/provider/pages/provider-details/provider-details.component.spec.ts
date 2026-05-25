@@ -6,7 +6,7 @@ import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -77,10 +77,11 @@ describe('ProviderDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderDetailsComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
         LetDirective,
+        ProviderDetailsComponent,
         ReactiveFormsModule,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
@@ -90,6 +91,7 @@ describe('ProviderDetailsComponent', () => {
         )
       ],
       providers: [
+        ...providePermissionService(),
         provideMockStore({
           initialState: { Provider: { details: initialState } }
         }),
@@ -125,6 +127,7 @@ describe('ProviderDetailsComponent', () => {
     })
 
     it('should display correct breadcrumbs', async () => {
+      const breadcrumbService = component['breadcrumbService']
       jest.spyOn(breadcrumbService, 'setItems')
 
       component.ngOnInit()
