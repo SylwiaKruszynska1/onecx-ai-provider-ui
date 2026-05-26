@@ -19,6 +19,7 @@ import { AppComponent } from './app.component'
 import { metaReducers, reducers } from './app.reducers'
 import { APIConfiguration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
+import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 export const commonImports = [CommonModule]
 
@@ -32,6 +33,7 @@ export const commonImports = [CommonModule]
     BrowserAnimationsModule,
     AppRoutingModule,
     LetDirective,
+    StandaloneShellModule,
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({

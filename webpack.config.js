@@ -75,7 +75,8 @@ const config = withModuleFederationPlugin({
       requiredVersion: 'auto',
       includeSecondaries: true
     }
-  })
+  }),
+  sharedMappings: ['@onecx/angular-accelerator'],
 })
 
 const plugins = config.plugins.filter((plugin) => !(plugin instanceof ModifyEntryPlugin))
