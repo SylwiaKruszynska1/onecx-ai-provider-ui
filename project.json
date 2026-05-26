@@ -28,6 +28,7 @@
           }
         ],
         "styles": [
+          "node_modules/primeicons/primeicons.css",
           {
             "input": "./src/styles.scss",
             "bundleName": "styles",
