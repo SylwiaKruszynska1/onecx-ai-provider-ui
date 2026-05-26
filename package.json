@@ -114,6 +114,7 @@
     "webpack": "5.94.0"
   },
   "overrides": {
+    "koa": "^2.16.2",
     "vite": "6.4.2",
     "@onecx/nx-plugin": {
       "@angular/compiler": "^19.2.20",

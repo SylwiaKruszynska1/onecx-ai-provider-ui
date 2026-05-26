@@ -21,7 +21,6 @@ import { FloatLabelModule } from 'primeng/floatlabel'
   selector: 'app-configuration-details',
   templateUrl: './configuration-details.component.html',
   styleUrls: ['./configuration-details.component.scss'],
-  standalone: true,
   imports: [
     AngularAcceleratorModule,
     CommonModule,
