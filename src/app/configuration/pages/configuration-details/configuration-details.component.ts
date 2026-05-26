@@ -126,7 +126,7 @@ export class ConfigurationDetailsComponent implements OnInit {
   ) {
     this.filteredProviders$ = combineLatest([this.providerQuery$, this.viewModel$]).pipe(
       map(([query, vm]) => {
-        const suggestions = [...(vm.details?.llmProvider ? [vm.details.llmProvider] : []), ...(vm.Providers ?? [])]
+        const suggestions = [...(vm.details?.llmProvider ? [vm.details.llmProvider] : []), ...vm.Providers ?? []]
         return suggestions.filter(
           (p) => p.name.toLowerCase().includes(query.toLowerCase()) && vm.details?.llmProvider?.id !== p.id
         )
@@ -136,11 +136,10 @@ export class ConfigurationDetailsComponent implements OnInit {
     this.mcpServerQuery$ = new BehaviorSubject<string>('')
     this.filteredMCPServers$ = combineLatest([this.mcpServerQuery$, this.viewModel$]).pipe(
       map(([query, vm]) => {
-        const suggestions = [...(vm.details?.mcpServers ?? []), ...(vm.MCPServers ?? [])]
-        return suggestions.filter(
-          (mcp) =>
-            (mcp.name ?? '').toLowerCase().includes(query.toLowerCase()) &&
-            vm.details?.mcpServers?.every((selected) => selected.id !== mcp.id)
+        const suggestions = [...(vm.details?.mcpServers ?? []), ...vm.MCPServers ?? []]
+        return suggestions.filter((mcp) =>
+          (mcp.name ?? '').toLowerCase().includes(query.toLowerCase())
+          && vm.details?.mcpServers?.every(selected => selected.id !== mcp.id)
         )
       })
     )

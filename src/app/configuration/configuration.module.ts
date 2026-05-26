@@ -16,7 +16,7 @@ import { SelectModule } from 'primeng/select'
 import { SharedModule } from '../shared/shared.module'
 import { configurationFeature } from './configuration.reducers'
 import { routes } from './configuration.routes'
-import { PortalPageComponent, providePermissionService } from '@onecx/angular-utils'
+import { providePermissionService } from '@onecx/angular-utils'
 import { ConfigurationSearchComponent } from './pages/configuration-search/configuration-search.component'
 import { ConfigurationSearchEffects } from './pages/configuration-search/configuration-search.effects'
 import { ConfigurationCreateUpdateComponent } from './pages/configuration-search/dialogs/configuration-create-update/configuration-create-update.component'
@@ -48,7 +48,6 @@ import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
     EffectsModule.forFeature([ConfigurationDetailsEffects, ConfigurationSearchEffects]),
     TranslateModule,
     StandaloneShellModule,
-    PortalPageComponent
   ]
 })
 export class ConfigurationModule {}
