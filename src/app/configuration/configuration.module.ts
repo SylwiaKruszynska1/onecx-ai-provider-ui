@@ -22,7 +22,6 @@ import { ConfigurationSearchEffects } from './pages/configuration-search/configu
 import { ConfigurationCreateUpdateComponent } from './pages/configuration-search/dialogs/configuration-create-update/configuration-create-update.component'
 import { ConfigurationDetailsComponent } from './pages/configuration-details/configuration-details.component'
 import { ConfigurationDetailsEffects } from './pages/configuration-details/configuration-details.effects'
-import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
   providers: [providePortalDialogService(), ...providePermissionService()],
@@ -47,7 +46,6 @@ import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
     StoreModule.forFeature(configurationFeature),
     EffectsModule.forFeature([ConfigurationDetailsEffects, ConfigurationSearchEffects]),
     TranslateModule,
-    StandaloneShellModule,
   ]
 })
 export class ConfigurationModule {}

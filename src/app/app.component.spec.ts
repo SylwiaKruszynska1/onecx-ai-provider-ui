@@ -5,7 +5,6 @@ import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { AppComponent } from './app.component'
 import { provideHttpClient } from '@angular/common/http'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 describe('AppComponent', () => {
   const mockActivatedRoute = {}
@@ -28,7 +27,6 @@ describe('AppComponent', () => {
         provideHttpClient(),
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents()
   })
 

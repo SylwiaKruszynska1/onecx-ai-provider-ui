@@ -18,7 +18,6 @@ import { MCPServerDetailsComponent } from './pages/mcpserver-details/mcpserver-d
 import { MCPServerSearchComponent } from './pages/mcpserver-search/mcpserver-search.component'
 import { MCPServerDetailsEffects } from './pages/mcpserver-details/mcpserver-details.effects'
 import { MCPServerSearchEffects } from './pages/mcpserver-search/mcpserver-search.effects'
-import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
   providers: [providePortalDialogService(), ...providePermissionService()],
@@ -39,7 +38,6 @@ import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
     StoreModule.forFeature(mcpserverFeature),
     EffectsModule.forFeature([MCPServerDetailsEffects, MCPServerSearchEffects]),
     TranslateModule,
-    StandaloneShellModule
   ]
 })
 export class MCPServerModule {}

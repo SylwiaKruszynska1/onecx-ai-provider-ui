@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
@@ -17,11 +17,9 @@ import { ProviderDetailsEffects } from './pages/provider-details/provider-detail
 import { ProviderSearchComponent } from './pages/provider-search/provider-search.component'
 import { ProviderSearchEffects } from './pages/provider-search/provider-search.effects'
 import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/provider-create-update/provider-create-update.component'
-import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @NgModule({
   providers: [providePortalDialogService(), ...providePermissionService()],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [],
   imports: [
     CommonModule,
@@ -37,8 +35,7 @@ import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
     ProviderSearchComponent,
     StoreModule.forFeature(ProviderFeature),
     EffectsModule.forFeature([ProviderDetailsEffects, ProviderSearchEffects]),
-    TranslateModule,
-    StandaloneShellModule
+    TranslateModule
   ]
 })
 export class ProviderModule {}
