@@ -64,6 +64,10 @@ const config = withModuleFederationPlugin({
       requiredVersion: 'auto',
       includeSecondaries: true
     },
+    '@onecx/angular-utils': {
+      requiredVersion: 'auto',
+      includeSecondaries: true
+    },
     '@onecx/integration-interface': {
       requiredVersion: 'auto',
       includeSecondaries: true
