@@ -5,7 +5,7 @@ import {
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
 } from '@onecx/angular-accelerator'
-import { Configuration } from '../../../shared/generated'
+import { Configuration } from 'src/app/shared/generated'
 import { ConfigurationSearchCriteria } from './configuration-search.parameters'
 
 export const ConfigurationSearchActions = createActionGroup({

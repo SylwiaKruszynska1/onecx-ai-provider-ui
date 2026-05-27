@@ -1,4 +1,4 @@
-import { Configuration, MCPServer, Provider } from '../../../shared/generated'
+import { Configuration, MCPServer, Provider } from 'src/app/shared/generated'
 
 export interface ConfigurationDetailsState {
   details: Configuration | undefined

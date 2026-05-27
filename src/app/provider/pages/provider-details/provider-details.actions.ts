@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { Provider } from '../../../shared/generated'
+import { Provider } from 'src/app/shared/generated'
 
 export const ProviderDetailsActions = createActionGroup({
   source: 'ProviderDetails',

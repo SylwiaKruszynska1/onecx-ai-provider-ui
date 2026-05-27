@@ -10,7 +10,7 @@ import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/ang
 import { DatePickerModule } from 'primeng/datepicker'
 import { TooltipModule } from 'primeng/tooltip'
 import { MultiSelectModule } from 'primeng/multiselect'
-import { SharedModule } from '../shared/shared.module'
+import { SharedModule } from 'src/app/shared/shared.module'
 import { providePermissionService } from '@onecx/angular-utils'
 import { mcpserverFeature } from './mcpserver.reducers'
 import { routes } from './mcpserver.routes'

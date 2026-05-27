@@ -212,10 +212,10 @@ describe('ConfigurationDetailsComponent', () => {
         AutoCompleteModule,
         MultiSelectModule,
         InputTextModule,
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./../../../../assets/i18n/de.json')
-        )
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en')
       ],
       providers: [
         ...providePermissionService(),

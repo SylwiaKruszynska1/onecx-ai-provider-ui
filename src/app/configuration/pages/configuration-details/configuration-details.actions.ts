@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { Configuration, MCPServer, Provider } from '../../../shared/generated'
+import { Configuration, MCPServer, Provider } from 'src/app/shared/generated'
 
 export const ConfigurationDetailsActions = createActionGroup({
   source: 'ConfigurationDetails',
