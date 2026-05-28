@@ -1,16 +1,18 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core'
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
-
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { map } from 'rxjs'
 import { Provider } from 'src/app/shared/generated'
-
 import { ProviderCreateUpdateViewModel } from './provider-create-update.viewmodel'
+import { TranslateModule } from '@ngx-translate/core'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 
 @Component({
   selector: 'app-provider-create-update',
   templateUrl: './provider-create-update.component.html',
-  styleUrls: ['./provider-create-update.component.scss']
+  styleUrls: ['./provider-create-update.component.scss'],
+  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule, InputTextModule]
 })
 export class ProviderCreateUpdateComponent
   implements

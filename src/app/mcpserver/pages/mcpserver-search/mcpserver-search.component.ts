@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { getUTCDateWithoutTimezoneIssues, isValidDate } from '@onecx/accelerator'
 import {
@@ -12,19 +12,39 @@ import {
   ExportDataService,
   InteractiveDataViewComponentState,
   RowListGridData,
-  SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
+  SearchHeaderComponentState,
+  AngularAcceleratorModule
+} from '@onecx/angular-accelerator'
 import { PrimeIcons } from 'primeng/api'
 import { map, Observable } from 'rxjs'
 import { MCPServerSearchActions } from './mcpserver-search.actions'
 import { MCPServerSearchCriteria, mcpserverSearchCriteriasSchema } from './mcpserver-search.parameters'
 import { selectMCPServerSearchViewModel } from './mcpserver-search.selectors'
 import { MCPServerSearchViewModel } from './mcpserver-search.viewmodel'
+import { TranslateModule } from '@ngx-translate/core'
+import { CommonModule } from '@angular/common'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { LetDirective } from '@ngrx/component'
+import { TooltipModule } from 'primeng/tooltip'
+import { InputTextModule } from 'primeng/inputtext'
+import { FloatLabelModule } from 'primeng/floatlabel'
 
 @Component({
   selector: 'app-mcpserver-search',
   templateUrl: './mcpserver-search.component.html',
-  styleUrls: ['./mcpserver-search.component.scss']
+  styleUrls: ['./mcpserver-search.component.scss'],
+  imports: [
+    AngularAcceleratorModule,
+    CommonModule,
+    TranslateModule,
+    FormsModule,
+    FloatLabelModule,
+    ReactiveFormsModule,
+    LetDirective,
+    InputTextModule,
+    PortalPageComponent,
+    TooltipModule
+  ]
 })
 export class MCPServerSearchComponent implements OnInit {
   viewModel$: Observable<MCPServerSearchViewModel> = this.store.select(selectMCPServerSearchViewModel)
@@ -78,7 +98,7 @@ export class MCPServerSearchComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     @Inject(LOCALE_ID) public readonly locale: string,
     private readonly exportDataService: ExportDataService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.breadcrumbService.setItems([
@@ -113,9 +133,7 @@ export class MCPServerSearchComponent implements OnInit {
     const searchCriteria = Object.entries(formValue.getRawValue()).reduce(
       (acc: Partial<MCPServerSearchCriteria>, [key, value]) => ({
         ...acc,
-        [key]: isValidDate(value)
-          ? getUTCDateWithoutTimezoneIssues(value)
-          : value
+        [key]: isValidDate(value) ? getUTCDateWithoutTimezoneIssues(value) : value
       }),
       {}
     )

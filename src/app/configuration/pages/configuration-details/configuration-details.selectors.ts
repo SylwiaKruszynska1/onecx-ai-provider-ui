@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store'
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
 import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors'
-import { Configuration, MCPServer, Provider } from '../../../shared/generated'
+import { Configuration, MCPServer, Provider } from 'src/app/shared/generated'
 import { configurationFeature } from '../../configuration.reducers'
 import { initialState } from './configuration-details.reducers'
 import { ConfigurationDetailsViewModel } from './configuration-details.viewmodel'

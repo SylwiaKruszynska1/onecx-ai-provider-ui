@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store'
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
-import { Provider } from '../../../shared/generated'
+import { Provider } from 'src/app/shared/generated'
 import { ProviderFeature } from '../../provider.reducers'
 import { initialState } from './provider-details.reducers'
 import { ProviderDetailsViewModel } from './provider-details.viewmodel'

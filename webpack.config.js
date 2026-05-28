@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const { ModifySourcePlugin, ReplaceOperation } = require('modify-source-webpack-plugin')
 const { ModifyEntryPlugin } = require('@angular-architects/module-federation/src/utils/modify-entry-plugin')
 const { share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack')
 const config = withModuleFederationPlugin({
@@ -39,6 +40,10 @@ const config = withModuleFederationPlugin({
       requiredVersion: 'auto',
       includeSecondaries: true
     },
+    primeng: {
+      requiredVersion: 'auto',
+      includeSecondaries: true
+    },
     '@onecx/accelerator': {
       requiredVersion: 'auto',
       includeSecondaries: true
@@ -59,31 +64,63 @@ const config = withModuleFederationPlugin({
       requiredVersion: 'auto',
       includeSecondaries: true
     },
+    '@onecx/angular-utils': {
+      requiredVersion: 'auto',
+      includeSecondaries: true
+    },
     '@onecx/integration-interface': {
-      requiredVersion: 'auto',
-      includeSecondaries: true
-    },
-    '@onecx/keycloak-auth': {
-      requiredVersion: 'auto',
-      includeSecondaries: true
-    },
-    '@onecx/portal-integration-angular': {
-      requiredVersion: 'auto',
-      includeSecondaries: true
-    },
-    '@onecx/portal-layout-styles': {
       requiredVersion: 'auto',
       includeSecondaries: true
     },
     '@ngx-translate/core': {
       requiredVersion: 'auto'
+    },
+    '@onecx/angular-standalone-shell': {
+      requiredVersion: 'auto',
+      includeSecondaries: true
     }
   }),
-
-  sharedMappings: ['@onecx/portal-integration-angular']
+  sharedMappings: ['@onecx/angular-accelerator'],
 })
 
 const plugins = config.plugins.filter((plugin) => !(plugin instanceof ModifyEntryPlugin))
+
+const modifyPrimeNgPlugin = new ModifySourcePlugin({
+  rules: [
+    {
+      test: (module) => {
+        return module.resource && module.resource.includes('primeng')
+      },
+      operations: [
+        new ReplaceOperation(
+          'all',
+          'document\\.createElement\\(([^)]+)\\)',
+          'document.createElementFromPrimeNg({"this": this, "arguments": Array.from(arguments), element: $1})'
+        ),
+        new ReplaceOperation('all', 'Theme.setLoadedStyleName', '(function(_){})')
+      ]
+    }
+  ]
+})
+
+const modifyMaterialPlugin = new ModifySourcePlugin({
+  rules: [
+    {
+      test: (module) => {
+        return (
+          module.resource && (module.resource.includes('@angular/material') || module.resource.includes('@angular/cdk'))
+        )
+      },
+      operations: [
+        new ReplaceOperation(
+          'all',
+          'document\\.createElement\\(',
+          'document.createElementFromMaterial({"this": this, "arguments": Array.from(arguments)},'
+        )
+      ]
+    }
+  ]
+})
 
 module.exports = {
   ...config,
@@ -91,7 +128,9 @@ module.exports = {
     new webpack.DefinePlugin({
       ngDevMode: 'undefined'
     }),
-    ...plugins
+    ...plugins,
+    modifyPrimeNgPlugin,
+    modifyMaterialPlugin
   ],
   output: {
     uniqueName: 'onecx-ai-provider-ui',
@@ -106,6 +145,7 @@ module.exports = {
     splitChunks: false
   },
   module: {
+    ...config.module,
     parser: {
       javascript: {
         importMeta: false,

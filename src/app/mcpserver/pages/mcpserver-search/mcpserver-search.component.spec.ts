@@ -11,14 +11,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import {
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  ColumnType,
-  DiagramType,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { ColumnType, DiagramType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { MCPServerSearchActions } from './mcpserver-search.actions'
@@ -48,8 +43,8 @@ describe('MCPServerSearchComponent', () => {
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -101,22 +96,23 @@ describe('MCPServerSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MCPServerSearchComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
+        MCPServerSearchComponent,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
         FormsModule,
-        ReactiveFormsModule,
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./../../../../assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en'),
         HttpClientTestingModule,
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { mcpserver: { search: initialState } }
@@ -183,8 +179,7 @@ describe('MCPServerSearchComponent', () => {
       doneFn()
     })
 
-    const searchHeader = await mcpserverSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
@@ -269,7 +264,7 @@ describe('MCPServerSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -291,7 +286,6 @@ describe('MCPServerSearchComponent', () => {
       description: sampleDate
     })
     component.mcpserverSearchFormGroup = formValue
-
 
     component.search(formValue)
 
@@ -356,9 +350,7 @@ describe('MCPServerSearchComponent', () => {
 
     await editButtons[0].click()
 
-    expect(store.dispatch).toHaveBeenCalledWith(
-      MCPServerSearchActions.detailsButtonClicked({ id: '1' })
-    )
+    expect(store.dispatch).toHaveBeenCalledWith(MCPServerSearchActions.detailsButtonClicked({ id: '1' }))
   })
 
   it('should dispatch diagramComponentStateChanged action on diagram mode changes', async () => {
@@ -395,12 +387,14 @@ describe('MCPServerSearchComponent', () => {
       ...baseMCPServerSearchViewModel,
       results: [],
       columns: columns,
-      displayedColumns: columns
+      resultComponentState: {
+        layout: 'table',
+        displayedColumns: columns
+      }
     })
     store.refreshState()
 
     const interactiveDataView = await mcpserverSearch.getSearchResults()
-      ; (await (await interactiveDataView.getDataLayoutSelection()).getTableLayoutSelectionButton())?.click()
 
     const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
     expect(columnGroupSelector).toBeTruthy()

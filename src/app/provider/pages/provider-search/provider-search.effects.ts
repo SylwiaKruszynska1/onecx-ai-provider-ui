@@ -9,12 +9,8 @@ import {
   filterOutOnlyQueryParamsChanged,
   filterOutQueryParamsHaveNotChanged
 } from '@onecx/ngrx-accelerator'
-import {
-  DialogState,
-  ExportDataService,
-  PortalDialogService,
-  PortalMessageService
-} from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { DialogState, ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
 import equal from 'fast-deep-equal'
 import { PrimeIcons } from 'primeng/api'
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
@@ -37,7 +33,7 @@ export class ProviderSearchEffects {
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
-  ) { }
+  ) {}
 
   syncParamsToUrl$ = createEffect(
     () => {
@@ -327,13 +323,13 @@ export class ProviderSearchEffects {
         ProviderSearchActions.providerSearchResultsReceived({
           results: stream,
           totalNumberOfResults: totalElements
-        })
-      ),
+        }),
       catchError((error) =>
         of(
           ProviderSearchActions.providerSearchResultsLoadingFailed({
             error
-          })
+            })
+          )
         )
       )
     )

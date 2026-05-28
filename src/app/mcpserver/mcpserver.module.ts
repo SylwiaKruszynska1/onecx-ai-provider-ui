@@ -6,32 +6,38 @@ import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreModule } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
-import { PortalCoreModule, providePortalDialogService } from '@onecx/portal-integration-angular'
-import { CalendarModule } from 'primeng/calendar'
-import { SharedModule } from '../shared/shared.module'
+import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
+import { DatePickerModule } from 'primeng/datepicker'
+import { TooltipModule } from 'primeng/tooltip'
+import { MultiSelectModule } from 'primeng/multiselect'
+import { SharedModule } from 'src/app/shared/shared.module'
+import { providePermissionService } from '@onecx/angular-utils'
 import { mcpserverFeature } from './mcpserver.reducers'
 import { routes } from './mcpserver.routes'
 import { MCPServerDetailsComponent } from './pages/mcpserver-details/mcpserver-details.component'
 import { MCPServerSearchComponent } from './pages/mcpserver-search/mcpserver-search.component'
 import { MCPServerDetailsEffects } from './pages/mcpserver-details/mcpserver-details.effects'
 import { MCPServerSearchEffects } from './pages/mcpserver-search/mcpserver-search.effects'
-import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
 @NgModule({
-  providers: [providePortalDialogService()],
-  declarations: [MCPServerDetailsComponent, MCPServerSearchComponent],
+  providers: [providePortalDialogService(), ...providePermissionService()],
+  declarations: [],
   imports: [
     CommonModule,
     SharedModule,
     LetDirective,
-    PortalCoreModule.forMicroFrontend(),
-    RouterModule.forChild(addInitializeModuleGuard(routes)),
+    AngularAcceleratorModule,
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
-    CalendarModule,
+    DatePickerModule,
+    TooltipModule,
+    MultiSelectModule,
+    MCPServerDetailsComponent,
+    MCPServerSearchComponent,
     StoreModule.forFeature(mcpserverFeature),
     EffectsModule.forFeature([MCPServerDetailsEffects, MCPServerSearchEffects]),
-    TranslateModule
+    TranslateModule,
   ]
 })
 export class MCPServerModule {}

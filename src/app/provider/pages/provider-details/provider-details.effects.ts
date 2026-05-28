@@ -5,7 +5,7 @@ import { concatLatestFrom } from '@ngrx/operators'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { Action, Store } from '@ngrx/store'
 import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { catchError, map, of, switchMap, tap } from 'rxjs'
 import { selectRouteParam } from 'src/app/shared/selectors/router.selectors'
 import { ProviderDetailsActions } from './provider-details.actions'
@@ -20,7 +20,7 @@ export class ProviderDetailsEffects {
     private readonly router: Router,
     private readonly store: Store,
     private readonly messageService: PortalMessageService
-  ) { }
+  ) {}
 
   navigatedToDetailsPage$ = createEffect(() => {
     return this.actions$.pipe(

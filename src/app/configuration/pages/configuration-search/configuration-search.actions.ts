@@ -4,8 +4,8 @@ import {
   GroupByCountDiagramComponentState,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
-import { Configuration } from '../../../shared/generated'
+} from '@onecx/angular-accelerator'
+import { Configuration } from 'src/app/shared/generated'
 import { ConfigurationSearchCriteria } from './configuration-search.parameters'
 
 export const ConfigurationSearchActions = createActionGroup({

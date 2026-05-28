@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
 import { DataTableColumn } from '@onecx/angular-accelerator'
-import { Provider } from '../../../shared/generated'
+import { Provider } from 'src/app/shared/generated'
 import { ProviderSearchCriteria } from './provider-search.parameters'
 
 export const ProviderSearchActions = createActionGroup({

@@ -5,7 +5,8 @@ import { concatLatestFrom } from '@ngrx/operators'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { Action, Store } from '@ngrx/store'
 import { filterForNavigatedTo, filterOutQueryParamsHaveNotChanged } from '@onecx/ngrx-accelerator'
-import { ExportDataService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { ExportDataService } from '@onecx/angular-accelerator'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 import equal from 'fast-deep-equal'
 import { catchError, map, of, switchMap, tap } from 'rxjs'
 import { McpServerService } from 'src/app/shared/generated'
@@ -25,7 +26,7 @@ export class MCPServerSearchEffects {
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
-  ) { }
+  ) {}
 
   syncParamsToUrl$ = createEffect(
     () => {

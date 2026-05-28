@@ -6,7 +6,7 @@ import { routerNavigatedAction } from '@ngrx/router-store'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { PortalMessageServiceMock, providePortalMessageServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { ExportDataService, PortalDialogService } from '@onecx/portal-integration-angular'
+import { ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
 import { MonoTypeOperatorFunction, ReplaySubject, map, of, throwError } from 'rxjs'
 import { ConfigurationService } from 'src/app/shared/generated'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
@@ -54,7 +54,7 @@ describe('ConfigurationSearchEffects', () => {
   let mockMessageService: PortalMessageServiceMock
 
   const mockCriteria: ConfigurationSearchCriteria = {
-    name: 'test-name',
+    name: 'test-name'
   }
 
   beforeEach(async () => {
@@ -166,7 +166,7 @@ describe('ConfigurationSearchEffects', () => {
       const navigateSpy = jest.spyOn(router, 'navigate')
 
       route.queryParams = of({
-        name: 'different-name',
+        name: 'different-name'
       })
 
       actions$.next(ConfigurationSearchActions.resetButtonClicked())
@@ -248,9 +248,7 @@ describe('ConfigurationSearchEffects', () => {
         totalPages: 0
       })
 
-      const performSpy = jest
-        .spyOn(effects, 'performSearch')
-        .mockReturnValue(of(expectedAction) as any)
+      const performSpy = jest.spyOn(effects, 'performSearch').mockReturnValue(of(expectedAction) as any)
 
       actions$.next({ type: routerNavigatedAction.type })
 
@@ -327,8 +325,8 @@ describe('ConfigurationSearchEffects', () => {
           totalPages: 1
         }) as never
       )
-    });
-    [
+    })
+    ;[
       {
         desc: 'should trigger search when createConfigurationSucceeded action is dispatched',
         action: ConfigurationSearchActions.createConfigurationSucceeded()
@@ -404,9 +402,9 @@ describe('ConfigurationSearchEffects', () => {
         })
         done()
       })
-    });
+    })
 
-    [
+    ;[
       {
         desc: 'should dispatch updateConfigurationCancelled when dialog is cancelled',
         dialogResult: { button: 'secondary', result: null }
@@ -632,9 +630,9 @@ describe('ConfigurationSearchEffects', () => {
         })
         done()
       })
-    });
+    })
 
-    [
+    ;[
       {
         desc: 'should dispatch deleteConfigurationCancelled when dialog is cancelled',
         dialogResult: { button: 'secondary', result: null }
@@ -808,9 +806,9 @@ describe('ConfigurationSearchEffects', () => {
       })
 
       actions$.next(ConfigurationSearchActions.createConfigurationButtonClicked())
-    });
+    })
 
-    [
+    ;[
       {
         desc: 'should dispatch cancelled action when dialog is closed without result',
         dialogResult: null
@@ -886,15 +884,13 @@ describe('ConfigurationSearchEffects', () => {
   })
 
   describe('exportData$', () => {
-    [
+    ;[
       {
         desc: 'should handle export with empty displayed columns',
         viewModel: {
           columns: [],
           searchCriteria: {},
-          results: [
-            { id: '1', name: 'Context 1', description: 'Description 1', imagePath: '' }
-          ],
+          results: [{ id: '1', name: 'Context 1', description: 'Description 1', imagePath: '' }],
           displayedColumns: [],
           resultComponentState: { displayedColumns: undefined },
           searchHeaderComponentState: null,
@@ -909,9 +905,7 @@ describe('ConfigurationSearchEffects', () => {
         viewModel: {
           columns: [],
           searchCriteria: {},
-          results: [
-            { id: '1', name: 'Context 1', description: 'Description 1', imagePath: '' }
-          ],
+          results: [{ id: '1', name: 'Context 1', description: 'Description 1', imagePath: '' }],
           displayedColumns: [],
           resultComponentState: null,
           searchHeaderComponentState: null,
@@ -925,11 +919,7 @@ describe('ConfigurationSearchEffects', () => {
       it(desc, (done) => {
         store.overrideSelector(selectConfigurationSearchViewModel, viewModel)
         effects.exportData$.subscribe(() => {
-          expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-            [],
-            viewModel.results,
-            'Configuration.csv'
-          )
+          expect(exportDataService.exportCsv).toHaveBeenCalledWith([], viewModel.results, 'Configuration.csv')
           done()
         })
         actions$.next(ConfigurationSearchActions.exportButtonClicked())
@@ -955,11 +945,7 @@ describe('ConfigurationSearchEffects', () => {
       store.overrideSelector(selectConfigurationSearchViewModel, mockViewModel)
 
       effects.exportData$.subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          mockColumns,
-          mockResults,
-          'Configuration.csv'
-        )
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith(mockColumns, mockResults, 'Configuration.csv')
         done()
       })
 
@@ -981,11 +967,7 @@ describe('ConfigurationSearchEffects', () => {
       store.overrideSelector(selectConfigurationSearchViewModel, mockViewModel)
 
       effects.exportData$.subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          mockColumns,
-          [],
-          'Configuration.csv'
-        )
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith(mockColumns, [], 'Configuration.csv')
         done()
       })
 

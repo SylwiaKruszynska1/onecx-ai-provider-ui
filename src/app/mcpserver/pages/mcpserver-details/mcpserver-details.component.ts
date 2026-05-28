@@ -1,26 +1,39 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { TranslatePipe } from '@ngx-translate/core'
-import { Action, BreadcrumbService, ObjectDetailItem, UserService } from '@onecx/portal-integration-angular'
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core'
+import { Action, AngularAcceleratorModule, BreadcrumbService, ObjectDetailItem } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { map, Observable } from 'rxjs'
-
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { PrimeIcons } from 'primeng/api'
 import { MCPServerDetailsActions } from './mcpserver-details.actions'
 import { selectMCPServerDetailsViewModel } from './mcpserver-details.selectors'
 import { MCPServerDetailsViewModel } from './mcpserver-details.viewmodel'
+import { CommonModule } from '@angular/common'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { LetDirective } from '@ngrx/component'
 
 @Component({
   selector: 'app-mcpserver-details',
   templateUrl: './mcpserver-details.component.html',
-  styleUrls: ['./mcpserver-details.component.scss']
+  styleUrls: ['./mcpserver-details.component.scss'],
+  imports: [
+    AngularAcceleratorModule,
+    CommonModule,
+    LetDirective,
+    FloatLabelModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    PortalPageComponent
+  ]
 })
 export class MCPServerDetailsComponent implements OnInit {
   viewModel$: Observable<MCPServerDetailsViewModel> = this.store.select(selectMCPServerDetailsViewModel)
 
   headerLabels$: Observable<ObjectDetailItem[]> = this.viewModel$.pipe(
     map((vm) => {
-      const labels: ObjectDetailItem[] = [        
+      const labels: ObjectDetailItem[] = [
         {
           label: 'MCPSERVER_DETAILS.FORM.NAME',
           labelPipe: TranslatePipe,
@@ -30,14 +43,14 @@ export class MCPServerDetailsComponent implements OnInit {
           label: 'MCPSERVER_DETAILS.FORM.URL',
           labelPipe: TranslatePipe,
           value: vm.details?.url
-        },
+        }
       ]
       return labels
     })
   )
 
   headerActions$: Observable<Action[]> = this.viewModel$.pipe(
-    map((vm) => {      
+    map((vm) => {
       const actions: Action[] = [
         {
           titleKey: 'MCPSERVER_DETAILS.GENERAL.BACK',
@@ -110,33 +123,33 @@ export class MCPServerDetailsComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private userService: UserService
   ) {
-    this.formGroup = new FormGroup({      
+    this.formGroup = new FormGroup({
       apiKey: new FormControl(null, [Validators.maxLength(255)]),
       name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
       description: new FormControl(null, [Validators.required, Validators.maxLength(1024)]),
-      url: new FormControl(null, [Validators.required, Validators.maxLength(2048)]),      
+      url: new FormControl(null, [Validators.required, Validators.maxLength(2048)])
     })
     this.formGroup.disable()
 
     this.viewModel$.subscribe((vm) => {
       if (!vm.editMode) {
-        this.formGroup.patchValue({          
+        this.formGroup.patchValue({
           apiKey: vm.details?.apiKey,
           name: vm.details?.name,
           description: vm.details?.description,
-          url: vm.details?.url,
+          url: vm.details?.url
         })
         this.formGroup.markAsPristine()
       }
 
       if (vm.editMode) {
         this.formGroup.enable()
-      } else {        
+      } else {
         this.formGroup.disable()
       }
     })
 
-    this.hasAPIKeyPermission = this.userService.hasPermission('MCPSERVER#CHANGE_API_KEY')
+    this.userService.hasPermission('MCPSERVER#CHANGE_API_KEY').then((res) => (this.hasAPIKeyPermission = res))
   }
 
   ngOnInit(): void {

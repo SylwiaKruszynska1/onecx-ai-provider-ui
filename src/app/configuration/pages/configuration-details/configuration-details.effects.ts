@@ -5,10 +5,17 @@ import { concatLatestFrom } from '@ngrx/operators'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { Action, Store } from '@ngrx/store'
 import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
-import { DialogState, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { DialogState, PortalDialogService } from '@onecx/angular-accelerator'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { PrimeIcons } from 'primeng/api'
 import { catchError, filter, map, mergeMap, of, switchMap, tap } from 'rxjs'
-import { Configuration, ConfigurationService, McpServerService, ProviderService, UpdateConfigurationRequest } from 'src/app/shared/generated'
+import {
+  Configuration,
+  ConfigurationService,
+  McpServerService,
+  ProviderService,
+  UpdateConfigurationRequest
+} from 'src/app/shared/generated'
 import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors'
 import { selectRouteParam, selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { ConfigurationDetailsActions } from './configuration-details.actions'
@@ -26,7 +33,7 @@ export class ConfigurationDetailsEffects {
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly portalDialogService: PortalDialogService
-  ) { }
+  ) {}
 
   navigatedToDetailsPage$ = createEffect(() => {
     return this.actions$.pipe(

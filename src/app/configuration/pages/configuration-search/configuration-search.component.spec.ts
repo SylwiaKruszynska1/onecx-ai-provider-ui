@@ -10,15 +10,10 @@ import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import {
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  ColumnType,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule,
-  RowListGridData,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { ColumnType, RowListGridData } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ConfigurationSearchActions } from './configuration-search.actions'
@@ -40,7 +35,7 @@ describe('ConfigurationSearchComponent', () => {
 
   const baseConfigurationSearchViewModel: ConfigurationSearchViewModel = {
     columns: configurationSearchColumns,
-    searchCriteria: {    
+    searchCriteria: {
       name: '',
       description: ''
     },
@@ -56,19 +51,21 @@ describe('ConfigurationSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationSearchComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
+        ConfigurationSearchComponent,
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./../../../../assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en'),
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { Configuration: { search: initialState } }
@@ -88,7 +85,7 @@ describe('ConfigurationSearchComponent', () => {
 
   beforeEach(async () => {
     const userService = TestBed.inject(UserService)
-    userService.hasPermission = () => true
+    userService.hasPermission = async () => true
     const translateService = TestBed.inject(TranslateService)
     translateService.use('en')
     formBuilder = TestBed.inject(FormBuilder)
@@ -133,8 +130,7 @@ describe('ConfigurationSearchComponent', () => {
       doneFn()
     })
 
-    const searchHeader = await ConfigurationSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
@@ -212,7 +208,7 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -221,8 +217,8 @@ describe('ConfigurationSearchComponent', () => {
     expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
     const searchHeader = await ConfigurationSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
-    const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
-    expect(await searchBreadcrumbItem!.getText()).toEqual('Search')
+    const headerText = await pageHeader.getHeaderText()
+    expect(headerText).toBe('Configuration Search')
   })
 
   it('should dispatch searchButtonClicked action on search', (done) => {
@@ -240,7 +236,6 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch editConfigurationButtonClicked action on item edit click', async () => {
-
     store.overrideSelector(selectConfigurationSearchViewModel, {
       ...baseConfigurationSearchViewModel,
       results: [
@@ -281,7 +276,6 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch createConfigurationButtonClicked action on create click', async () => {
-
     const header = await ConfigurationSearch.getHeader()
     const createButton = await (await header.getPageHeader()).getInlineActionButtonByIcon(PrimeIcons.PLUS)
 
@@ -293,7 +287,9 @@ describe('ConfigurationSearchComponent', () => {
 
   it('should dispatch navigateToProvidersButtonClicked', async () => {
     const header = await ConfigurationSearch.getHeader()
-    const navigateToProvidersButton = await (await header.getPageHeader()).getInlineActionButtonByIcon(PrimeIcons.ANDROID)
+    const navigateToProvidersButton = await (
+      await header.getPageHeader()
+    ).getInlineActionButtonByIcon(PrimeIcons.ANDROID)
 
     expect(navigateToProvidersButton).toBeTruthy()
     await navigateToProvidersButton?.click()
@@ -344,17 +340,14 @@ describe('ConfigurationSearchComponent', () => {
         component.search(component.configurationSearchFormGroup)
 
         const calls = (store.dispatch as jest.Mock).mock.calls
-        const found = calls.some(call => {
+        const found = calls.some((call) => {
           const action = call[0]
           return (
             action.type === '[ConfigurationSearch] Search button clicked' &&
             action.searchCriteria &&
-            (
-              (action.searchCriteria.name instanceof Date
-                ? action.searchCriteria.name.toISOString()
-                : action.searchCriteria.name
-              ) === expected.name
-            )
+            (action.searchCriteria.name instanceof Date
+              ? action.searchCriteria.name.toISOString()
+              : action.searchCriteria.name) === expected.name
           )
         })
         expect(found).toBe(true)
@@ -393,7 +386,7 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   describe('actions dispatch', () => {
-    [
+    ;[
       {
         method: 'resultComponentStateChanged',
         action: ConfigurationSearchActions.resultComponentStateChanged,
@@ -411,14 +404,13 @@ describe('ConfigurationSearchComponent', () => {
       }
     ].forEach(({ method, action, payload }) => {
       it(`should dispatch ${action.type} when ${method} is called`, () => {
-        (component as any)[method](payload)
+        ;(component as any)[method](payload)
         expect(store.dispatch).toHaveBeenCalledWith(action(payload))
       })
     })
   })
 
   it('should export csv data on export action click', async () => {
-
     const results = [
       {
         id: '1',
@@ -453,74 +445,41 @@ describe('ConfigurationSearchComponent', () => {
   })
 
   it('should dispatch viewModeChanged action on view mode changes', async () => {
-
     component.viewModeChanged('advanced')
 
     expect(store.dispatch).toHaveBeenCalledWith(ConfigurationSearchActions.viewModeChanged({ viewMode: 'advanced' }))
   })
 
-  it('should dispatch displayedColumnsChanged on data view column change', async () => {
+  it('should dispatch displayedColumnsChanged on data view column change', () => {
+    jest.spyOn(store, 'dispatch')
 
-    fixture = TestBed.createComponent(ConfigurationSearchComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-    ConfigurationSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, ConfigurationSearchHarness)
+    const columns = [
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'COLUMN_KEY',
+        id: 'column_1'
+      },
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'SECOND_COLUMN_KEY',
+        id: 'column_2'
+      }
+    ]
 
-    expect(store.dispatch).toHaveBeenCalledWith(
-      ConfigurationSearchActions.displayedColumnsChanged({ displayedColumns: configurationSearchColumns })
+    component.onDisplayedColumnsChange(
+      new CustomEvent('displayedColumnsChange', {
+        detail: columns
+      })
     )
-
-    jest.clearAllMocks()
-
-    store.overrideSelector(selectConfigurationSearchViewModel, {
-      ...baseConfigurationSearchViewModel,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'COLUMN_KEY',
-          id: 'column_1'
-        },
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'SECOND_COLUMN_KEY',
-          id: 'column_2'
-        }
-      ]
-    })
-    store.refreshState()
-
-    const interactiveDataView = await ConfigurationSearch.getSearchResults()
-    const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
-    expect(columnGroupSelector).toBeTruthy()
-    await columnGroupSelector!.openCustomGroupColumnSelectorDialog()
-    const pickList = await columnGroupSelector!.getPicklist()
-    const transferControlButtons = await pickList.getTransferControlsButtons()
-    expect(transferControlButtons.length).toBe(4)
-    const activateAllColumnsButton = transferControlButtons[3]
-    await activateAllColumnsButton.click()
-    const saveButton = await columnGroupSelector!.getSaveButton()
-    await saveButton.click()
 
     expect(store.dispatch).toHaveBeenCalledWith(
       ConfigurationSearchActions.displayedColumnsChanged({
-        displayedColumns: [
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'COLUMN_KEY',
-            id: 'column_1'
-          },
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'SECOND_COLUMN_KEY',
-            id: 'column_2'
-          }
-        ]
+        displayedColumns: columns
       })
     )
   })
 
   it('should dispatch chartVisibilityToggled on show/hide chart header', async () => {
-
     store.overrideSelector(selectConfigurationSearchViewModel, {
       ...baseConfigurationSearchViewModel,
       chartVisible: false

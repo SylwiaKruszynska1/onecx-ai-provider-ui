@@ -5,7 +5,8 @@ import { concatLatestFrom } from '@ngrx/operators'
 import { routerNavigatedAction } from '@ngrx/router-store'
 import { Action, Store } from '@ngrx/store'
 import { filterForNavigatedTo, filterOutQueryParamsHaveNotChanged } from '@onecx/ngrx-accelerator'
-import { ExportDataService, PortalMessageService, PortalDialogService, DialogState } from '@onecx/portal-integration-angular'
+import { ExportDataService, PortalDialogService, DialogState } from '@onecx/angular-accelerator'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 import equal from 'fast-deep-equal'
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
@@ -15,7 +16,12 @@ import { configurationSearchCriteriasSchema } from './configuration-search.param
 import { configurationSearchSelectors, selectConfigurationSearchViewModel } from './configuration-search.selectors'
 import { ConfigurationCreateUpdateComponent } from './dialogs/configuration-create-update/configuration-create-update.component'
 import { PrimeIcons } from 'primeng/api'
-import { Configuration, ConfigurationService, CreateConfigurationRequest, UpdateConfigurationRequest } from 'src/app/shared/generated'
+import {
+  Configuration,
+  ConfigurationService,
+  CreateConfigurationRequest,
+  UpdateConfigurationRequest
+} from 'src/app/shared/generated'
 
 @Injectable()
 export class ConfigurationSearchEffects {
@@ -28,13 +34,16 @@ export class ConfigurationSearchEffects {
     private readonly store: Store,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
-  ) { }
+  ) {}
 
   syncParamsToUrl$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(ConfigurationSearchActions.searchButtonClicked, ConfigurationSearchActions.resetButtonClicked),
-        concatLatestFrom(() => [this.store.select(configurationSearchSelectors.selectCriteria), this.route.queryParams]),
+        concatLatestFrom(() => [
+          this.store.select(configurationSearchSelectors.selectCriteria),
+          this.route.queryParams
+        ]),
         tap(([, criteria, queryParams]) => {
           const results = configurationSearchCriteriasSchema.safeParse(queryParams)
           if (!results.success || !equal(criteria, results.data)) {
@@ -81,7 +90,10 @@ export class ConfigurationSearchEffects {
 
   refreshSearchAfterCreateUpdate$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ConfigurationSearchActions.createConfigurationSucceeded, ConfigurationSearchActions.updateConfigurationSucceeded),
+      ofType(
+        ConfigurationSearchActions.createConfigurationSucceeded,
+        ConfigurationSearchActions.updateConfigurationSucceeded
+      ),
       concatLatestFrom(() => this.store.select(configurationSearchSelectors.selectCriteria)),
       switchMap(([, searchCriteria]) => this.performSearch(searchCriteria))
     )
@@ -244,9 +256,11 @@ export class ConfigurationSearchEffects {
           this.messageService.error({
             summaryKey: 'CONFIGURATION_DELETE.ERROR'
           })
-          return of(ConfigurationSearchActions.deleteConfigurationFailed({
-            error: 'Item to delete or its ID not found!'
-          }))
+          return of(
+            ConfigurationSearchActions.deleteConfigurationFailed({
+              error: 'Item to delete or its ID not found!'
+            })
+          )
         }
 
         return this.configurationService.deleteConfiguration(itemToDelete.id).pipe(

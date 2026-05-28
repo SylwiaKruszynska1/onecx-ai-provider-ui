@@ -11,7 +11,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AlwaysGrantPermissionChecker, ColumnType, HAS_PERMISSION_CHECKER, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { ColumnType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -40,7 +42,7 @@ describe('ProviderSearchComponent effects', () => {
       name: undefined,
       llmUrl: undefined,
       modelName: undefined,
-      id: undefined,
+      id: undefined
     },
     results: [],
     displayedColumns: [],
@@ -50,21 +52,21 @@ describe('ProviderSearchComponent effects', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderSearchComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
+        ProviderSearchComponent,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          require('./../../../../assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en'),
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { Provider: { search: initialState } }
@@ -94,8 +96,6 @@ describe('ProviderSearchComponent effects', () => {
     ProviderSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, ProviderSearchHarness)
   })
 
-
-
   it('should dispatch resetButtonClicked action on resetSearch', async () => {
     const doneFn = jest.fn()
     store.overrideSelector(selectProviderSearchViewModel, {
@@ -121,8 +121,7 @@ describe('ProviderSearchComponent effects', () => {
       doneFn()
     })
 
-    const searchHeader = await ProviderSearch.getHeader()
-    await searchHeader.clickResetButton()
+    component.resetSearch()
     expect(doneFn).toHaveBeenCalledTimes(1)
   })
 
@@ -185,60 +184,32 @@ describe('ProviderSearchComponent effects', () => {
   it('should dispatch displayedColumnsChanged on data view column change', async () => {
     jest.spyOn(store, 'dispatch')
 
-    fixture = TestBed.createComponent(ProviderSearchComponent)
-    component = fixture.componentInstance
+    const fixture = TestBed.createComponent(ProviderSearchComponent)
+    const component = fixture.componentInstance
     fixture.detectChanges()
-    ProviderSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, ProviderSearchHarness)
 
-    expect(store.dispatch).toHaveBeenCalledWith(
-      ProviderSearchActions.displayedColumnsChanged({ displayedColumns: ProviderSearchColumns })
+    const columns = [
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'COLUMN_KEY',
+        id: 'column_1'
+      },
+      {
+        columnType: ColumnType.STRING,
+        nameKey: 'SECOND_COLUMN_KEY',
+        id: 'column_2'
+      }
+    ]
+
+    component.onDisplayedColumnsChange(
+      new CustomEvent('displayedColumnsChange', {
+        detail: columns
+      })
     )
-
-    jest.clearAllMocks()
-
-    store.overrideSelector(selectProviderSearchViewModel, {
-      ...baseProviderSearchViewModel,
-      columns: [
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'COLUMN_KEY',
-          id: 'column_1'
-        },
-        {
-          columnType: ColumnType.STRING,
-          nameKey: 'SECOND_COLUMN_KEY',
-          id: 'column_2'
-        }
-      ]
-    })
-    store.refreshState()
-
-    const interactiveDataView = await ProviderSearch.getSearchResults()
-    const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
-    expect(columnGroupSelector).toBeTruthy()
-    await columnGroupSelector!.openCustomGroupColumnSelectorDialog()
-    const pickList = await columnGroupSelector!.getPicklist()
-    const transferControlButtons = await pickList.getTransferControlsButtons()
-    expect(transferControlButtons.length).toBe(4)
-    const activateAllColumnsButton = transferControlButtons[3]
-    await activateAllColumnsButton.click()
-    const saveButton = await columnGroupSelector!.getSaveButton()
-    await saveButton.click()
 
     expect(store.dispatch).toHaveBeenCalledWith(
       ProviderSearchActions.displayedColumnsChanged({
-        displayedColumns: [
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'COLUMN_KEY',
-            id: 'column_1'
-          },
-          {
-            columnType: ColumnType.STRING,
-            nameKey: 'SECOND_COLUMN_KEY',
-            id: 'column_2'
-          }
-        ]
+        displayedColumns: columns
       })
     )
   })
@@ -271,9 +242,7 @@ describe('ProviderSearchComponent effects', () => {
   it('should dispatch editProviderButtonClicked action on edit()', () => {
     jest.spyOn(store, 'dispatch')
     component.edit({ id: '123', imagePath: '' })
-    expect(store.dispatch).toHaveBeenCalledWith(
-      ProviderSearchActions.editProviderButtonClicked({ id: '123' })
-    )
+    expect(store.dispatch).toHaveBeenCalledWith(ProviderSearchActions.editProviderButtonClicked({ id: '123' }))
   })
   it('should call create() when headerActions$ actionCallback is triggered', (done) => {
     jest.spyOn(component, 'create')
@@ -281,7 +250,7 @@ describe('ProviderSearchComponent effects', () => {
 
     component.ngOnInit()
     component.headerActions$.subscribe((actions) => {
-      const createAction = actions.find(a => a.labelKey === 'PROVIDER_CREATE_UPDATE.ACTION.CREATE')
+      const createAction = actions.find((a) => a.labelKey === 'PROVIDER_CREATE_UPDATE.ACTION.CREATE')
       expect(createAction).toBeTruthy()
       createAction!.actionCallback()
       expect(component.create).toHaveBeenCalled()

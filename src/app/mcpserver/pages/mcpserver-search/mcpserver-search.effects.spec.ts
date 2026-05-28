@@ -6,7 +6,7 @@ import { routerNavigatedAction } from '@ngrx/router-store'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { PortalMessageServiceMock, providePortalMessageServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { ExportDataService } from '@onecx/portal-integration-angular'
+import { ExportDataService } from '@onecx/angular-accelerator'
 import { MonoTypeOperatorFunction, ReplaySubject, map, of, throwError } from 'rxjs'
 import { McpServerService } from 'src/app/shared/generated'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
@@ -248,9 +248,7 @@ describe('MCPServerSearchEffects', () => {
         totalPages: 0
       })
 
-      const performSpy = jest
-        .spyOn(effects, 'performSearch')
-        .mockReturnValue(of(expectedAction) as any)
+      const performSpy = jest.spyOn(effects, 'performSearch').mockReturnValue(of(expectedAction) as any)
 
       actions$.next({ type: routerNavigatedAction.type })
 
@@ -318,9 +316,7 @@ describe('MCPServerSearchEffects', () => {
       const mockViewModel = {
         columns: [],
         searchCriteria: {},
-        results: [
-          { id: '1', name: 'Server 1', description: 'Description 1', imagePath: '' }
-        ],
+        results: [{ id: '1', name: 'Server 1', description: 'Description 1', imagePath: '' }],
         displayedColumns: [],
         resultComponentState: { displayedColumns: undefined },
         searchHeaderComponentState: null,
@@ -345,9 +341,7 @@ describe('MCPServerSearchEffects', () => {
       const mockViewModel = {
         columns: [],
         searchCriteria: {},
-        results: [
-          { id: '1', name: 'Server 1', description: 'Description 1', imagePath: '' }
-        ],
+        results: [{ id: '1', name: 'Server 1', description: 'Description 1', imagePath: '' }],
         displayedColumns: [],
         resultComponentState: null,
         searchHeaderComponentState: null,
@@ -388,11 +382,7 @@ describe('MCPServerSearchEffects', () => {
       store.refreshState()
 
       effects.exportData$.subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          mockColumns,
-          mockResults,
-          'MCPServer.csv'
-        )
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith(mockColumns, mockResults, 'MCPServer.csv')
         done()
       })
 
@@ -415,11 +405,7 @@ describe('MCPServerSearchEffects', () => {
       store.refreshState()
 
       effects.exportData$.subscribe(() => {
-        expect(exportDataService.exportCsv).toHaveBeenCalledWith(
-          mockColumns,
-          [],
-          'MCPServer.csv'
-        )
+        expect(exportDataService.exportCsv).toHaveBeenCalledWith(mockColumns, [], 'MCPServer.csv')
         done()
       })
 
@@ -450,5 +436,4 @@ describe('MCPServerSearchEffects', () => {
       actions$.next(MCPServerSearchActions.resetButtonClicked())
     })
   })
-
 })

@@ -9,14 +9,9 @@ import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import {
-  Action,
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule,
-  PortalDialogService,
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { Action, BreadcrumbService, PortalDialogService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PrimeIcons } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
@@ -56,8 +51,8 @@ describe('ConfigurationDetailsComponent', () => {
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -76,7 +71,6 @@ describe('ConfigurationDetailsComponent', () => {
   let component: ConfigurationDetailsComponent
   let fixture: ComponentFixture<ConfigurationDetailsComponent>
   let store: MockStore<Store>
-  let breadcrumbService: BreadcrumbService
   let ConfigurationDetails: ConfigurationDetailsHarness
   let effects: ConfigurationDetailsEffects
   let actions$: ReplaySubject<any>
@@ -95,12 +89,14 @@ describe('ConfigurationDetailsComponent', () => {
       modificationUser: 'user-1',
       creationUser: 'user-1',
       llmProvider: undefined,
-      mcpServers: [{
-        modificationCount: 1,
-        id: 'id-1',
-        name: 'name-1',
-        description: 'description-1'
-      }]
+      mcpServers: [
+        {
+          modificationCount: 1,
+          id: 'id-1',
+          name: 'name-1',
+          description: 'description-1'
+        }
+      ]
     },
     detailsLoaded: true,
     detailsLoadingIndicator: false,
@@ -205,24 +201,24 @@ describe('ConfigurationDetailsComponent', () => {
       }
     } as unknown as jest.Mocked<Router>
 
-
-
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationDetailsComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        ConfigurationDetailsComponent,
+        AngularAcceleratorModule,
         LetDirective,
         FormsModule,
         ReactiveFormsModule,
         AutoCompleteModule,
         MultiSelectModule,
         InputTextModule,
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./../../../../assets/i18n/de.json')
-        )
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en')
       ],
       providers: [
+        ...providePermissionService(),
         ConfigurationDetailsEffects,
         provideMockStore({
           initialState: { Configuration: { details: initialState, backNavigationPossible: true } }
@@ -239,7 +235,7 @@ describe('ConfigurationDetailsComponent', () => {
         { provide: ProviderService, useValue: providerService },
         { provide: McpServerService, useValue: mcpServerService },
         { provide: Router, useValue: router },
-        { provide: PortalDialogService, useValue: portalDialogService },
+        { provide: PortalDialogService, useValue: portalDialogService }
       ]
     }).compileComponents()
 
@@ -255,18 +251,17 @@ describe('ConfigurationDetailsComponent', () => {
 
     fixture = TestBed.createComponent(ConfigurationDetailsComponent)
     component = fixture.componentInstance
-    breadcrumbService = TestBed.inject(BreadcrumbService)
     fixture.detectChanges()
     ConfigurationDetails = await TestbedHarnessEnvironment.harnessForFixture(fixture, ConfigurationDetailsHarness)
   })
 
   describe('ConfigurationDetailsComponent', () => {
-
     it('should create', () => {
       expect(component).toBeTruthy()
     })
 
     it('should display correct breadcrumbs', async () => {
+      const breadcrumbService = component['breadcrumbService']
       jest.spyOn(breadcrumbService, 'setItems')
 
       component.ngOnInit()
@@ -474,7 +469,7 @@ describe('ConfigurationDetailsComponent', () => {
         name: 'name',
         description: 'desc',
         mcpServers: [{ id: '', name: '' }],
-        llmProvider: { id: 'id-1', name: 'provider', modelName: 'model' },
+        llmProvider: { id: 'id-1', name: 'provider', modelName: 'model' }
       }
       const dispatchSpy = jest.spyOn(store, 'dispatch')
 
@@ -497,7 +492,7 @@ describe('ConfigurationDetailsComponent', () => {
     })
 
     it('should call breadcrumbService.setItems on ngOnInit', () => {
-      const breadcrumbSpy = jest.spyOn(breadcrumbService, 'setItems')
+      const breadcrumbSpy = jest.spyOn(component['breadcrumbService'], 'setItems')
       component.ngOnInit()
       expect(breadcrumbSpy).toHaveBeenCalledWith([
         {
@@ -599,6 +594,5 @@ describe('ConfigurationDetailsComponent', () => {
       fixture.detectChanges()
       expect(component.formGroup.value.id).toBe('')
     })
-
   })
 })

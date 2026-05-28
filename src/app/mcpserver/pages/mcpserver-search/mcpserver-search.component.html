@@ -4,19 +4,19 @@
   *ngrxLet="viewModel$; let vm"
 >
   <ocx-search-header
-    [headline]="'MCPSERVER_SEARCH.HEADER' | translate"
+    [header]="'MCPSERVER_SEARCH.HEADER' | translate"
     [subheader]="'MCPSERVER_SEARCH.SUB_HEADER' | translate"
     (searched)="search(mcpserverSearchFormGroup)"
     (resetted)="resetSearch()"
     [manualBreadcrumbs]="true"
     [actions]="(headerActions$ | async) ?? []"
-    (componentStateChanged)="searchHeaderComponentStateChanged($event)"
+    (componentStateChanged)="searchHeaderComponentStateChanged($any($event))"
     [viewMode]="vm.searchHeaderComponentState?.activeViewMode ?? 'basic'"
   >
     <form [formGroup]="mcpserverSearchFormGroup">
       <div class="grid mt-0 p-fluid">
         <div class="col-12 md:col-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               pInputText
               id="name"
@@ -28,11 +28,11 @@
               tooltipEvent="hover"
             />
             <label for="name" style="white-space: nowrap"> {{ 'MCPSERVER_SEARCH.CRITERIA.NAME' | translate }}</label>
-          </span>
+          </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               pInputText
               id="description"
@@ -43,12 +43,14 @@
               tooltipPosition="top"
               tooltipEvent="hover"
             />
-            <label for="description" style="white-space: nowrap"> {{ 'MCPSERVER_SEARCH.CRITERIA.DESCRIPTION' | translate }}</label>
-          </span>
+            <label for="description" style="white-space: nowrap">
+              {{ 'MCPSERVER_SEARCH.CRITERIA.DESCRIPTION' | translate }}</label
+            >
+          </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               pInputText
               id="url"
@@ -60,25 +62,23 @@
               tooltipEvent="hover"
             />
             <label for="url" style="white-space: nowrap"> {{ 'MCPSERVER_SEARCH.CRITERIA.URL' | translate }}</label>
-          </span>
-        </div>        
+          </p-floatlabel>
+        </div>
       </div>
-      
     </form>
   </ocx-search-header>
   <ocx-content-container layout="horizontal">
     <ocx-content class="w-full">
       <ocx-interactive-data-view
-        (viewItem)="details($event)"
+        (viewItem)="details($any($event))"
         viewPermission="MCPSERVER#VIEW"
         [data]="vm.results"
         [columns]="vm.columns"
         [emptyResultsMessage]="
           'MCPSERVER_SEARCH.EMPTY_RESULTS' | translate
         "
-        (componentStateChanged)="resultComponentStateChanged($event)"
+        (componentStateChanged)="resultComponentStateChanged($any($event))"
         [layout]="vm.resultComponentState?.layout ?? 'list'"
-        [displayedColumns]="vm.resultComponentState?.displayedColumns ?? []"
         [supportedViewLayouts]="['list', 'table']"
         [page]="vm.resultComponentState?.activePage ?? 0"
         [pageSize]="vm.resultComponentState?.pageSize"
@@ -90,7 +90,6 @@
         [actionColumnPosition]="vm.resultComponentState?.actionColumnConfig?.position?? 'right'"
         [frozenActionColumn]="vm.resultComponentState?.actionColumnConfig?.frozen ?? false"
       >
-        >
       </ocx-interactive-data-view>
     </ocx-content>
     <ocx-content
@@ -107,7 +106,7 @@
           [column]="diagramColumn"
           sumKey="MCPSERVER_SEARCH.DIAGRAM.SUM"
           [diagramType]="vm.diagramComponentState?.activeDiagramType ?? defaultDiagramType"
-          (componentStateChanged)="diagramComponentStateChanged($event)"
+          (componentStateChanged)="diagramComponentStateChanged($any($event))"
         ></ocx-group-by-count-diagram>
       </div>
     </ocx-content>

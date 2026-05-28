@@ -8,13 +8,10 @@ import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import {
-  AlwaysGrantPermissionChecker,
-  BreadcrumbService,
-  HAS_PERMISSION_CHECKER,
-  PortalCoreModule,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PrimeIcons } from 'primeng/api'
 import { of } from 'rxjs'
@@ -45,8 +42,8 @@ describe('MCPServerDetailsComponent', () => {
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -59,7 +56,6 @@ describe('MCPServerDetailsComponent', () => {
   let component: MCPServerDetailsComponent
   let fixture: ComponentFixture<MCPServerDetailsComponent>
   let store: MockStore<Store>
-  let breadcrumbService: BreadcrumbService
   let mcpserverDetails: MCPServerDetailsHarness
   let translateService: TranslateService
 
@@ -69,11 +65,11 @@ describe('MCPServerDetailsComponent', () => {
     }
   }
   const baseMCPServerDetailsViewModel: MCPServerDetailsViewModel = {
-    details: {      
-      apiKey: "",
-      description: "",
-      name: "",
-      url: ""      
+    details: {
+      apiKey: '',
+      description: '',
+      name: '',
+      url: ''
     },
     detailsLoadingIndicator: false,
     detailsLoaded: true,
@@ -85,20 +81,22 @@ describe('MCPServerDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MCPServerDetailsComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
         FormsModule,
         BrowserAnimationsModule,
+        MCPServerDetailsComponent,
         ReactiveFormsModule,
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./../../../../assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en'),
         HttpClientTestingModule
       ],
       providers: [
+        ...providePermissionService(),
         provideMockStore({
           initialState: { mcpserver: { details: initialState } }
         }),
@@ -112,7 +110,7 @@ describe('MCPServerDetailsComponent', () => {
       ]
     }).compileComponents()
     const userServiceMock = TestBed.inject(UserService)
-    userServiceMock.permissions$.next(["MCPSERVER#BACK"])
+    jest.spyOn(userServiceMock, 'getPermissions').mockReturnValue(of(['MCPSERVER#BACK']))
 
     translateService = TestBed.inject(TranslateService)
     translateService.use('en')
@@ -123,7 +121,6 @@ describe('MCPServerDetailsComponent', () => {
 
     fixture = TestBed.createComponent(MCPServerDetailsComponent)
     component = fixture.componentInstance
-    breadcrumbService = TestBed.inject(BreadcrumbService)
     fixture.detectChanges()
     mcpserverDetails = await TestbedHarnessEnvironment.harnessForFixture(fixture, MCPServerDetailsHarness)
   })
@@ -133,6 +130,7 @@ describe('MCPServerDetailsComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -261,9 +259,11 @@ describe('MCPServerDetailsComponent', () => {
     const saveAction = await pageHeader.getInlineActionButtonByIcon(PrimeIcons.SAVE)
     await saveAction?.click()
 
-    expect(store.dispatch).toHaveBeenCalledWith(MCPServerDetailsActions.saveButtonClicked({
-      details: baseMCPServerDetailsViewModel.details!
-    }))
+    expect(store.dispatch).toHaveBeenCalledWith(
+      MCPServerDetailsActions.saveButtonClicked({
+        details: baseMCPServerDetailsViewModel.details!
+      })
+    )
   })
 
   it('cancel clicked should dispatch cancel action', async () => {
@@ -315,9 +315,9 @@ describe('MCPServerDetailsComponent', () => {
     store.overrideSelector(selectMCPServerDetailsViewModel, {
       ...baseMCPServerDetailsViewModel,
       details: {
-        id: "my-id",
-        name: "my-name",
-        apiKey: "my-apikey"
+        id: 'my-id',
+        name: 'my-name',
+        apiKey: 'my-apikey'
       }
     })
     store.refreshState()

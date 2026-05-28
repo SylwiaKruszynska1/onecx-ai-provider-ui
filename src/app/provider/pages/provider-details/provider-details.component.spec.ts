@@ -6,7 +6,9 @@ import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { AlwaysGrantPermissionChecker, BreadcrumbService, HAS_PERMISSION_CHECKER, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ProviderDetailsComponent } from './provider-details.component'
 import { ProviderDetailsHarness } from './provider-details.harness'
@@ -33,12 +35,11 @@ describe('ProviderDetailsComponent', () => {
   }
 
   window.postMessage = (m: any) => {
-
     listeners.forEach((l) =>
       l({
         data: m,
-        stopImmediatePropagation: () => { },
-        stopPropagation: () => { }
+        stopImmediatePropagation: () => {},
+        stopPropagation: () => {}
       })
     )
   }
@@ -76,19 +77,19 @@ describe('ProviderDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderDetailsComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
+        ProviderDetailsComponent,
         ReactiveFormsModule,
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          require('./../../../../assets/i18n/de.json')
-        )
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en')
       ],
       providers: [
+        ...providePermissionService(),
         provideMockStore({
           initialState: { Provider: { details: initialState } }
         }),
@@ -124,6 +125,7 @@ describe('ProviderDetailsComponent', () => {
     })
 
     it('should display correct breadcrumbs', async () => {
+      const breadcrumbService = component['breadcrumbService']
       jest.spyOn(breadcrumbService, 'setItems')
 
       component.ngOnInit()
@@ -172,7 +174,7 @@ describe('ProviderDetailsComponent', () => {
         name: 'Test name',
         description: 'Test description',
         llmUrl: 'Test llmUrl',
-        modelName: 'Test modelName',                
+        modelName: 'Test modelName',
         apiKey: 'TestAPIKey'
       })
     })

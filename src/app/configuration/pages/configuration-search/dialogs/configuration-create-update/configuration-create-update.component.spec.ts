@@ -3,7 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ConfigurationCreateUpdateComponent } from './configuration-create-update.component'
 import { Configuration } from 'src/app/shared/generated'
@@ -35,16 +36,16 @@ describe('ConfigurationCreateUpdateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationCreateUpdateComponent],
       imports: [
-        PortalCoreModule,
+        ConfigurationCreateUpdateComponent,
+        AngularAcceleratorModule,
         FormsModule,
         ReactiveFormsModule,
         LetDirective,
-        TranslateTestingModule.withTranslations(
-          'en',
-          require('./../../../../../../assets/i18n/en.json')
-        ).withTranslations('de', require('./../../../../../../assets/i18n/de.json'))
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en')
       ],
       providers: [
         BreadcrumbService,
@@ -62,7 +63,7 @@ describe('ConfigurationCreateUpdateComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should initialize form with empty values', () => {    
+  it('should initialize form with empty values', () => {
     expect(component.formGroup.get('name')?.value).toBeNull()
     expect(component.formGroup.get('description')?.value).toBeNull()
   })
@@ -76,7 +77,7 @@ describe('ConfigurationCreateUpdateComponent', () => {
   })
 
   it('should create dialog result with form values', () => {
-    const formValues = {      
+    const formValues = {
       name: 'AI Context 1',
       description: 'Description'
     }
@@ -91,7 +92,7 @@ describe('ConfigurationCreateUpdateComponent', () => {
 
   it('should merge existing item with form values in dialog result when editing', () => {
     component.vm = { itemToEdit: mockItem }
-    const formValues = {      
+    const formValues = {
       name: 'Updated AI Context 1',
       description: 'Updated Description'
     }
@@ -108,17 +109,17 @@ describe('ConfigurationCreateUpdateComponent', () => {
   it('should validate max length for all fields', () => {
     const longString = 'a'.repeat(256)
 
-    component.formGroup.patchValue({      
+    component.formGroup.patchValue({
       name: longString,
       description: longString
     })
-    
+
     expect(component.formGroup.get('name')?.errors?.['maxlength']).toBeTruthy()
     expect(component.formGroup.get('description')?.errors?.['maxlength']).toBeTruthy()
   })
 
   it('should consider form valid with valid values', () => {
-    component.formGroup.patchValue({      
+    component.formGroup.patchValue({
       name: 'Valid AI Context 1',
       description: 'Valid Description'
     })

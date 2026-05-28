@@ -10,7 +10,8 @@ import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AlwaysGrantPermissionChecker, BreadcrumbService, ColumnType, HAS_PERMISSION_CHECKER, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
+import { AngularAcceleratorModule, ColumnType } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -40,7 +41,7 @@ describe('ProviderSearchComponent', () => {
       description: undefined,
       llmUrl: undefined,
       modelName: undefined,
-      id: undefined,
+      id: undefined
     },
     results: [],
     displayedColumns: [],
@@ -50,21 +51,21 @@ describe('ProviderSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProviderSearchComponent],
+      declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         LetDirective,
+        ProviderSearchComponent,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
-          'de',
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          require('./../../../../assets/i18n/de.json')
-        ),
+        TranslateTestingModule.withTranslations({
+          'en': require('./src/assets/i18n/en.json'),
+          'de': require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en'),
         NoopAnimationsModule
       ],
       providers: [
+        ...providePermissionService(),
         DialogService,
         provideMockStore({
           initialState: { Provider: { search: initialState } }
@@ -175,7 +176,7 @@ describe('ProviderSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
+    const breadcrumbService = component['breadcrumbService']
     jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
@@ -184,9 +185,9 @@ describe('ProviderSearchComponent', () => {
     expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
     const searchHeader = await ProviderSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
-    const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
+    const headerText = await pageHeader.getHeaderText()
 
-    expect(await searchBreadcrumbItem!.getText()).toEqual('Search')
+    expect(headerText).toBe('Provider Search')
   })
 
   it('should export csv data on export action click', async () => {
@@ -354,13 +355,14 @@ describe('ProviderSearchComponent', () => {
     it('should map valid Date value to UTC ISO string in searchCriteria', () => {
       const localDate = new Date(2023, 7, 14, 12, 30, 45)
       const expectedIso = new Date(Date.UTC(
-        localDate.getFullYear(),
-        localDate.getMonth(),
-        localDate.getDate(),
-        localDate.getHours(),
-        localDate.getMinutes(),
-        localDate.getSeconds()
-      )).toISOString()
+          localDate.getFullYear(),
+          localDate.getMonth(),
+          localDate.getDate(),
+          localDate.getHours(),
+          localDate.getMinutes(),
+          localDate.getSeconds()
+        )
+      ).toISOString()
 
       const formValue = formBuilder.group({ modelName: localDate })
       component.search(formValue)
@@ -375,8 +377,3 @@ describe('ProviderSearchComponent', () => {
     })
   })
 })
-
-
-
-
-

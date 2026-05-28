@@ -3,8 +3,8 @@ import {
   GroupByCountDiagramComponentState,
   InteractiveDataViewComponentState,
   SearchHeaderComponentState
-} from '@onecx/portal-integration-angular'
-import { MCPServer } from '../../../shared/generated'
+} from '@onecx/angular-accelerator'
+import { MCPServer } from 'src/app/shared/generated'
 import { MCPServerSearchCriteria } from './mcpserver-search.parameters'
 
 export const MCPServerSearchActions = createActionGroup({
