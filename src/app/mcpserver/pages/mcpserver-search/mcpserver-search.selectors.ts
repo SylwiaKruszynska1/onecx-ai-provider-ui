@@ -17,8 +17,8 @@ export const selectResults = createSelector(
 
       return {
         imagePath: '',
-        id: item.id ?? '',
         ...item,
+        id: item.id ?? '',
         status
         // ACTION S6: Add additional fields as needed
         // https://onecx.github.io/docs/nx-plugins/current/general/getting_started/search/configure-search-results.html#action-6

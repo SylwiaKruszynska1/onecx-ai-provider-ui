@@ -43,6 +43,9 @@ export const ProviderSearchActions = createActionGroup({
       results: Provider[]
       totalNumberOfResults: number
     }>(),
+    'Provider health poll ticked': props<{
+      id: string
+    }>(),
     'Provider health status updated': props<{
       id: string
       status: string

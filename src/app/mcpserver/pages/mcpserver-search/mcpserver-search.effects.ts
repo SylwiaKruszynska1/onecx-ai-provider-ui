@@ -9,7 +9,7 @@ import { filterForNavigatedTo, filterOutQueryParamsHaveNotChanged } from '@onecx
 import { ExportDataService } from '@onecx/angular-accelerator'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 import equal from 'fast-deep-equal'
-import { catchError, map, mergeMap, of, switchMap, tap, from, timer } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap, tap, from, timer, takeUntil } from 'rxjs'
 import { MCPServer, McpServerService } from 'src/app/shared/generated'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { MCPServerSearchActions } from './mcpserver-search.actions'
@@ -29,33 +29,45 @@ export class MCPServerSearchEffects {
     private readonly exportDataService: ExportDataService
   ) {}
 
-  // Fetch and poll MCP health status: immediately on new results, then every 15 seconds
-pollMCPServerHealth$ = createEffect(() => {
+  pollMCPServerHealth$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(MCPServerSearchActions.mcpserverSearchResultsReceived),
       switchMap(({ stream }) =>
         timer(0, 15000).pipe(
-          mergeMap(() =>
-            from(stream).pipe(
-              mergeMap((server: MCPServer) => {
-                const id = server.id ?? ''
-                if (!id) {
-                  return of(MCPServerSearchActions.mcpserverHealthStatusUpdated({ id: '', status: 'NODATA' }))
-                }
-
-                return this.mcpserverService.getMCPServerHealthStatus(id).pipe(
-                  map((resp) => MCPServerSearchActions.mcpserverHealthStatusUpdated({ id, status: resp?.status ?? 'NODATA' })),
-                  catchError((error: HttpErrorResponse) =>
-                    of(
-                      MCPServerSearchActions.mcpserverHealthStatusUpdated({
-                        id,
-                        status: error?.status === 404 ? 'NODATA' : 'OFFLINE'
-                      })
-                    )
-                  )
-                )
-              })
+          takeUntil(
+            this.actions$.pipe(
+              ofType(
+                MCPServerSearchActions.mcpserverSearchResultsReceived
+              )
             )
+          ),
+          mergeMap(() => from(stream)),
+          map((server: MCPServer) =>
+            MCPServerSearchActions.mcpserverHealthPollTicked({
+              id: server.id ?? ''
+            })
+          )
+        )
+      )
+    )
+  })
+
+  updateMCPServerHealthStatus$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(MCPServerSearchActions.mcpserverHealthPollTicked),
+
+      mergeMap(({ id }) =>
+        (id
+          ? this.mcpserverService.getMCPServerHealthStatus(id).pipe(
+              map(resp => resp?.status ?? 'NODATA'),
+              catchError((error: HttpErrorResponse) =>
+                of(error?.status === 404 ? 'NODATA' : 'OFFLINE')
+              )
+            )
+          : of('NODATA')
+        ).pipe(
+          map(status =>
+            MCPServerSearchActions.mcpserverHealthStatusUpdated({ id, status })
           )
         )
       )

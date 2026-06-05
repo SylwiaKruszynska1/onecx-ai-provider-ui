@@ -62,6 +62,41 @@ describe('mcpserverSearchReducer', () => {
     expect(state.results).toEqual([{ id: '1' }])
   })
 
+  it('should update healthStatus on mcpserverHealthStatusUpdated', () => {
+    const prevState = {
+      ...initialState,
+      healthStatus: {
+        '1': 'ONLINE'
+      }
+    }
+    const action = MCPServerSearchActions.mcpserverHealthStatusUpdated({
+      id: '2',
+      status: 'OFFLINE'
+    })
+    const state = mcpserverSearchReducer(prevState as any, action)
+
+    expect(state.healthStatus).toEqual({
+      '1': 'ONLINE',
+      '2': 'OFFLINE'
+    })
+  })
+
+  it('should initialize healthStatus when undefined', () => {
+    const prevState = {
+      ...initialState,
+      healthStatus: undefined
+    }
+    const action = MCPServerSearchActions.mcpserverHealthStatusUpdated({
+      id: '1',
+      status: 'ONLINE'
+    })
+    const state = mcpserverSearchReducer(prevState as any, action)
+
+    expect(state.healthStatus).toEqual({
+      '1': 'ONLINE'
+    })
+  })
+
   it('should clear results on mcpserverSearchResultsLoadingFailed', () => {
     const prevState = { ...initialState, results: [{ id: '1' }] }
     const action = MCPServerSearchActions.mcpserverSearchResultsLoadingFailed({ error: null })
