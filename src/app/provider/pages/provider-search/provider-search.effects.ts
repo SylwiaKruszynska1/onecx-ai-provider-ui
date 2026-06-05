@@ -1,4 +1,5 @@
 import { Injectable, SkipSelf } from '@angular/core'
+import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
@@ -13,7 +14,7 @@ import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { DialogState, ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
 import equal from 'fast-deep-equal'
 import { PrimeIcons } from 'primeng/api'
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap, tap, from, timer } from 'rxjs'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { ProviderSearchActions } from './provider-search.actions'
 import { ProviderSearchComponent } from './provider-search.component'
@@ -34,6 +35,38 @@ export class ProviderSearchEffects {
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
   ) {}
+
+pollProviderHealth$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProviderSearchActions.providerSearchResultsReceived),
+      switchMap(({ results }) =>
+        timer(0, 15000).pipe(
+          mergeMap(() =>
+            from(results).pipe(
+              mergeMap((r: Provider) => {
+                const id = r.id ?? ''
+                if (!id) {
+                  return of(ProviderSearchActions.providerHealthStatusUpdated({ id: '', status: 'NODATA' }))
+                }
+
+                return this.providerService.getProviderHealthStatus(id).pipe(
+                  map((resp) => ProviderSearchActions.providerHealthStatusUpdated({ id, status: resp?.status ?? 'NODATA' })),
+                  catchError((error: HttpErrorResponse) =>
+                    of(
+                      ProviderSearchActions.providerHealthStatusUpdated({
+                        id,
+                        status: error?.status === 404 ? 'NODATA' : 'OFFLINE'
+                      })
+                    )
+                  )
+                )
+              })
+            )
+          )
+        )
+      )
+    )
+  })
 
   syncParamsToUrl$ = createEffect(
     () => {

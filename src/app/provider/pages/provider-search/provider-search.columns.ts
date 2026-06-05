@@ -48,5 +48,17 @@ export const ProviderSearchColumns: DataTableColumn[] = [
             'PROVIDER_SEARCH.PREDEFINED_GROUP.FULL'
         ]
     },
+    {
+        columnType: ColumnType.STRING,
+        id: 'status',
+        nameKey: 'PROVIDER_SEARCH.COLUMNS.STATUS',
+        filterable: false,
+        sortable: false,
+        predefinedGroupKeys: [
+            'PROVIDER_SEARCH.PREDEFINED_GROUP.DEFAULT',
+            'PROVIDER_SEARCH.PREDEFINED_GROUP.EXTENDED',
+            'PROVIDER_SEARCH.PREDEFINED_GROUP.FULL'
+        ]
+    },
 ]
 

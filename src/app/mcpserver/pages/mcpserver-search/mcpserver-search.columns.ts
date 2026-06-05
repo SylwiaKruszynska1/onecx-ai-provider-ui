@@ -4,37 +4,49 @@ export const mcpserverSearchColumns: DataTableColumn[] = [
   {
     columnType: ColumnType.STRING,
     id: 'name',
-    nameKey: 'MCP_SERVER_SEARCH.RESULTS.NAME',
+    nameKey: 'MCPSERVER_SEARCH.RESULTS.NAME',
     filterable: true,
     sortable: true,
     predefinedGroupKeys: [
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.DEFAULT',
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.FULL'
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.DEFAULT',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.FULL'
     ]
   },
   {
     columnType: ColumnType.STRING,
     id: 'description',
-    nameKey: 'MCP_SERVER_SEARCH.RESULTS.DESCRIPTION',
+    nameKey: 'MCPSERVER_SEARCH.RESULTS.DESCRIPTION',
     filterable: true,
     sortable: true,
     predefinedGroupKeys: [
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.DEFAULT',
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.FULL'
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.DEFAULT',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.FULL'
     ]
   },  
   {
     columnType: ColumnType.STRING,
     id: 'url',
-    nameKey: 'MCP_SERVER_SEARCH.RESULTS.URL',
+    nameKey: 'MCPSERVER_SEARCH.RESULTS.URL',
     filterable: true,
     sortable: true,
     predefinedGroupKeys: [
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
-      'MCP_SERVER_SEARCH.PREDEFINED_GROUP.FULL'
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.FULL'
     ]
   },
+  {
+    columnType: ColumnType.STRING,
+    id: 'status',
+    nameKey: 'MCPSERVER_SEARCH.RESULTS.STATUS',
+    filterable: false,
+    sortable: false,
+    predefinedGroupKeys: [
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.DEFAULT',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
+      'MCPSERVER_SEARCH.PREDEFINED_GROUP.FULL'
+    ]
+  }
 ]
 // ACTION S6: Define search results columns: https://onecx.github.io/docs/nx-plugins/current/general/getting_started/search/configure-search-results.html#action-6

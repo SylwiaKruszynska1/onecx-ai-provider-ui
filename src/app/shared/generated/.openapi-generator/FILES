@@ -19,6 +19,7 @@ model/createMCPServerRequest.ts
 model/createProviderRequest.ts
 model/executionPolicy.ts
 model/mCPServer.ts
+model/mCPServerHealthStatus.ts
 model/mCPServerPageResult.ts
 model/mCPServerSearchCriteria.ts
 model/models.ts
@@ -26,6 +27,7 @@ model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts
 model/problemDetailResponse.ts
 model/provider.ts
+model/providerHealthStatus.ts
 model/providerPageResult.ts
 model/providerSearchCriteria.ts
 model/providerType.ts

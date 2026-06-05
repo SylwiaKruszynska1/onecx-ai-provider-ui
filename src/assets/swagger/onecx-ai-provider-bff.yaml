@@ -278,7 +278,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProviderPageResult'
-  /mcpServer:
+  /providers/{id}/health:
+    get:
+      x-onecx:
+        permissions:
+          provider:
+            - read
+      tags:
+        - provider
+      description: Return Provider health status by its ID
+      operationId: getProviderHealthStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderHealthStatus'
+        "404":
+          description: Not found
+  /mcpServers:
     post:
       x-onecx:
         permissions:
@@ -386,6 +411,31 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
         "404":
           description: MCP Server not found
+  /mcpServers/{id}/health:
+    get:
+      x-onecx:
+        permissions:
+          mcpServer:
+            - read
+      tags:
+        - mcpServer
+      description: Return MCP Server health status by its ID
+      operationId: getMCPServerHealthStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPServerHealthStatus'
+        "404":
+          description: Not found
   /mcpServers/search:
     post:
       x-onecx:
@@ -828,3 +878,23 @@ components:
           type: string
         message:
           type: string
+    ProviderHealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - HEALTHY
+            - UNHEALTHY
+        checkedAt:
+          $ref: '#/components/schemas/OffsetDateTime'
+    MCPServerHealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - HEALTHY
+            - UNHEALTHY
+        checkedAt:
+          $ref: '#/components/schemas/OffsetDateTime'

@@ -74,12 +74,18 @@
     "RESULTS": {
       "NAME": "Name",
       "DESCRIPTION": "Beschreibung",
-      "URL": "URL"
+      "URL": "URL",
+      "STATUS": "Status"
     },
     "CRITERIA": {
       "NAME": "Name",
       "DESCRIPTION": "Beschreibung",
       "URL": "URL"
+    },
+    "STATUS": {
+      "ONLINE": "Online",
+      "OFFLINE": "Offline: Nicht Erreichbar",
+      "NODATA": "Keine Daten"
     }
   },
   "CONFIGURATION_DETAILS": {
@@ -295,12 +301,18 @@
       "NAME": "Name",
       "DESCRIPTION": "Beschreibung",
       "LLMURL": "LlmUrl",
-      "MODELNAME": "Modelname"
+      "MODELNAME": "Modelname",
+      "STATUS": "Status"
     },
     "PREDEFINED_GROUP": {
       "DEFAULT": "Standard",
       "EXTENDED": "Erweitert",
       "FULL": "Vollständig"
+    },
+    "STATUS": {
+      "ONLINE": "Online",
+      "OFFLINE": "Offline: Nicht Erreichbar",
+      "NODATA": "Keine Daten"
     }
   }
 }

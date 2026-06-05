@@ -12,7 +12,8 @@ export const initialState: ProviderSearchState = {
   viewMode: 'basic',
   chartVisible: false,
   searchLoadingIndicator: false,
-  criteria: {}
+  criteria: {},
+  healthStatus: {}
 }
 
 export const ProviderSearchReducer = createReducer(
@@ -48,7 +49,18 @@ export const ProviderSearchReducer = createReducer(
     ProviderSearchActions.providerSearchResultsReceived,
     (state: ProviderSearchState, { results }): ProviderSearchState => ({
       ...state,
-      results
+      results,
+      healthStatus: {}
+    })
+  ),
+  on(
+    ProviderSearchActions.providerHealthStatusUpdated,
+    (state: ProviderSearchState, { id, status }): ProviderSearchState => ({
+      ...state,
+      healthStatus: {
+        ...(state.healthStatus ?? {}),
+        [id]: status
+      }
     })
   ),
   on(

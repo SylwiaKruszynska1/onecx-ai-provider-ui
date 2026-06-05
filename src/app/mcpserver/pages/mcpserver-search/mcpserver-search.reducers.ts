@@ -8,6 +8,7 @@ import { MCPServerSearchState } from './mcpserver-search.state'
 export const initialState: MCPServerSearchState = {
   columns: mcpserverSearchColumns,
   results: [],
+  healthStatus: {},
   chartVisible: false,
   resultComponentState: null,
   searchHeaderComponentState: null,
@@ -51,8 +52,19 @@ export const mcpserverSearchReducer = createReducer(
     (state: MCPServerSearchState, { stream }): MCPServerSearchState => ({
       ...state,
       results: stream,
+      healthStatus: {},
       searchLoadingIndicator: false,
       searchExecuted: true
+    })
+  ),
+  on(
+    MCPServerSearchActions.mcpserverHealthStatusUpdated,
+    (state: MCPServerSearchState, { id, status }): MCPServerSearchState => ({
+      ...state,
+      healthStatus: {
+        ...(state.healthStatus ?? {}),
+        [id]: status
+      }
     })
   ),
   on(
