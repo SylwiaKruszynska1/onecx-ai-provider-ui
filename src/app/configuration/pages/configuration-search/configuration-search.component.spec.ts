@@ -275,6 +275,16 @@ describe('ConfigurationSearchComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith(ConfigurationSearchActions.editConfigurationButtonClicked({ id: '1' }))
   })
 
+  it('should dispatch deleteConfigurationButtonClicked action on delete', () => {
+    const row: RowListGridData = { id: 'test-id', imagePath: '' }
+
+    component.delete(row)
+
+    expect(store.dispatch).toHaveBeenCalledWith(
+      ConfigurationSearchActions.deleteConfigurationButtonClicked({ id: 'test-id' })
+    )
+  })
+
   it('should dispatch createConfigurationButtonClicked action on create click', async () => {
     const header = await ConfigurationSearch.getHeader()
     const createButton = await (await header.getPageHeader()).getInlineActionButtonByIcon(PrimeIcons.PLUS)

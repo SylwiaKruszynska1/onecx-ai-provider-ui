@@ -7,7 +7,7 @@ import { ConfigurationDetailsViewModel } from './configuration-details.viewmodel
 
 export const configurationDetailsSelectors = createChildSelectors(configurationFeature.selectDetails, initialState)
 
-const selectDetailsState = createSelector(
+export const selectDetailsState = createSelector(
   configurationDetailsSelectors.selectDetails,
   configurationDetailsSelectors.selectDetailsLoadingIndicator,
   configurationDetailsSelectors.selectDetailsLoaded,
@@ -18,7 +18,7 @@ const selectDetailsState = createSelector(
   })
 )
 
-const selectProvidersState = createSelector(
+export const selectProvidersState = createSelector(
   configurationDetailsSelectors.selectProviders,
   configurationDetailsSelectors.selectProvidersLoadingIndicator,
   configurationDetailsSelectors.selectProvidersLoaded,
@@ -29,7 +29,7 @@ const selectProvidersState = createSelector(
   })
 )
 
-const selectMcpServersState = createSelector(
+export const selectMcpServersState = createSelector(
   configurationDetailsSelectors.selectMcpServers,
   configurationDetailsSelectors.selectMcpServersLoadingIndicator,
   configurationDetailsSelectors.selectMcpServersLoaded,

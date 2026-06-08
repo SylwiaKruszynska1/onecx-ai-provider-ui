@@ -26,7 +26,7 @@ export const selectDisplayedColumns = createSelector(
   }
 )
 
-const selectSearchCoreState = createSelector(
+export const selectSearchCoreState = createSelector(
   configurationSearchSelectors.selectColumns,
   configurationSearchSelectors.selectCriteria,
   selectResults,
@@ -39,7 +39,7 @@ const selectSearchCoreState = createSelector(
   })
 )
 
-const selectComponentStates = createSelector(
+export const selectComponentStates = createSelector(
   configurationSearchSelectors.selectResultComponentState,
   configurationSearchSelectors.selectSearchHeaderComponentState,
   configurationSearchSelectors.selectDiagramComponentState,
@@ -50,7 +50,7 @@ const selectComponentStates = createSelector(
   })
 )
 
-const selectUiState = createSelector(
+export const selectUiState = createSelector(
   configurationSearchSelectors.selectChartVisible,
   configurationSearchSelectors.selectSearchLoadingIndicator,
   configurationSearchSelectors.selectSearchExecuted,

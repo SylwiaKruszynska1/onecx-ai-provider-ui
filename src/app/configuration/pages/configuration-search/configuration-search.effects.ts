@@ -129,7 +129,7 @@ export class ConfigurationSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(ConfigurationSearchActions.updateConfigurationCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('DialogResult was not set as expected!')
         }
         const itemToEditId = dialogResult.result.id
@@ -186,7 +186,7 @@ export class ConfigurationSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(ConfigurationSearchActions.createConfigurationCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('DialogResult was not set as expected!')
         }
         const toCreateItem = {
