@@ -22,42 +22,52 @@ export const selectDisplayedColumns = createSelector(
   configurationSearchSelectors.selectColumns,
   configurationSearchSelectors.selectDisplayedColumns,
   (columns, displayedColumns): DataTableColumn[] => {
-    return (displayedColumns?.map((d) => columns.find((c) => c.id === d)).filter((d) => d) as DataTableColumn[]) ?? []
+    return (displayedColumns?.map((d) => columns.find((c) => c.id === d)).filter(Boolean) as DataTableColumn[]) ?? []
   }
 )
 
-export const selectConfigurationSearchViewModel = createSelector(
+const selectSearchCoreState = createSelector(
   configurationSearchSelectors.selectColumns,
   configurationSearchSelectors.selectCriteria,
   selectResults,
   selectDisplayedColumns,
+  (columns, searchCriteria, results, displayedColumns) => ({
+    columns,
+    searchCriteria,
+    results,
+    displayedColumns
+  })
+)
+
+const selectComponentStates = createSelector(
   configurationSearchSelectors.selectResultComponentState,
   configurationSearchSelectors.selectSearchHeaderComponentState,
   configurationSearchSelectors.selectDiagramComponentState,
+  (resultComponentState, searchHeaderComponentState, diagramComponentState) => ({
+    resultComponentState,
+    searchHeaderComponentState,
+    diagramComponentState
+  })
+)
+
+const selectUiState = createSelector(
   configurationSearchSelectors.selectChartVisible,
   configurationSearchSelectors.selectSearchLoadingIndicator,
   configurationSearchSelectors.selectSearchExecuted,
-  (
-    columns,
-    searchCriteria,
-    results,
-    displayedColumns,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
+  (chartVisible, searchLoadingIndicator, searchExecuted) => ({
     chartVisible,
     searchLoadingIndicator,
     searchExecuted
-  ): ConfigurationSearchViewModel => ({
-    columns,
-    searchCriteria,
-    results,
-    displayedColumns,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
-    chartVisible,
-    searchLoadingIndicator,
-    searchExecuted
+  })
+)
+
+export const selectConfigurationSearchViewModel = createSelector(
+  selectSearchCoreState,
+  selectComponentStates,
+  selectUiState,
+  (coreState, componentStates, uiState): ConfigurationSearchViewModel => ({
+    ...coreState,
+    ...componentStates,
+    ...uiState
   })
 )

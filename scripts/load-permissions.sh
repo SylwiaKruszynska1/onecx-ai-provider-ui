@@ -12,15 +12,21 @@ chart_file="helm/Chart.yaml"
  
 # Function to print success, error and warning messages
 print_success() {
-    echo -e "\n${GREEN}$1${NC}"
+    local message="$1"
+    echo -e "\n${GREEN}${message}${NC}"
+    return 0
 }
  
 print_error() {
-    echo -e "\n${RED}$1${NC}"
+    local message="$1"
+    echo -e "\n${RED}${message}${NC}"
+    return 0
 }
  
 print_warning() {
-    echo -e "\n${YELLOW}$1${NC}"
+    local message="$1"
+    echo -e "\n${YELLOW}${message}${NC}"
+    return 0
 }
  
 # Function to get or save the token
@@ -31,19 +37,19 @@ get_or_save_token() {
     local token_file="$token_dir/token.txt"
    
     # Create .local directory if it doesn't exist
-    if [ ! -d "$token_dir" ]; then
+    if [[ ! -d "$token_dir" ]]; then
         mkdir "$token_dir"
         print_success "Created $token_dir directory"
     fi
  
-    if [ -f "$token_file" ]; then
+    if [[ -f "$token_file" ]]; then
         apm_principal_token=$(cat "$token_file")
         print_success "Token loaded from $token_file"
         print_warning "If the connection to the Database cant be established, remove as a first debugging step the $token_file in the directory $token_dir"
     else
        
         read -p "Please enter your apm-principal-token: " apm_principal_token
-        if [ -z "$apm_principal_token" ]; then
+        if [[ -z "$apm_principal_token" ]]; then
             print_error "Error: apm-principal-token cannot be empty."
             exit 1
         fi
@@ -51,6 +57,7 @@ get_or_save_token() {
         print_success "Token saved to $token_file"
     fi
     print_success "apm-principal-token received."
+    return 0
 }
  
 # Function to extract app ID and product name
@@ -64,6 +71,7 @@ extract_app_id_and_product_name() {
     print_success "=> app id: $app_id"
     print_success "=> app name: $app_name"
     print_success "=> product name: $product_name"
+    return 0
 }
  
 # Function to find permissions
@@ -91,6 +99,7 @@ find_permissions() {
             break
         fi
     done < "$values_file"
+    return 0
 }
  
 # Function to create JSON
@@ -109,6 +118,7 @@ create_json() {
  
     permissions_json+="]"
     permissions_json+="}"
+    return 0
 }
  
 create_permission() {
@@ -159,7 +169,7 @@ create_permission() {
     else
         # Extract the permission ID from the response
         permission_id=$(echo "$response" | jq -r '.id')
-        if [ -n "$permission_id" ] && [ "$permission_id" != "null" ]; then
+        if [[ -n "$permission_id" ]] && [[ "$permission_id" != "null" ]]; then
             print_success "Created permission with ID: $permission_id" >&2
             echo "$permission_id"
             return 0
@@ -191,7 +201,7 @@ create_assignment() {
  
     # Extract the assignment ID from the response
     assignment_id=$(echo "$assignment_response" | jq -r '.id // empty')
-    if [ -n "$assignment_id" ]; then
+    if [[ -n "$assignment_id" ]]; then
         print_success "Created assignment with ID: $assignment_id" >&2
     else
         # Check if assignments already exist in the database
@@ -207,16 +217,17 @@ create_assignment() {
     fi
 }
  
-getRoleId(){
+get_role_id(){
     read -p "Role ID (Please enter your role guid): " role_id
-    if [ -z "$role_id" ]; then
+    if [[ -z "$role_id" ]]; then
         print_error "Error: role_id cannot be empty."
         exit 1
     fi
+    return 0
 }
  
 # Main execution
-if [ ! -f "$values_file" ] || [ ! -f "$chart_file" ]; then
+if [[ ! -f "$values_file" ]] || [[ ! -f "$chart_file" ]]; then
     print_error "Error: $values_file or $chart_file not found. Execute this script from the product root directory."
     exit 1
 fi
@@ -228,7 +239,7 @@ extract_app_id_and_product_name
 find_permissions
 create_json
 # Get role_id once
-getRoleId
+get_role_id
  
 # Array to store skipped entries
 skipped_entries=()
@@ -253,7 +264,7 @@ for permission_data in "${array[@]}"; do
 done
  
 # Print summary of skipped entries
-if [ ${#skipped_entries[@]} -gt 0 ]; then
+if [[ ${#skipped_entries[@]} -gt 0 ]]; then
     print_warning "\nSummary of entries for which permissions/assignments were not created:"
     for entry in "${skipped_entries[@]}"; do
         echo "- $entry"
