@@ -8,7 +8,6 @@ export * from './createMCPServerRequest';
 export * from './createProviderRequest';
 export * from './executionPolicy';
 export * from './mCPServer';
-export * from './mCPServerHealthStatus';
 export * from './mCPServerPageResult';
 export * from './mCPServerSearchCriteria';
 export * from './problemDetailInvalidParam';

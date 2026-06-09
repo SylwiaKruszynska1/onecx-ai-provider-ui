@@ -35,18 +35,6 @@ export const mcpserverSearchColumns: DataTableColumn[] = [
       'MCPSERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
       'MCPSERVER_SEARCH.PREDEFINED_GROUP.FULL'
     ]
-  },
-  {
-    columnType: ColumnType.STRING,
-    id: 'status',
-    nameKey: 'MCPSERVER_SEARCH.RESULTS.STATUS',
-    filterable: false,
-    sortable: false,
-    predefinedGroupKeys: [
-      'MCPSERVER_SEARCH.PREDEFINED_GROUP.DEFAULT',
-      'MCPSERVER_SEARCH.PREDEFINED_GROUP.EXTENDED',
-      'MCPSERVER_SEARCH.PREDEFINED_GROUP.FULL'
-    ]
   }
 ]
 // ACTION S6: Define search results columns: https://onecx.github.io/docs/nx-plugins/current/general/getting_started/search/configure-search-results.html#action-6

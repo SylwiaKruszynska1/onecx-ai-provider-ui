@@ -9,16 +9,11 @@ describe('McpServerSearch selectors', () => {
         { id: '1', name: 'A', description: 'desc', url: 'http://a', apiKey: 'key1' },
         { id: '2', name: 'B', description: 'desc2', url: 'http://b', apiKey: 'key2' }
       ]
-      const healthStatus = {
-        '1': 'ONLINE',
-        '2': 'OFFLINE'
-      }
       const expected = [
-        { imagePath: '', id: '1', name: 'A', description: 'desc', url: 'http://a', apiKey: 'key1', status: 'ONLINE' },
-        { imagePath: '', id: '2', name: 'B', description: 'desc2', url: 'http://b', apiKey: 'key2', status: 'OFFLINE' }
+        { imagePath: '', id: '1', name: 'A', description: 'desc', url: 'http://a', apiKey: 'key1' },
+        { imagePath: '', id: '2', name: 'B', description: 'desc2', url: 'http://b', apiKey: 'key2' }
       ]
-
-      expect(selectors.selectResults.projector(input, healthStatus)).toEqual(expected)
+      expect(selectors.selectResults.projector(input)).toEqual(expected)
     })
 
     it('should set empty id when source id is undefined', () => {
@@ -51,24 +46,7 @@ describe('McpServerSearch selectors', () => {
       ...uiState
     })
   })
-  it('should default status to NODATA when healthStatus is undefined', () => {
-    const input = [{ id: '1', name: 'A' }]
-    const mapped = selectors.selectResults.projector(input, undefined as any)
 
-    expect(mapped[0]['status']).toBe('NODATA')
-  })
-
-  it('should use empty id and return NODATA when id is undefined', () => {
-    const input = [{ id: undefined, name: 'A' }]
-    const healthStatus = {}
-    const mapped = selectors.selectResults.projector(input, healthStatus)
-
-    expect(mapped[0]).toEqual(
-      expect.objectContaining({
-        id: '',
-        status: 'NODATA'
-      })
-    )
   it('selectMCPServerSearchViewModel should combine values from store state', () => {
     const state = {
       mcpserver: {

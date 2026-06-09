@@ -17,5 +17,4 @@ export interface MCPServerSearchState {
   searchLoadingIndicator: boolean
   criteria: MCPServerSearchCriteria
   searchExecuted: boolean
-  healthStatus?: Record<string, string>
 }

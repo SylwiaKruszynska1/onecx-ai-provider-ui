@@ -74,18 +74,12 @@
     "RESULTS": {
       "NAME": "Name",
       "DESCRIPTION": "Beschreibung",
-      "URL": "URL",
-      "STATUS": "Status"
+      "URL": "URL"
     },
     "CRITERIA": {
       "NAME": "Name",
       "DESCRIPTION": "Beschreibung",
       "URL": "URL"
-    },
-    "STATUS": {
-      "ONLINE": "Online",
-      "OFFLINE": "Offline: Nicht Erreichbar",
-      "NODATA": "Keine Daten"
     }
   },
   "CONFIGURATION_DETAILS": {

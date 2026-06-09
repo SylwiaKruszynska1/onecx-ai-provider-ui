@@ -26,13 +26,6 @@ export const MCPServerSearchActions = createActionGroup({
       totalPages: number
     }>(),
     'mcpserver search results loading failed': props<{ error: string | null }>(),
-    'mcpserver health poll ticked': props<{
-      id: string
-    }>(),
-    'mcpserver health status updated': props<{
-      id: string
-      status: string
-    }>(),
     'Export button clicked': emptyProps(),
     'Result component state changed': props<InteractiveDataViewComponentState>(),
     'Search header component state changed': props<SearchHeaderComponentState>(),

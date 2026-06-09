@@ -1,5 +1,4 @@
 import { Injectable, SkipSelf } from '@angular/core'
-import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
@@ -9,8 +8,8 @@ import { filterForNavigatedTo, filterOutQueryParamsHaveNotChanged } from '@onecx
 import { ExportDataService } from '@onecx/angular-accelerator'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 import equal from 'fast-deep-equal'
-import { catchError, map, mergeMap, of, switchMap, tap, from, timer, takeUntil } from 'rxjs'
-import { MCPServer, McpServerService } from 'src/app/shared/generated'
+import { catchError, map, of, switchMap, tap } from 'rxjs'
+import { McpServerService } from 'src/app/shared/generated'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { MCPServerSearchActions } from './mcpserver-search.actions'
 import { MCPServerSearchComponent } from './mcpserver-search.component'
@@ -28,51 +27,6 @@ export class MCPServerSearchEffects {
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
   ) {}
-
-  pollMCPServerHealth$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(MCPServerSearchActions.mcpserverSearchResultsReceived),
-      switchMap(({ stream }) =>
-        timer(0, 15000).pipe(
-          takeUntil(
-            this.actions$.pipe(
-              ofType(
-                MCPServerSearchActions.mcpserverSearchResultsReceived
-              )
-            )
-          ),
-          mergeMap(() => from(stream)),
-          map((server: MCPServer) =>
-            MCPServerSearchActions.mcpserverHealthPollTicked({
-              id: server.id ?? ''
-            })
-          )
-        )
-      )
-    )
-  })
-
-  updateMCPServerHealthStatus$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(MCPServerSearchActions.mcpserverHealthPollTicked),
-
-      mergeMap(({ id }) =>
-        (id
-          ? this.mcpserverService.getMCPServerHealthStatus(id).pipe(
-              map(resp => resp?.status ?? 'NODATA'),
-              catchError((error: HttpErrorResponse) =>
-                of(error?.status === 404 ? 'NODATA' : 'OFFLINE')
-              )
-            )
-          : of('NODATA')
-        ).pipe(
-          map(status =>
-            MCPServerSearchActions.mcpserverHealthStatusUpdated({ id, status })
-          )
-        )
-      )
-    )
-  })
 
   syncParamsToUrl$ = createEffect(
     () => {

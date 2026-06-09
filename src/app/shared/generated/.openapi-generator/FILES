@@ -19,7 +19,6 @@ model/createMCPServerRequest.ts
 model/createProviderRequest.ts
 model/executionPolicy.ts
 model/mCPServer.ts
-model/mCPServerHealthStatus.ts
 model/mCPServerPageResult.ts
 model/mCPServerSearchCriteria.ts
 model/models.ts

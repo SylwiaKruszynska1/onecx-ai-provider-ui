@@ -90,28 +90,6 @@
         [actionColumnPosition]="vm.resultComponentState?.actionColumnConfig?.position?? 'right'"
         [frozenActionColumn]="vm.resultComponentState?.actionColumnConfig?.frozen ?? false"
       >
-        <ng-template pTemplate="stringTableCell" let-rowObject="rowObject" let-column="column">
-          @if (column.id === 'status') {
-            @if (rowObject.status === 'HEALTHY') {
-              <span class="flex align-items-center gap-2 text-green-500">
-                <i class="pi pi-circle-on status-icon"></i>
-                <span>{{ 'MCPSERVER_SEARCH.STATUS.ONLINE' | translate }}</span>
-              </span>
-            } @else if (rowObject.status === 'UNHEALTHY' || rowObject.status === 'OFFLINE') {
-              <span class="flex align-items-center gap-2 text-red-500">
-                <i class="pi pi-circle-on"></i>
-                <span>{{ 'MCPSERVER_SEARCH.STATUS.OFFLINE' | translate }}</span>
-              </span>
-            } @else if (rowObject.status === 'NODATA') {
-              <span class="flex align-items-center gap-2 text-gray-500">
-                <i class="pi pi-circle-on"></i>
-                <span>{{ 'MCPSERVER_SEARCH.STATUS.NODATA' | translate }}</span>
-              </span>
-            }
-          } @else {
-            {{ rowObject[column.id] }}
-          }
-        </ng-template>
       </ocx-interactive-data-view>
     </ocx-content>
     <ocx-content
