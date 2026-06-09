@@ -127,7 +127,7 @@ describe('ProviderSearch selectors', () => {
         modelName: 'model'
       }
     ]
-    const mapped = selectResults.projector(results as any)
+    const mapped = selectResults.projector(results as any, undefined)
 
     expect(mapped).toEqual([
       {
@@ -136,7 +136,8 @@ describe('ProviderSearch selectors', () => {
         name: 'Test',
         description: 'Desc',
         llmUrl: 'url',
-        modelName: 'model'
+        modelName: 'model',
+        status: 'NODATA'
       }
     ])
   })
