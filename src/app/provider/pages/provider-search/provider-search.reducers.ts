@@ -58,7 +58,7 @@ export const ProviderSearchReducer = createReducer(
     (state: ProviderSearchState, { id, status }): ProviderSearchState => ({
       ...state,
       healthStatus: {
-        ...(state.healthStatus ?? {}),
+        ...state.healthStatus,
         [id]: status
       }
     })
