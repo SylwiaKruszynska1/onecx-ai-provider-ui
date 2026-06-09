@@ -11,7 +11,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
-import { AngularAcceleratorModule, ColumnType } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule, ColumnType, RowListGridData } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
 import { ProviderSearchActions } from './provider-search.actions'
@@ -325,6 +325,19 @@ describe('ProviderSearchComponent', () => {
 
     diagram = await ProviderSearch.getDiagram()
     expect(diagram).toBeTruthy()
+  })
+
+  it('should dispatch deleteProviderButtonClicked when delete is called', () => {
+    const dispatchSpy = jest.spyOn(store, 'dispatch')
+    const mockRow = {
+      id: '123'
+    } as RowListGridData
+
+    component.delete(mockRow)
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      ProviderSearchActions.deleteProviderButtonClicked({ id: '123' })
+    )
   })
 
   describe('date mapping logic', () => {

@@ -119,9 +119,9 @@ export class MCPServerDetailsComponent implements OnInit {
   hasAPIKeyPermission = false
 
   constructor(
-    private store: Store,
-    private breadcrumbService: BreadcrumbService,
-    private userService: UserService
+    private readonly store: Store,
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly userService: UserService
   ) {
     this.formGroup = new FormGroup({
       apiKey: new FormControl(null, [Validators.maxLength(255)]),

@@ -293,7 +293,7 @@ export class ConfigurationDetailsEffects {
         if (!backNavigationPossible) {
           return of(ConfigurationDetailsActions.backNavigationFailed())
         }
-        window.history.back()
+        globalThis.history.back()
         return of(ConfigurationDetailsActions.backNavigationStarted())
       })
     )

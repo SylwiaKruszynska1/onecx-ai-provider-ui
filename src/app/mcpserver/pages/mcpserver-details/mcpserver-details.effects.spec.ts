@@ -174,6 +174,19 @@ describe('MCPServerDetailsEffects', () => {
   })
 
   describe('loadMCPServerById$', () => {
+    it('should call getMCPServerById with empty string when id is missing', (done) => {
+      const resource = { id: '1', apiKey: 'k' } as MCPServer
+      mcpService.getMCPServerById.mockReturnValue(of({ ...resource }) as any)
+
+      actions$.next(MCPServerDetailsActions.navigatedToDetailsPage({ id: undefined }))
+
+      effects.loadMCPServerById$.subscribe((action) => {
+        expect(mcpService.getMCPServerById).toHaveBeenCalledWith('')
+        expect(action).toEqual(MCPServerDetailsActions.mCPServerDetailsReceived({ details: resource }))
+        done()
+      })
+    })
+
     it('should dispatch mCPServerDetailsReceived on success', (done) => {
       const resource = { id: '1', apiKey: 'k' } as MCPServer
       mcpService.getMCPServerById.mockReturnValue(of({ ...resource }) as any)
@@ -227,6 +240,18 @@ describe('MCPServerDetailsEffects', () => {
   })
 
   describe('saveButtonClicked$', () => {
+    it('should cancel update when details are missing', (done) => {
+      store.overrideSelector(mcpserverDetailsSelectors.selectDetails, undefined as any)
+      store.refreshState()
+
+      actions$.next(MCPServerDetailsActions.saveButtonClicked({ details: {} as any }))
+
+      effects.saveButtonClicked$.subscribe((action) => {
+        expect(action).toEqual(MCPServerDetailsActions.updateMCPServerCancelled())
+        done()
+      })
+    })
+
     it('should cancel update when details missing id', (done) => {
       store.overrideSelector(mcpserverDetailsSelectors.selectDetails, { id: undefined } as any)
       store.refreshState()
@@ -278,6 +303,22 @@ describe('MCPServerDetailsEffects', () => {
   })
 
   describe('deleteButtonClicked$', () => {
+    it('should error when confirmed deletion has no item id', (done) => {
+      portalDialogService.openDialog.mockReturnValue(of({ button: 'primary' } as DialogState<any>))
+      store.overrideSelector(mcpserverDetailsSelectors.selectDetails, undefined as any)
+      store.refreshState()
+
+      actions$.next(MCPServerDetailsActions.deleteButtonClicked())
+
+      effects.deleteButtonClicked$.subscribe({
+        next: () => done.fail('Expected stream to error'),
+        error: (error) => {
+          expect(error).toEqual(new Error('Item to delete not found!'))
+          done()
+        }
+      })
+    })
+
     it('should cancel deletion when dialog cancelled', (done) => {
       portalDialogService.openDialog.mockReturnValue(of({ button: 'secondary' } as DialogState<any>) as any)
       store.overrideSelector(mcpserverDetailsSelectors.selectDetails, { id: '1' } as any)

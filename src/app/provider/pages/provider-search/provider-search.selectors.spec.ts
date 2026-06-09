@@ -90,4 +90,28 @@ describe('ProviderSearch selectors', () => {
     const mapped = selectDisplayedColumns.projector(columns, displayedColumns)
     expect(mapped).toEqual([])
   })
+
+  it('should fallback to empty string when id is undefined', () => {
+    const results = [
+      {
+        id: undefined,
+        name: 'Test',
+        description: 'Desc',
+        llmUrl: 'url',
+        modelName: 'model'
+      }
+    ]
+    const mapped = selectResults.projector(results as any)
+
+    expect(mapped).toEqual([
+      {
+        imagePath: '',
+        id: '',
+        name: 'Test',
+        description: 'Desc',
+        llmUrl: 'url',
+        modelName: 'model'
+      }
+    ])
+  })
 })
