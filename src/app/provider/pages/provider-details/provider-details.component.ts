@@ -40,9 +40,9 @@ export class ProviderDetailsComponent implements OnInit {
   public formGroup: FormGroup
 
   constructor(
-    private store: Store,
-    private breadcrumbService: BreadcrumbService,
-    private user: UserService
+    private readonly store: Store,
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly user: UserService
   ) {
     this.formGroup = new FormGroup({
       name: new FormControl(null, [Validators.maxLength(255)]),
@@ -67,7 +67,7 @@ export class ProviderDetailsComponent implements OnInit {
             conditional: true,
             showCondition: !vm.editMode,
             actionCallback: () => {
-              window.history.back()
+              globalThis.history.back()
             }
           },
           {
@@ -152,10 +152,10 @@ export class ProviderDetailsComponent implements OnInit {
 
   toggleEditMode(value: boolean) {
     this.store.dispatch(ProviderDetailsActions.providerDetailsEditModeSet({ editMode: value }))
-    if (!value) {
-      this.formGroup.disable()
-    } else {
+    if (value) {
       this.formGroup.enable()
+    } else {
+      this.formGroup.disable()
     }
     if (!this.user.hasPermission('PROVIDER#CHANGE_API_KEY')) {
       this.formGroup.get('apiKey')?.disable()

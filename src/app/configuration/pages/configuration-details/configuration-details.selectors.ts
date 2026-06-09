@@ -1,49 +1,63 @@
 import { createSelector } from '@ngrx/store'
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
 import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors'
-import { Configuration, MCPServer, Provider } from 'src/app/shared/generated'
 import { configurationFeature } from '../../configuration.reducers'
 import { initialState } from './configuration-details.reducers'
 import { ConfigurationDetailsViewModel } from './configuration-details.viewmodel'
 
 export const configurationDetailsSelectors = createChildSelectors(configurationFeature.selectDetails, initialState)
 
-export const selectConfigurationDetailsViewModel = createSelector(
+export const selectDetailsState = createSelector(
   configurationDetailsSelectors.selectDetails,
   configurationDetailsSelectors.selectDetailsLoadingIndicator,
   configurationDetailsSelectors.selectDetailsLoaded,
+  (details, detailsLoadingIndicator, detailsLoaded) => ({
+    details,
+    detailsLoadingIndicator,
+    detailsLoaded
+  })
+)
+
+export const selectProvidersState = createSelector(
   configurationDetailsSelectors.selectProviders,
   configurationDetailsSelectors.selectProvidersLoadingIndicator,
   configurationDetailsSelectors.selectProvidersLoaded,
+  (Providers, ProvidersLoadingIndicator, ProvidersLoaded) => ({
+    Providers,
+    ProvidersLoadingIndicator,
+    ProvidersLoaded
+  })
+)
+
+export const selectMcpServersState = createSelector(
   configurationDetailsSelectors.selectMcpServers,
   configurationDetailsSelectors.selectMcpServersLoadingIndicator,
   configurationDetailsSelectors.selectMcpServersLoaded,
+  (MCPServers, MCPServersLoadingIndicator, MCPServersLoaded) => ({
+    MCPServers,
+    MCPServersLoadingIndicator,
+    MCPServersLoaded
+  })
+)
+
+export const selectConfigurationDetailsViewModel = createSelector(
+  selectDetailsState,
+  selectProvidersState,
+  selectMcpServersState,
   selectBackNavigationPossible,
   configurationDetailsSelectors.selectEditMode,
   configurationDetailsSelectors.selectIsSubmitting,
   (
-    details: Configuration | undefined,
-    detailsLoadingIndicator: boolean,
-    detailsLoaded: boolean,
-    Providers: Provider[] | undefined,
-    ProvidersLoadingIndicator: boolean,
-    ProvidersLoaded: boolean,
-    MCPServers: MCPServer[] | undefined,
-    MCPServersLoadingIndicator: boolean,
-    MCPServersLoaded: boolean,
-    backNavigationPossible: boolean,
-    editMode: boolean,
-    isSubmitting: boolean
+    detailsState,
+    providersState,
+    mcpServersState,
+    backNavigationPossible,
+    editMode,
+    isSubmitting
   ): ConfigurationDetailsViewModel => ({
-    details,
-    detailsLoadingIndicator,
-    detailsLoaded,
-    Providers,
-    ProvidersLoadingIndicator,
-    ProvidersLoaded,
-    MCPServers,
-    MCPServersLoaded,
-    MCPServersLoadingIndicator,
+    ...detailsState,
+    ...providersState,
+    ...mcpServersState,
     backNavigationPossible,
     editMode,
     isSubmitting

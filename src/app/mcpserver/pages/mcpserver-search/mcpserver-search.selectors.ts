@@ -29,35 +29,46 @@ export const selectResults = createSelector(
   }
 )
 
-export const selectMCPServerSearchViewModel = createSelector(
+const selectSearchCoreState = createSelector(
   mcpserverSearchSelectors.selectColumns,
   mcpserverSearchSelectors.selectCriteria,
   selectResults,
+  (columns, searchCriteria, results) => ({
+    columns,
+    searchCriteria,
+    results
+  })
+)
+
+const selectComponentStates = createSelector(
   mcpserverSearchSelectors.selectResultComponentState,
   mcpserverSearchSelectors.selectSearchHeaderComponentState,
   mcpserverSearchSelectors.selectDiagramComponentState,
+  (resultComponentState, searchHeaderComponentState, diagramComponentState) => ({
+    resultComponentState,
+    searchHeaderComponentState,
+    diagramComponentState
+  })
+)
+
+const selectUiState = createSelector(
   mcpserverSearchSelectors.selectChartVisible,
   mcpserverSearchSelectors.selectSearchLoadingIndicator,
   mcpserverSearchSelectors.selectSearchExecuted,
-  (
-    columns,
-    searchCriteria,
-    results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
+  (chartVisible, searchLoadingIndicator, searchExecuted) => ({
     chartVisible,
     searchLoadingIndicator,
     searchExecuted
-  ): MCPServerSearchViewModel => ({
-    columns,
-    searchCriteria,
-    results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
-    chartVisible,
-    searchLoadingIndicator,
-    searchExecuted
+  })
+)
+
+export const selectMCPServerSearchViewModel = createSelector(
+  selectSearchCoreState,
+  selectComponentStates,
+  selectUiState,
+  (coreState, componentStates, uiState): MCPServerSearchViewModel => ({
+    ...coreState,
+    ...componentStates,
+    ...uiState
   })
 )

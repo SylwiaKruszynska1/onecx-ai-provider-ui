@@ -17,7 +17,7 @@ import { PrimeIcons } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
-import { ReplaySubject, of } from 'rxjs'
+import { ReplaySubject, firstValueFrom, of } from 'rxjs'
 import {
   Configuration,
   ConfigurationService,
@@ -319,7 +319,6 @@ describe('ConfigurationDetailsComponent', () => {
 
       const pageDetails = component.formGroup.value
       delete baseConfigurationDetailsViewModel.details?.creationUser
-      delete baseConfigurationDetailsViewModel.details?.modificationCount
       delete baseConfigurationDetailsViewModel.details?.modificationUser
       expect(pageDetails).toEqual({
         ...baseConfigurationDetailsViewModel.details
@@ -438,6 +437,28 @@ describe('ConfigurationDetailsComponent', () => {
       expect(actionLabelsEdit).not.toContain('CONFIGURATION_DETAILS.GENERAL.EDIT')
     })
 
+    it('should return empty string when MCPServer is null', () => {
+      const result = component.getMCPName(null as any)
+
+      expect(result).toBe('')
+    })
+
+    it('should emit query in mcpServerQuery$ when searchMCPServers is called', () => {
+      const nextSpy = jest.spyOn(component['mcpServerQuery$'], 'next')
+
+      component.searchMCPServers({ query: 'test-query' })
+
+      expect(nextSpy).toHaveBeenCalledWith('test-query')
+    })
+
+    it('should emit query in providerQuery$ when searchProviders is called', () => {
+      const nextSpy = jest.spyOn(component['providerQuery$'], 'next')
+
+      component.searchProviders({ query: 'provider-query' })
+
+      expect(nextSpy).toHaveBeenCalledWith('provider-query')
+    })
+
     it('should dispatch edit action when edit() is called', () => {
       const dispatchSpy = jest.spyOn(store, 'dispatch')
 
@@ -469,7 +490,8 @@ describe('ConfigurationDetailsComponent', () => {
         name: 'name',
         description: 'desc',
         mcpServers: [{ id: '', name: '' }],
-        llmProvider: { id: 'id-1', name: 'provider', modelName: 'model' }
+        llmProvider: { id: 'id-1', name: 'provider', modelName: 'model' },
+        modificationCount: 1
       }
       const dispatchSpy = jest.spyOn(store, 'dispatch')
 
@@ -489,6 +511,65 @@ describe('ConfigurationDetailsComponent', () => {
       const dispatchSpy = jest.spyOn(store, 'dispatch')
       component.delete()
       expect(dispatchSpy).toHaveBeenCalledWith(ConfigurationDetailsActions.deleteButtonClicked())
+    })
+
+    it('should return empty providers suggestions when no provider and no Providers', (done) => {
+      const viewModel = {
+        ...baseConfigurationDetailsViewModel,
+        details: { ...baseConfigurationDetailsViewModel.details, llmProvider: undefined },
+        Providers: undefined
+      } as any
+
+      store.overrideSelector(selectConfigurationDetailsViewModel, viewModel)
+      store.refreshState()
+
+      component.providerQuery$.next('test')
+
+      component.filteredProviders$.subscribe((result) => {
+        expect(result).toEqual([])
+        done()
+      })
+    })
+
+    it('should return empty MCPServer suggestions when no sources exist', (done) => {
+      const viewModel = {
+        ...baseConfigurationDetailsViewModel,
+        details: { ...baseConfigurationDetailsViewModel.details, mcpServers: undefined },
+        MCPServers: undefined
+      } as any
+
+      store.overrideSelector(selectConfigurationDetailsViewModel, viewModel)
+      store.refreshState()
+
+      component.searchMCPServers({ query: 'test' })
+
+      component.filteredMCPServers$.subscribe((result) => {
+        expect(result).toEqual([])
+        done()
+      })
+    })
+
+    it('should handle MCPServer with undefined name using empty string fallback', (done) => {
+      const mcpServer = { id: '1', name: undefined } as any
+
+      const viewModel = {
+        ...baseConfigurationDetailsViewModel,
+        details: {
+          ...baseConfigurationDetailsViewModel.details,
+          mcpServers: []
+        },
+        MCPServers: [mcpServer]
+      } as any
+
+      store.overrideSelector(selectConfigurationDetailsViewModel, viewModel)
+      store.refreshState()
+
+      component.searchMCPServers({ query: '' })
+
+      component.filteredMCPServers$.subscribe((result) => {
+        expect(result.length).toBe(1)
+        done()
+      })
     })
 
     it('should call breadcrumbService.setItems on ngOnInit', () => {
@@ -593,6 +674,71 @@ describe('ConfigurationDetailsComponent', () => {
       store.refreshState()
       fixture.detectChanges()
       expect(component.formGroup.value.id).toBe('')
+    })
+
+    it('should call mcpServerQuery$.next when searchMCPServers is called', () => {
+      const nextSpy = jest.spyOn(component.mcpServerQuery$, 'next')
+      component.searchMCPServers({ query: 'test-mcp' })
+      expect(nextSpy).toHaveBeenCalledWith('test-mcp')
+    })
+
+    it('should call providerQuery$.next when searchProviders is called', () => {
+      const nextSpy = jest.spyOn(component.providerQuery$, 'next')
+      component.searchProviders({ query: 'test-provider' })
+      expect(nextSpy).toHaveBeenCalledWith('test-provider')
+    })
+
+    it('should return empty provider suggestions when Providers is undefined', async () => {
+      const viewModel = {
+        ...baseConfigurationDetailsViewModel,
+        details: { ...baseConfigurationDetailsViewModel.details, llmProvider: undefined },
+        Providers: undefined
+      } as any
+      store.overrideSelector(selectConfigurationDetailsViewModel, viewModel)
+      store.refreshState()
+      fixture.detectChanges()
+
+      component.searchProviders({ query: 'provider' })
+      const providers = await firstValueFrom(component.filteredProviders$)
+
+      expect(providers).toEqual([])
+    })
+
+    it('should return empty MCP suggestions when selected and available MCP lists are undefined', async () => {
+      const viewModel = {
+        ...baseConfigurationDetailsViewModel,
+        details: { ...baseConfigurationDetailsViewModel.details, mcpServers: undefined },
+        MCPServers: undefined
+      } as any
+      store.overrideSelector(selectConfigurationDetailsViewModel, viewModel)
+      store.refreshState()
+      fixture.detectChanges()
+
+      component.searchMCPServers({ query: 'mcp' })
+      const mcpServers = await firstValueFrom(component.filteredMCPServers$)
+
+      expect(mcpServers).toEqual([])
+    })
+
+    it('should include MCP suggestion with missing name when query is empty', async () => {
+      const namelessMcp = { id: 'mcp-no-name', name: undefined } as any
+      const viewModel = {
+        ...baseConfigurationDetailsViewModel,
+        details: { ...baseConfigurationDetailsViewModel.details, mcpServers: [] },
+        MCPServers: [namelessMcp]
+      } as any
+      store.overrideSelector(selectConfigurationDetailsViewModel, viewModel)
+      store.refreshState()
+      fixture.detectChanges()
+
+      component.searchMCPServers({ query: '' })
+      const mcpServers = await firstValueFrom(component.filteredMCPServers$)
+
+      expect(mcpServers).toEqual([namelessMcp])
+    })
+
+    it('should return empty string from getMCPName when mcpServer is falsy', () => {
+      expect(component.getMCPName(null as any)).toBe('')
     })
   })
 })

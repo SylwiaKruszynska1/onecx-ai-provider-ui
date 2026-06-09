@@ -115,5 +115,27 @@ describe('ProviderSearch selectors', () => {
         status: 'NODATA'
       })
     )
+  it('should fallback to empty string when id is undefined', () => {
+    const results = [
+      {
+        id: undefined,
+        name: 'Test',
+        description: 'Desc',
+        llmUrl: 'url',
+        modelName: 'model'
+      }
+    ]
+    const mapped = selectResults.projector(results as any)
+
+    expect(mapped).toEqual([
+      {
+        imagePath: '',
+        id: '',
+        name: 'Test',
+        description: 'Desc',
+        llmUrl: 'url',
+        modelName: 'model'
+      }
+    ])
   })
 })

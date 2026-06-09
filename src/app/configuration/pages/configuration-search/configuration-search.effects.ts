@@ -20,7 +20,6 @@ import {
   Configuration,
   ConfigurationService,
   CreateConfigurationRequest,
-  UpdateConfigurationRequest
 } from 'src/app/shared/generated'
 
 @Injectable()
@@ -50,6 +49,7 @@ export class ConfigurationSearchEffects {
             const params = {
               ...criteria
               //TODO: Move to docs to explain how to only put the date part in the URL in case you have date and not datetime
+              // NOSONAR
               //exampleDate: criteria.exampleDate?.toISOString()?.slice(0, 10)
             }
             this.router.navigate([], {
@@ -99,67 +99,6 @@ export class ConfigurationSearchEffects {
     )
   })
 
-  editButtonClicked$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(ConfigurationSearchActions.editConfigurationButtonClicked),
-      concatLatestFrom(() => this.store.select(configurationSearchSelectors.selectResults)),
-      map(([action, results]) => {
-        return results.find((item) => item.id == action.id)
-      }),
-      mergeMap((itemToEdit) => {
-        return this.portalDialogService.openDialog<Configuration | undefined>(
-          'CONFIGURATION_CREATE_UPDATE.UPDATE.HEADER',
-          {
-            type: ConfigurationCreateUpdateComponent,
-            inputs: {
-              vm: {
-                itemToEdit
-              }
-            }
-          },
-          'CONFIGURATION_CREATE_UPDATE.UPDATE.FORM.SAVE',
-          'CONFIGURATION_CREATE_UPDATE.UPDATE.FORM.CANCEL',
-          {
-            baseZIndex: 100
-          }
-        )
-      }),
-      switchMap((dialogResult) => {
-        if (!dialogResult || dialogResult.button == 'secondary') {
-          return of(ConfigurationSearchActions.updateConfigurationCancelled())
-        }
-        if (!dialogResult?.result) {
-          throw new Error('DialogResult was not set as expected!')
-        }
-        const itemToEditId = dialogResult.result.id
-        if (!itemToEditId) {
-          throw new Error('Item ID is required for update!')
-        }
-        const itemToEdit = {
-          ...dialogResult.result
-        } as UpdateConfigurationRequest
-        return this.configurationService.updateConfiguration(itemToEditId, itemToEdit).pipe(
-          map(() => {
-            this.messageService.success({
-              summaryKey: 'CONFIGURATION_CREATE_UPDATE.UPDATE.SUCCESS'
-            })
-            return ConfigurationSearchActions.updateConfigurationSucceeded()
-          })
-        )
-      }),
-      catchError((error) => {
-        this.messageService.error({
-          summaryKey: 'CONFIGURATION_CREATE_UPDATE.UPDATE.ERROR'
-        })
-        return of(
-          ConfigurationSearchActions.updateConfigurationFailed({
-            error
-          })
-        )
-      })
-    )
-  })
-
   createButtonClicked$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ConfigurationSearchActions.createConfigurationButtonClicked),
@@ -185,7 +124,7 @@ export class ConfigurationSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(ConfigurationSearchActions.createConfigurationCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('DialogResult was not set as expected!')
         }
         const toCreateItem = {

@@ -221,7 +221,7 @@ export class MCPServerDetailsEffects {
         if (!backNavigationPossible) {
           return of(MCPServerDetailsActions.backNavigationFailed())
         }
-        window.history.back()
+        globalThis.history.back()
         return of(MCPServerDetailsActions.backNavigationStarted())
       })
     )

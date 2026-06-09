@@ -278,6 +278,18 @@ describe('MCPServerSearchComponent', () => {
     expect(await searchBreadcrumbItem!.getText()).toEqual('Search')
   })
 
+  it('should reset form when search criteria becomes empty object', () => {
+    const resetSpy = jest.spyOn(component.mcpserverSearchFormGroup, 'reset')
+
+    store.overrideSelector(selectMCPServerSearchViewModel, {
+      ...baseMCPServerSearchViewModel,
+      searchCriteria: {}
+    })
+    store.refreshState()
+
+    expect(resetSpy).toHaveBeenCalled()
+  })
+
   it('should dispatch searchButtonClicked action on search', () => {
     jest.spyOn(store, 'dispatch')
     const sampleDate = new Date(2024, 5, 1, 10, 0, 0)

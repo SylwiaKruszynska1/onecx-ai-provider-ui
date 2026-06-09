@@ -181,6 +181,18 @@ describe('ConfigurationDetailsEffects', () => {
   })
 
   describe('loadConfigurationById$', () => {
+    it('should call getConfiguration with empty string when id is missing', (done) => {
+      const resource = { id: '1', name: 'c' } as Configuration
+      configurationService.getConfiguration.mockReturnValue(of({ ...resource }) as any)
+      actions$.next(ConfigurationDetailsActions.navigatedToDetailsPage({ id: undefined }))
+      
+      effects.loadConfigurationById$.subscribe((action) => {
+        expect(configurationService.getConfiguration).toHaveBeenCalledWith('')
+        expect(action).toEqual(ConfigurationDetailsActions.configurationDetailsReceived({ details: resource }))
+        done()
+      })
+    })
+
     it('should dispatch configurationDetailsReceived on success', (done) => {
       const resource = { id: '1', name: 'c' } as Configuration
       configurationService.getConfiguration.mockReturnValue(of({ ...resource }) as any)
@@ -197,6 +209,123 @@ describe('ConfigurationDetailsEffects', () => {
       effects.loadConfigurationById$.subscribe((action) => {
         expect(action.type).toEqual(ConfigurationDetailsActions.configurationDetailsLoadingFailed.type)
         expect(action).toEqual(ConfigurationDetailsActions.configurationDetailsLoadingFailed({ error: err }))
+        done()
+      })
+    })
+  })
+
+  describe('loadMCPServers$', () => {
+    it('should dispatch configurationMCPServersReceived on success', (done) => {
+      const stream = [{ id: '1', name: 'mcp' }]
+
+      mcpServerService.findMCPServerByCriteria.mockReturnValue(
+        of({ stream }) as any
+      )
+
+      actions$.next(ConfigurationDetailsActions.navigatedToDetailsPage({ id: '1' }))
+
+      effects.loadMCPServers$.subscribe((action) => {
+        expect(mcpServerService.findMCPServerByCriteria).toHaveBeenCalledWith({})
+        expect(action).toEqual(
+          ConfigurationDetailsActions.configurationMCPServersReceived({
+            MCPServers: stream
+          })
+        )
+        done()
+      })
+    })
+
+    it('should dispatch configurationMCPServersLoadingFailed on error', (done) => {
+      const err = 'mcp failed'
+      const serviceSpy = jest.spyOn(mcpServerService, 'findMCPServerByCriteria')
+
+      serviceSpy.mockReturnValue(
+        throwError(() => err) as any
+      )
+
+      actions$.next(ConfigurationDetailsActions.navigatedToDetailsPage({ id: '1' }))
+
+      effects.loadMCPServers$.subscribe({
+        next: (action) => {
+          expect(serviceSpy).toHaveBeenCalledWith({})
+
+          expect(action.type).toEqual(
+            ConfigurationDetailsActions.configurationMCPServersLoadingFailed.type
+          )
+
+          expect(action).toEqual(
+            ConfigurationDetailsActions.configurationMCPServersLoadingFailed({
+              error: err
+            })
+          )
+
+          done()
+        },
+        error: done.fail
+      })
+    })
+  })
+
+  describe('loadProviders$', () => {
+    it('should dispatch configurationProvidersReceived on success', (done) => {
+      const stream = [{ id: '1', name: 'provider', modelName: 'model' }]
+
+      providerService.findProviderBySearchCriteria.mockReturnValue(
+        of({ stream }) as any
+      )
+
+      actions$.next(ConfigurationDetailsActions.navigatedToDetailsPage({ id: '1' }))
+
+      effects.loadProviders$.subscribe((action) => {
+        expect(providerService.findProviderBySearchCriteria).toHaveBeenCalledWith({})
+        expect(action).toEqual(
+          ConfigurationDetailsActions.configurationProvidersReceived({
+            providers: stream
+          })
+        )
+        done()
+      })
+    })
+
+    it('should dispatch configurationProvidersLoadingFailed on error', (done) => {
+      const err = 'providers failed'
+      const serviceSpy = jest.spyOn(providerService, 'findProviderBySearchCriteria')
+
+      serviceSpy.mockReturnValue(
+        throwError(() => err) as any
+      )
+
+      actions$.next(ConfigurationDetailsActions.navigatedToDetailsPage({ id: '1' }))
+
+      effects.loadProviders$.subscribe({
+        next: (action) => {
+          expect(serviceSpy).toHaveBeenCalledWith({})
+
+          expect(action.type).toEqual(
+            ConfigurationDetailsActions.configurationProvidersLoadingFailed.type
+          )
+          expect(action).toEqual(
+            ConfigurationDetailsActions.configurationProvidersLoadingFailed({
+              error: err
+            })
+          )
+          done()
+        },
+        error: done.fail
+      })
+    })
+  })
+
+  describe('cancelButtonNotDirty$', () => {
+    it('should dispatch cancelEditNotDirty when dirty is false', (done) => {
+      actions$.next(
+        ConfigurationDetailsActions.cancelButtonClicked({ dirty: false })
+      )
+
+      effects.cancelButtonNotDirty$.subscribe((action) => {
+        expect(action).toEqual(
+          ConfigurationDetailsActions.cancelEditNotDirty()
+        )
         done()
       })
     })
@@ -224,6 +353,18 @@ describe('ConfigurationDetailsEffects', () => {
   })
 
   describe('saveButtonClicked$', () => {
+    it('should cancel update when details are missing', (done) => {
+      store.overrideSelector(configurationDetailsSelectors.selectDetails, undefined as any)
+      store.refreshState()
+      
+      actions$.next(ConfigurationDetailsActions.saveButtonClicked({ details: {} as any }))
+      
+      effects.saveButtonClicked$.subscribe((action) => {
+        expect(action).toEqual(ConfigurationDetailsActions.updateConfigurationCancelled())
+        done()
+      })
+    })
+
     it('should cancel update when details missing id', (done) => {
       store.overrideSelector(configurationDetailsSelectors.selectDetails, { id: undefined } as any)
       store.refreshState()
@@ -244,7 +385,7 @@ describe('ConfigurationDetailsEffects', () => {
       effects.saveButtonClicked$.subscribe((action) => {
         expect(configurationService.updateConfiguration).toHaveBeenCalledWith('1', { ...details, ...newDetails })
         expect(successSpy).toHaveBeenCalledWith({ summaryKey: 'CONFIGURATION_DETAILS.UPDATE.SUCCESS' })
-        expect(action).toEqual(ConfigurationDetailsActions.updateConfigurationSucceeded())
+        expect(action.type).toEqual(ConfigurationDetailsActions.updateConfigurationSucceeded.type)
         done()
       })
     })
@@ -265,6 +406,19 @@ describe('ConfigurationDetailsEffects', () => {
   })
 
   describe('deleteButtonClicked$', () => {
+    it('should cancel deletion when dialog returns undefined', (done) => {
+      portalDialogService.openDialog.mockReturnValue(of(undefined) as any)
+      store.overrideSelector(configurationDetailsSelectors.selectDetails, { id: '1' } as any)
+      store.refreshState()
+      
+      actions$.next(ConfigurationDetailsActions.deleteButtonClicked())
+
+      effects.deleteButtonClicked$.subscribe((action) => {
+        expect(action).toEqual(ConfigurationDetailsActions.deleteConfigurationCancelled())
+        done()
+      })
+    })
+
     it('should cancel deletion when dialog cancelled', (done) => {
       portalDialogService.openDialog.mockReturnValue(of({ button: 'secondary' } as DialogState<any>) as any)
       store.overrideSelector(configurationDetailsSelectors.selectDetails, { id: '1' } as any)
@@ -303,6 +457,22 @@ describe('ConfigurationDetailsEffects', () => {
         done()
       })
     })
+
+    it('should error when confirmed deletion has no item id', (done) => {
+      portalDialogService.openDialog.mockReturnValue(of({ button: 'primary' } as DialogState<any>) as any)
+      store.overrideSelector(configurationDetailsSelectors.selectDetails, undefined as any)
+      store.refreshState()
+      
+      actions$.next(ConfigurationDetailsActions.deleteButtonClicked())
+      
+      effects.deleteButtonClicked$.subscribe({
+        next: () => done.fail('Expected stream to error'),
+        error: (error) => {
+          expect(error).toEqual(new Error('Item to delete or its ID not found!'))
+          done()
+        }
+      })
+    })
   })
 
   describe('deleteConfigurationSucceeded$', () => {
@@ -329,6 +499,33 @@ describe('ConfigurationDetailsEffects', () => {
         done()
       })
     })
+
+    it('should display error message on configurationMCPServersLoadingFailed', (done) => {
+      const errorSpy = jest.spyOn(mockMessageService, 'error')
+      
+      actions$.next(ConfigurationDetailsActions.configurationMCPServersLoadingFailed({ error: 'err' }))
+      
+      effects.displayError$.subscribe(() => {
+        expect(errorSpy).toHaveBeenCalledWith({
+          summaryKey: 'MCPSERVER_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+        })
+        done()
+      })
+    })
+
+    it('should display error message on configurationProvidersLoadingFailed', (done) => {
+      const errorSpy = jest.spyOn(mockMessageService, 'error')
+      
+      actions$.next(ConfigurationDetailsActions.configurationProvidersLoadingFailed({ error: 'err' }))
+      
+      effects.displayError$.subscribe(() => {
+        expect(errorSpy).toHaveBeenCalledWith({
+          summaryKey: 'PROVIDER_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+        })
+        done()
+      })
+    })
+
     it('should not display on unrelated action', (done) => {
       const errorSpy = jest.spyOn(mockMessageService, 'error')
       setTimeout(() => {

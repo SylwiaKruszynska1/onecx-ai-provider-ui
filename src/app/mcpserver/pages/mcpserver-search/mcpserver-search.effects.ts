@@ -85,6 +85,7 @@ export class MCPServerSearchEffects {
             const params = {
               ...criteria
               //TODO: Move to docs to explain how to only put the date part in the URL in case you have date and not datetime
+              // NOSONAR
               //exampleDate: criteria.exampleDate?.toISOString()?.slice(0, 10)
             }
             this.router.navigate([], {

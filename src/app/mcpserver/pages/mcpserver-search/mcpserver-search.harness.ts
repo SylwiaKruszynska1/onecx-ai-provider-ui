@@ -6,7 +6,7 @@ import {
 } from '@onecx/angular-accelerator/testing'
 
 export class MCPServerSearchHarness extends ComponentHarness {
-  static hostSelector = 'app-mcpserver-search'
+  static readonly hostSelector = 'app-mcpserver-search'
 
   getHeader = this.locatorFor(SearchHeaderHarness)
   getSearchResults = this.locatorFor(InteractiveDataViewHarness)
