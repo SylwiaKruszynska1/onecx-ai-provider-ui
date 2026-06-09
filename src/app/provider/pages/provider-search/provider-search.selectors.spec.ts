@@ -115,6 +115,8 @@ describe('ProviderSearch selectors', () => {
         status: 'NODATA'
       })
     )
+  })
+
   it('should fallback to empty string when id is undefined', () => {
     const results = [
       {
