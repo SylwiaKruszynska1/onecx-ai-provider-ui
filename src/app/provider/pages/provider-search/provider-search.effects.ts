@@ -23,6 +23,8 @@ import { ProviderSearchSelectors, selectProviderSearchViewModel } from './provid
 import { ProviderCreateUpdateComponent } from './dialogs/provider-create-update/provider-create-update.component'
 import { CreateProviderRequest, Provider, ProviderService, UpdateProviderRequest } from 'src/app/shared/generated'
 
+const PROVIDER_HEALTH_POLL_INTERVAL_MS = 15000
+
 @Injectable()
 export class ProviderSearchEffects {
   constructor(
@@ -40,7 +42,7 @@ export class ProviderSearchEffects {
     return this.actions$.pipe(
       ofType(ProviderSearchActions.providerSearchResultsReceived),
       switchMap(({ results }) =>
-        timer(0, 15000).pipe(
+        timer(0, PROVIDER_HEALTH_POLL_INTERVAL_MS).pipe(
           takeUntil(
             this.actions$.pipe(
               ofType(
@@ -58,7 +60,6 @@ export class ProviderSearchEffects {
   updateProviderHealthStatus$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ProviderSearchActions.providerHealthPollTicked),
-
       mergeMap(({ id }) =>
         (id
           ? this.providerService.getProviderHealthStatus(id).pipe(
