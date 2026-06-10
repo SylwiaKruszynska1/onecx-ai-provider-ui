@@ -11,7 +11,10 @@ describe('ProviderSearch selectors', () => {
         modelName: 'model',
       }
     ]
-    const mapped = selectResults.projector(results)
+    const healthStatus = {
+      '1': 'ONLINE'
+    }
+    const mapped = selectResults.projector(results, healthStatus)
     expect(mapped).toEqual([
       {
         imagePath: '',
@@ -20,6 +23,7 @@ describe('ProviderSearch selectors', () => {
         description: 'Desc',
         llmUrl: 'url',
         modelName: 'model',
+        status: 'ONLINE'
       }
     ])
   })
@@ -41,13 +45,14 @@ describe('ProviderSearch selectors', () => {
     const columns = [{ id: 'col1', nameKey: 'Col1' }] as any
     const searchCriteria = { name: 'Test' }
     const results = [{ id: '1', name: 'Test', modelName: 'model' }]
+    const healthStatus = { '1': 'ONLINE' }
     const viewMode = 'basic'
     const chartVisible = true
 
     const vm = selectProviderSearchViewModel.projector(
       columns,
       searchCriteria,
-      selectResults.projector(results),
+      selectResults.projector(results, healthStatus),
       selectDisplayedColumns.projector(columns, ['col1']),
       viewMode,
       chartVisible
@@ -63,6 +68,7 @@ describe('ProviderSearch selectors', () => {
           description: undefined,
           llmUrl: undefined,
           modelName: 'model',
+          status: 'ONLINE'
         }
       ],
       displayedColumns: [{ id: 'col1', nameKey: 'Col1' }],
@@ -91,6 +97,26 @@ describe('ProviderSearch selectors', () => {
     expect(mapped).toEqual([])
   })
 
+  it('should set NODATA when healthStatus is undefined', () => {
+    const results = [{ id: '1', name: 'Test', modelName: 'model' }]
+    const mapped = selectResults.projector(results, undefined as any)
+
+    expect(mapped[0]['status']).toBe('NODATA')
+  })
+
+  it('should use empty id and return NODATA when id is undefined', () => {
+    const results = [{ id: undefined, name: 'Test', modelName: 'model' }]
+    const healthStatus = {}
+    const mapped = selectResults.projector(results, healthStatus)
+
+    expect(mapped[0]).toEqual(
+      expect.objectContaining({
+        id: '',
+        status: 'NODATA'
+      })
+    )
+  })
+
   it('should fallback to empty string when id is undefined', () => {
     const results = [
       {
@@ -101,7 +127,7 @@ describe('ProviderSearch selectors', () => {
         modelName: 'model'
       }
     ]
-    const mapped = selectResults.projector(results as any)
+    const mapped = selectResults.projector(results as any, undefined)
 
     expect(mapped).toEqual([
       {
@@ -110,7 +136,8 @@ describe('ProviderSearch selectors', () => {
         name: 'Test',
         description: 'Desc',
         llmUrl: 'url',
-        modelName: 'model'
+        modelName: 'model',
+        status: 'NODATA'
       }
     ])
   })

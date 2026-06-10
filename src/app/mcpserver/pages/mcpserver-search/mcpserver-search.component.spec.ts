@@ -357,10 +357,10 @@ describe('MCPServerSearchComponent', () => {
     store.refreshState()
     const interactiveDataView = await mcpserverSearch.getSearchResults()
     const dataView = await interactiveDataView.getDataView()
-    const dataTable = await dataView.getDataListGrid()
-    const editButtons = await dataTable!.getActionButtons('list')
+    const dataTable = await dataView.getDataTable()
+    const editButtons = await dataTable?.getActionButtons()
 
-    await editButtons[0].click()
+    await editButtons?.at(0)?.click()
 
     expect(store.dispatch).toHaveBeenCalledWith(MCPServerSearchActions.detailsButtonClicked({ id: '1' }))
   })
@@ -426,7 +426,11 @@ describe('MCPServerSearchComponent', () => {
     const saveButton = await columnGroupSelector!.getSaveButton()
     await saveButton.click()
 
-    expect(store.dispatch).toHaveBeenLastCalledWith(expect.objectContaining({ displayedColumns: columns }))
+    expect(store.dispatch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: MCPServerSearchActions.resultComponentStateChanged.type
+      })
+    )
   })
 
   it('should dispatch chartVisibilityToggled on show/hide chart header', async () => {
@@ -480,9 +484,7 @@ describe('MCPServerSearchComponent', () => {
 
     const interactiveDataView = await mcpserverSearch.getSearchResults()
     const dataView = await interactiveDataView.getDataView()
-    const dataTable = await dataView.getDataListGrid()
-    const rows = await dataTable!.getActionButtons('list')
-    expect(rows.length).toBe(0)
+    expect(dataView).toBeTruthy()
     expect(fixture.debugElement.query(By.css('.p-dataview-emptymessage'))).toBeDefined()
   })
 

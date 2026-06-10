@@ -10,4 +10,5 @@ export interface ProviderSearchState {
   chartVisible: boolean
   searchLoadingIndicator: boolean
   criteria: ProviderSearchCriteria
+  healthStatus?: Record<string, string>
 }

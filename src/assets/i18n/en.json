@@ -307,12 +307,18 @@
       "NAME": "Name",
       "DESCRIPTION": "Description",
       "LLMURL": "LlmUrl",
-      "MODELNAME": "Modelname"      
+      "MODELNAME": "Modelname",
+      "STATUS": "Status"     
     },
     "PREDEFINED_GROUP": {
       "DEFAULT": "Default",
       "EXTENDED": "Extended",
       "FULL": "Full"
+    },
+    "STATUS": {
+      "ONLINE": "Online",
+      "OFFLINE": "Offline: Not Reachable",
+      "NODATA": "No Data"
     }
   }
 }

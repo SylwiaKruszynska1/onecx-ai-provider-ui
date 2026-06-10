@@ -14,6 +14,7 @@ export * from './problemDetailInvalidParam';
 export * from './problemDetailParam';
 export * from './problemDetailResponse';
 export * from './provider';
+export * from './providerHealthStatus';
 export * from './providerPageResult';
 export * from './providerSearchCriteria';
 export * from './providerType';

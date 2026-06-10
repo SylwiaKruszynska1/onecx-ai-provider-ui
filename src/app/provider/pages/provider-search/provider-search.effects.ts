@@ -1,4 +1,5 @@
 import { Injectable, SkipSelf } from '@angular/core'
+import { HttpErrorResponse } from '@angular/common/http'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
@@ -13,7 +14,7 @@ import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { DialogState, ExportDataService, PortalDialogService } from '@onecx/angular-accelerator'
 import equal from 'fast-deep-equal'
 import { PrimeIcons } from 'primeng/api'
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap, tap, from, timer, takeUntil } from 'rxjs'
 import { selectUrl } from 'src/app/shared/selectors/router.selectors'
 import { ProviderSearchActions } from './provider-search.actions'
 import { ProviderSearchComponent } from './provider-search.component'
@@ -21,6 +22,8 @@ import { ProviderSearchCriteriasSchema } from './provider-search.parameters'
 import { ProviderSearchSelectors, selectProviderSearchViewModel } from './provider-search.selectors'
 import { ProviderCreateUpdateComponent } from './dialogs/provider-create-update/provider-create-update.component'
 import { CreateProviderRequest, Provider, ProviderService, UpdateProviderRequest } from 'src/app/shared/generated'
+
+const PROVIDER_HEALTH_POLL_INTERVAL_MS = 15000
 
 @Injectable()
 export class ProviderSearchEffects {
@@ -34,6 +37,46 @@ export class ProviderSearchEffects {
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService
   ) {}
+
+  pollProviderHealth$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProviderSearchActions.providerSearchResultsReceived),
+      switchMap(({ results }) =>
+        timer(0, PROVIDER_HEALTH_POLL_INTERVAL_MS).pipe(
+          takeUntil(
+            this.actions$.pipe(
+              ofType(
+                ProviderSearchActions.providerSearchResultsReceived
+              )
+            )
+          ),
+          mergeMap(() => from(results)),
+          map((provider: Provider) => ProviderSearchActions.providerHealthPollTicked({ id: provider.id ?? '' }))
+        )
+      )
+    )
+  })
+
+  updateProviderHealthStatus$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProviderSearchActions.providerHealthPollTicked),
+      mergeMap(({ id }) =>
+        (id
+          ? this.providerService.getProviderHealthStatus(id).pipe(
+              map(resp => resp?.status ?? 'NODATA'),
+              catchError((error: HttpErrorResponse) =>
+                of(error?.status === 404 ? 'NODATA' : 'OFFLINE')
+              )
+            )
+          : of('NODATA')
+        ).pipe(
+          map(status =>
+            ProviderSearchActions.providerHealthStatusUpdated({ id, status })
+          )
+        )
+      )
+    )
+  })
 
   syncParamsToUrl$ = createEffect(
     () => {

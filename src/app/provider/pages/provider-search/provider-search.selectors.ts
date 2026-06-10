@@ -7,16 +7,26 @@ import { ProviderSearchViewModel } from './provider-search.viewmodel'
 
 export const ProviderSearchSelectors = createChildSelectors(ProviderFeature.selectSearch, initialState)
 
-export const selectResults = createSelector(ProviderSearchSelectors.selectResults, (results): RowListGridData[] => {
-  return results.map((item) => ({
-    imagePath: '',
-    id: item.id ?? '',
-    name: item.name,
-    description: item.description,
-    llmUrl: item.llmUrl,
-    modelName: item.modelName
-  }))
-})
+export const selectResults = createSelector(
+  ProviderSearchSelectors.selectResults,
+  ProviderSearchSelectors.selectHealthStatus,
+  (results, healthStatus): RowListGridData[] => {
+    return results.map((item) => {
+      const raw = healthStatus ? healthStatus[item.id ?? ''] : undefined
+      const statusKey = (raw ?? 'NODATA').toString().toUpperCase()
+
+      return {
+        imagePath: '',
+        id: item.id ?? '',
+        name: item.name,
+        description: item.description,
+        llmUrl: item.llmUrl,
+        modelName: item.modelName,
+        status: statusKey
+      }
+    })
+  }
+)
 
 export const selectDisplayedColumns = createSelector(
   ProviderSearchSelectors.selectColumns,

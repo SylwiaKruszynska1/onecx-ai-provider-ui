@@ -12,6 +12,7 @@ import { MCPServerDetailsViewModel } from './mcpserver-details.viewmodel'
 import { CommonModule } from '@angular/common'
 import { PortalPageComponent } from '@onecx/angular-utils'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 import { LetDirective } from '@ngrx/component'
 
 @Component({
@@ -23,6 +24,7 @@ import { LetDirective } from '@ngrx/component'
     CommonModule,
     LetDirective,
     FloatLabelModule,
+    InputTextModule,
     TranslateModule,
     ReactiveFormsModule,
     PortalPageComponent

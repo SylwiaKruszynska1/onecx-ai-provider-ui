@@ -78,15 +78,15 @@
           'MCPSERVER_SEARCH.EMPTY_RESULTS' | translate
         "
         (componentStateChanged)="resultComponentStateChanged($any($event))"
-        [layout]="vm.resultComponentState?.layout ?? 'list'"
-        [supportedViewLayouts]="['list', 'table']"
+        [layout]="vm.resultComponentState?.layout ?? 'table'"
+        [supportedViewLayouts]="['table']"
         [page]="vm.resultComponentState?.activePage ?? 0"
         [pageSize]="vm.resultComponentState?.pageSize"
         [filters]="vm.resultComponentState?.filters ?? []"
         [sortField]="vm.resultComponentState?.sorting?.sortColumn"
         [sortDirection]="vm.resultComponentState?.sorting?.sortDirection ?? defaultDataSortDirection"
         [selectedRows]="vm.resultComponentState?.selectedRows?? []"
-        [defaultGroupKey]="vm.resultComponentState?.activeColumnGroupKey ?? ''"
+        [defaultGroupKey]="vm.resultComponentState?.activeColumnGroupKey ?? 'MCPSERVER_SEARCH.PREDEFINED_GROUP.DEFAULT'"
         [actionColumnPosition]="vm.resultComponentState?.actionColumnConfig?.position?? 'right'"
         [frozenActionColumn]="vm.resultComponentState?.actionColumnConfig?.frozen ?? false"
       >

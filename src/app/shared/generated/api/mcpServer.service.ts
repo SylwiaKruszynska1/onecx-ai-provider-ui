@@ -154,7 +154,7 @@ export class McpServerService {
             }
         }
 
-        let localVarPath = `/mcpServer`;
+        let localVarPath = `/mcpServers`;
         return this.httpClient.request<MCPServer>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
