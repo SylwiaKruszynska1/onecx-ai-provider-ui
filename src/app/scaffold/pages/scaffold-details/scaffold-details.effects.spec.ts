@@ -252,7 +252,7 @@ describe('ScaffoldDetailsEffects', () => {
     })
 
     actions$.next(ScaffoldDetailsActions.deleteButtonClicked())
-    })
+  })
 
   it('should display error message on scaffoldDetailsLoadingFailed', () => {
     const messageService = TestBed.inject(PortalMessageService) as any
