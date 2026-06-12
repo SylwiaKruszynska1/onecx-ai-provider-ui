@@ -236,6 +236,24 @@ describe('ScaffoldDetailsEffects', () => {
     actions$.next(ScaffoldDetailsActions.deleteButtonClicked())
   })
 
+  it('should return deleteScaffoldFailed when details is undefined (covers optional chaining)', (done) => {
+    const store = TestBed.inject(MockStore)
+
+    store.overrideSelector(scaffoldDetailsSelectors.selectDetails, undefined)
+    store.refreshState()
+
+    effects.deleteButtonClicked$.subscribe((action) => {
+      expect(action).toEqual(
+        ScaffoldDetailsActions.deleteScaffoldFailed({
+          error: 'Missing id'
+        })
+      )
+      done()
+    })
+
+    actions$.next(ScaffoldDetailsActions.deleteButtonClicked())
+    })
+
   it('should display error message on scaffoldDetailsLoadingFailed', () => {
     const messageService = TestBed.inject(PortalMessageService) as any
     const messageErrorSpy = jest.spyOn(messageService, 'error')

@@ -84,7 +84,15 @@ export class ScaffoldDetailsEffects {
         this.store.select(scaffoldDetailsSelectors.selectDetails)
       ),
       switchMap(([, details]) => {
-        return this.scaffoldService.deleteScaffoldById(details!.id!).pipe(
+        if (!details?.id) {
+          return of(
+            ScaffoldDetailsActions.deleteScaffoldFailed({
+              error: 'Missing id'
+            })
+          )
+        }
+
+        return this.scaffoldService.deleteScaffoldById(details.id).pipe(
           map(() => ScaffoldDetailsActions.deleteScaffoldSucceeded()),
           catchError((error) =>
             of(ScaffoldDetailsActions.deleteScaffoldFailed({ error }))

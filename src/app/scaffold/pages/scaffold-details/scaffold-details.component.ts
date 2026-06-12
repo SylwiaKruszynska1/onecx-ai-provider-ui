@@ -37,8 +37,8 @@ export class ScaffoldDetailsComponent implements OnInit {
     public formGroup: FormGroup
 
     constructor(
-    private store: Store,
-    private breadcrumbService: BreadcrumbService
+    private readonly store: Store,
+    private readonly breadcrumbService: BreadcrumbService
     ) {
       this.formGroup = new FormGroup({
         name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
