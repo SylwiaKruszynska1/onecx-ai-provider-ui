@@ -11,6 +11,7 @@ describe('scaffoldSearchReducer', () => {
       }
     } as any)
     const state = scaffoldSearchReducer(initialState, action)
+    
     expect(state.criteria).toEqual({ name: 'Test' })
     expect(state.searchLoadingIndicator).toBe(true)
   })
@@ -23,12 +24,14 @@ describe('scaffoldSearchReducer', () => {
       }
     } as any)
     const state = scaffoldSearchReducer(initialState, action)
+    
     expect(state).toEqual(initialState)
   })
 
   it('should reset results and criteria on resetButtonClicked', () => {
     const prevState = { ...initialState, results: [{ id: '1' }], criteria: { name: 'Test' } }
     const state = scaffoldSearchReducer(prevState as any, ScaffoldSearchActions.resetButtonClicked())
+    
     expect(state.results).toEqual([])
     expect(state.criteria).toEqual({})
   })
@@ -38,6 +41,7 @@ describe('scaffoldSearchReducer', () => {
       initialState,
       ScaffoldSearchActions.searchButtonClicked({ searchCriteria: { name: 'Test' } })
     )
+    
     expect(state.criteria).toEqual({ name: 'Test' })
     expect(state.searchLoadingIndicator).toBe(true)
   })
@@ -57,6 +61,40 @@ describe('scaffoldSearchReducer', () => {
 
   it('should toggle chart visibility', () => {
     const state = scaffoldSearchReducer(initialState, ScaffoldSearchActions.chartVisibilityToggled())
+    
     expect(state.chartVisible).toBe(true)
+  })
+
+  it('should clear results and loading on scaffoldSearchResultsLoadingFailed', () => {
+    const state = scaffoldSearchReducer(
+      { ...initialState, results: [{ id: '1' }], searchLoadingIndicator: true } as any,
+      ScaffoldSearchActions.scaffoldSearchResultsLoadingFailed({ error: 'error' })
+    )
+
+    expect(state.results).toEqual([])
+    expect(state.searchLoadingIndicator).toBe(false)
+  })
+
+  it('should set chartVisible on chartVisibilityRehydrated', () => {
+    const state = scaffoldSearchReducer(initialState, ScaffoldSearchActions.chartVisibilityRehydrated({ visible: true }))
+    
+    expect(state.chartVisible).toBe(true)
+  })
+
+  it('should set viewMode on viewModeChanged', () => {
+    const state = scaffoldSearchReducer(initialState, ScaffoldSearchActions.viewModeChanged({ viewMode: 'advanced' }))
+    
+    expect(state.viewMode).toBe('advanced')
+  })
+
+  it('should set displayedColumns on displayedColumnsChanged', () => {
+    const state = scaffoldSearchReducer(
+      initialState,
+      ScaffoldSearchActions.displayedColumnsChanged({
+        displayedColumns: [{ id: 'name', nameKey: 'Name', columnType: undefined as any }]
+      })
+    )
+
+    expect(state.displayedColumns).toEqual(['name'])
   })
 })

@@ -150,9 +150,9 @@ export class ScaffoldDetailsComponent implements OnInit {
       
       this.viewModel$.subscribe((vm) => {
         if (vm.details?.sourceProduct) {
-          this.formGroup.get('sourceProduct')?.disable()
+          this.formGroup.get('sourceProduct')!.disable()
         } else {
-          this.formGroup.get('sourceProduct')?.enable()
+          this.formGroup.get('sourceProduct')!.enable()
         }
       })
     } else {

@@ -39,7 +39,7 @@ export class ScaffoldCreateUpdateComponent
     })
     this.formGroup.statusChanges
       .pipe(map((status) => status === 'VALID'))
-      .subscribe(this.primaryButtonEnabled)
+      .subscribe(value => this.primaryButtonEnabled.emit(value))
   }
 
   ocxDialogButtonClicked() {
@@ -56,7 +56,7 @@ export class ScaffoldCreateUpdateComponent
     }
 
     if (this.vm.itemToEdit?.sourceProduct) {
-      this.formGroup.get('sourceProduct')?.disable()
+      this.formGroup.get('sourceProduct')!.disable()
     }
   }
 }
