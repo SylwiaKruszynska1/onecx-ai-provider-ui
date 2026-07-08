@@ -141,7 +141,7 @@ describe('ConfigurationSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
     expect(await exportAllActionItem!.getText()).toBe('Export all')
@@ -163,7 +163,7 @@ describe('ConfigurationSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const showHideChartActionItem = await pageHeader.getOverFlowMenuItem('Hide chart')
     expect(await showHideChartActionItem!.getText()).toEqual('Hide chart')
@@ -218,17 +218,17 @@ describe('ConfigurationSearchComponent', () => {
     const searchHeader = await ConfigurationSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
     const headerText = await pageHeader.getHeaderText()
-    expect(headerText).toBe('Configuration Search')
+    expect(headerText).toBe('Scaffold Search')
   })
 
   it('should dispatch searchButtonClicked action on search', (done) => {
     const formValue = formBuilder.group({
-      changeMe: '123'
+      name: '123'
     })
     component.configurationSearchFormGroup = formValue
 
     store.scannedActions$.pipe(ofType(ConfigurationSearchActions.searchButtonClicked)).subscribe((a) => {
-      expect(a.searchCriteria).toEqual({ changeMe: '123' })
+      expect(a.searchCriteria).toEqual({ name: '123' })
       done()
     })
 
@@ -459,8 +459,8 @@ describe('ConfigurationSearchComponent', () => {
   it('should display translated headers', async () => {
     const searchHeader = await ConfigurationSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
-    expect(await pageHeader.getHeaderText()).toEqual('Configuration Search')
-    expect(await pageHeader.getSubheaderText()).toEqual('Searching and displaying of Configuration')
+    expect(await pageHeader.getHeaderText()).toEqual('Scaffold Search')
+    expect(await pageHeader.getSubheaderText()).toEqual('Searching and displaying of Scaffold')
   })
 
   it('should display translated empty message when no search results', async () => {
@@ -483,10 +483,10 @@ describe('ConfigurationSearchComponent', () => {
     const dataView = await interactiveDataView.getDataView()
     const dataTable = await dataView.getDataTable()
     const rows = await dataTable?.getRows()
-    expect(rows?.length).toBe(1)
+    expect(rows).toHaveLength(1)
 
     const rowData = await rows?.at(0)?.getData()
-    expect(rowData?.length).toBe(1)
+    expect(rowData).toHaveLength(1)
     expect(rowData?.at(0)).toEqual('No results.')
   })
 

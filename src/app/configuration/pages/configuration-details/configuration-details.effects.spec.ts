@@ -268,7 +268,7 @@ describe('ConfigurationDetailsEffects', () => {
 
   describe('loadProviders$', () => {
     it('should dispatch configurationProvidersReceived on success', (done) => {
-      const stream = [{ id: '1', name: 'provider', modelName: 'model' }]
+      const stream = [{ id: '1', name: 'provider', description: 'model' }]
 
       providerService.findProviderBySearchCriteria.mockReturnValue(
         of({ stream }) as any
@@ -332,6 +332,15 @@ describe('ConfigurationDetailsEffects', () => {
   })
 
   describe('cancelButtonClickedDirty$', () => {
+    it('should dispatch cancelEditBackClicked when dialog result is undefined', (done) => {
+      portalDialogService.openDialog.mockReturnValue(of(undefined) as any)
+      actions$.next(ConfigurationDetailsActions.cancelButtonClicked({ dirty: true }))
+      effects.cancelButtonClickedDirty$.subscribe((action) => {
+        expect(action).toEqual(ConfigurationDetailsActions.cancelEditBackClicked())
+        done()
+      })
+    })
+
     it('should cancel and dispatch cancelEditBackClicked when dialog is cancelled', (done) => {
       const dialogResult = { button: 'secondary' } as DialogState<Configuration>
       portalDialogService.openDialog.mockReturnValue(of(dialogResult) as any)

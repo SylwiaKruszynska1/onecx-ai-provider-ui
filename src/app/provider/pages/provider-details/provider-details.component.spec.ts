@@ -70,7 +70,7 @@ describe('ProviderDetailsComponent', () => {
       llmUrl: 'Test llmUrl',
       modelName: 'Test modelName',
       apiKey: 'TestAPIKey'
-    },
+    } as any,
     editMode: false,
     isApiKeyHidden: false
   }
@@ -146,7 +146,7 @@ describe('ProviderDetailsComponent', () => {
     it('should have 2 inline actions', async () => {
       const pageHeader = await ProviderDetails.getHeader()
       const inlineActions = await pageHeader.getInlineActionButtons()
-      expect(inlineActions.length).toBe(2)
+      expect(inlineActions).toHaveLength(2)
 
       const backAction = await pageHeader.getInlineActionButtonByLabel('Back')
       expect(backAction).toBeTruthy()
@@ -174,7 +174,7 @@ describe('ProviderDetailsComponent', () => {
         name: 'Test name',
         description: 'Test description',
         llmUrl: 'Test llmUrl',
-        modelName: 'Test modelName',
+        modelName: null,
         apiKey: 'TestAPIKey'
       })
     })

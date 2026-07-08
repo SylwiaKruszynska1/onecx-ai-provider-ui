@@ -4,6 +4,10 @@ import { TranslateModule } from '@ngx-translate/core'
 import { startsWith } from '@onecx/angular-webcomponents'
 export const routes: Routes = [
   {
+    matcher: startsWith('dashboard'),
+    loadChildren: () => import('./dashboard/dashboard.module').then((mod) => mod.DashboardModule)
+  },
+  {
     matcher: startsWith('mcpserver'),
     loadChildren: () => import('./mcpserver/mcpserver.module').then((mod) => mod.MCPServerModule)
   },

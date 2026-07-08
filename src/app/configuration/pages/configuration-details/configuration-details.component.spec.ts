@@ -109,7 +109,7 @@ describe('ConfigurationDetailsComponent', () => {
         llmUrl: 'Provider llmUrl',
         modelName: 'Provider modelName',
         apiKey: 'Provider apiKey'
-      }
+      } as any
     ],
     ProvidersLoaded: true,
     ProvidersLoadingIndicator: false,
@@ -275,14 +275,14 @@ describe('ConfigurationDetailsComponent', () => {
 
     it('should display translated headers', async () => {
       const pageHeader = await ConfigurationDetails.getHeader()
-      expect(await pageHeader.getHeaderText()).toEqual('Configuration Details')
-      expect(await pageHeader.getSubheaderText()).toEqual('Display of Configuration Details')
+      expect(await pageHeader.getHeaderText()).toEqual('Scaffold Details')
+      expect(await pageHeader.getSubheaderText()).toEqual('Display of Scaffold Details')
     })
 
     it('should have 2 inline actions', async () => {
       const pageHeader = await ConfigurationDetails.getHeader()
       const inlineActions = await pageHeader.getInlineActionButtons()
-      expect(inlineActions.length).toBe(2)
+      expect(inlineActions).toHaveLength(2)
 
       const backAction = await pageHeader.getInlineActionButtonByLabel('Back')
       expect(backAction).toBeTruthy()
@@ -348,7 +348,7 @@ describe('ConfigurationDetailsComponent', () => {
 
       const pageHeader = await ConfigurationDetails.getHeader()
       const objectDetails = await pageHeader.getObjectInfos()
-      expect(objectDetails.length).toBe(4)
+      expect(objectDetails).toHaveLength(4)
 
       const firstDetailItem = await pageHeader.getObjectInfoByLabel('first')
       expect(await firstDetailItem?.getLabel()).toEqual('first')
@@ -490,7 +490,7 @@ describe('ConfigurationDetailsComponent', () => {
         name: 'name',
         description: 'desc',
         mcpServers: [{ id: '', name: '' }],
-        llmProvider: { id: 'id-1', name: 'provider', modelName: 'model' },
+        llmProvider: { id: 'id-1', name: 'provider', description: 'model' },
         modificationCount: 1
       }
       const dispatchSpy = jest.spyOn(store, 'dispatch')
@@ -567,7 +567,7 @@ describe('ConfigurationDetailsComponent', () => {
       component.searchMCPServers({ query: '' })
 
       component.filteredMCPServers$.subscribe((result) => {
-        expect(result.length).toBe(1)
+        expect(result).toHaveLength(1)
         done()
       })
     })
@@ -637,7 +637,7 @@ describe('ConfigurationDetailsComponent', () => {
     })
 
     it('should patch the form with details and matched provider', () => {
-      const provider = { id: 'id-1', name: 'provider', modelName: 'model' } as Provider
+      const provider = { id: 'id-1', name: 'provider', description: 'model' } as Provider
       const details = { ...baseConfigurationDetailsViewModel.details, llmProvider: provider } as any
       const viewModel = {
         ...baseConfigurationDetailsViewModel,

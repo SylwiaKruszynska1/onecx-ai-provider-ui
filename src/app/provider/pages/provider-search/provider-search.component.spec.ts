@@ -109,7 +109,7 @@ describe('ProviderSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
     expect(await exportAllActionItem!.getText()).toBe('Export all')
@@ -131,7 +131,7 @@ describe('ProviderSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const showHideChartActionItem = await pageHeader.getOverFlowMenuItem('Hide chart')
     expect(await showHideChartActionItem!.getText()).toEqual('Hide chart')
@@ -253,10 +253,10 @@ describe('ProviderSearchComponent', () => {
     const dataView = await interactiveDataView.getDataView()
     const dataTable = await dataView.getDataTable()
     const rows = await dataTable?.getRows()
-    expect(rows?.length).toBe(1)
+    expect(rows).toHaveLength(1)
 
     const rowData = await rows?.at(0)?.getData()
-    expect(rowData?.length).toBe(1)
+    expect(rowData).toHaveLength(1)
     expect(rowData?.at(0)).toEqual('No results.')
   })
 
@@ -346,21 +346,21 @@ describe('ProviderSearchComponent', () => {
     })
 
     it('should map undefined value to undefined in searchCriteria', () => {
-      const formValue = formBuilder.group({ modelName: undefined })
+      const formValue = formBuilder.group({ description: undefined })
       component.search(formValue)
       expect(store.dispatch).toHaveBeenCalledWith(
         ProviderSearchActions.searchButtonClicked({
-          searchCriteria: { modelName: undefined }
+          searchCriteria: { description: undefined }
         })
       )
     })
 
     it('should map null value to undefined in searchCriteria', () => {
-      const formValue = formBuilder.group({ modelName: null })
+      const formValue = formBuilder.group({ description: null })
       component.search(formValue)
       expect(store.dispatch).toHaveBeenCalledWith(
         ProviderSearchActions.searchButtonClicked({
-          searchCriteria: { modelName: undefined }
+          searchCriteria: { description: undefined }
         })
       )
     })
@@ -377,13 +377,13 @@ describe('ProviderSearchComponent', () => {
         )
       ).toISOString()
 
-      const formValue = formBuilder.group({ modelName: localDate })
+      const formValue = formBuilder.group({ description: localDate })
       component.search(formValue)
 
       expect(store.dispatch).toHaveBeenCalledWith(
         ProviderSearchActions.searchButtonClicked({
           searchCriteria: {
-            modelName: expectedIso
+            description: expectedIso
           }
         })
       )
