@@ -6,6 +6,10 @@ export const routes: Routes = [
   {
     // Adjust the matcher to match the feature route.
     // If you only have one feature, you can use '' for simplification.
+    matcher: startsWith('scaffold'),
+    loadChildren: () => import('./scaffold/scaffold.module').then((mod) => mod.ScaffoldModule)
+  },
+  {
     matcher: startsWith('skill'),
     loadChildren: () => import('./skill/skill.module').then((mod) => mod.SkillModule)
   },
@@ -25,7 +29,7 @@ export const routes: Routes = [
   },
   {
     matcher: startsWith(''),
-    loadChildren: () => import('./dashboard/dashboard.module').then((mod) => mod.DashboardModule)
+    redirectTo: 'dashboard',
   },
   {
     matcher: startsWith('provider'),

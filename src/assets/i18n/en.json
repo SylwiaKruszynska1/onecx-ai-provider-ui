@@ -26,6 +26,108 @@
       "DESCRIPTION": "Description"
     }
   },
+  "SCAFFOLD_DETAILS": {
+    "CHANGE_ME": "ACTION D3: Adjust translation keys for details header",
+    "HEADER": "Scaffold Details",
+    "SUB_HEADER": "Display of Scaffold Details",
+    "HELP_ARTICLE_ID": "Help Article",
+    "BREADCRUMB": "Details",
+    "ARIA_LABEL": "Page Header with Details",
+    "ERROR_MESSAGES": {
+      "DETAILS_LOADING_FAILED": "Loading details failed."
+    },
+    "GENERAL": {
+      "BACK": "Back",
+      "MORE": "More",
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "CANCEL": "Cancel",
+      "SAVE": "Save"
+    },
+    "FORM": {
+      "FORM_FIELDS": "ACTION D3: Adjust translation keys for the form",
+      "NAME": "Name",
+      "SYSTEM_PROMPT": "System Prompt",
+      "SOURCE": "Source",
+      "SOURCE_PRODUCT": "Source Product",
+      "SKILLS": "Skills"
+    },
+    "CANCEL": {
+      "HEADER": "Confirm cancellation",
+      "MESSAGE": "Please confirm that you want to cancel editing and reset changes.",
+      "CONFIRM": "Confirm"
+    },
+    "UPDATE": {
+      "CHANGE_ME": "ACTION D3: Adjust translation keys for update dialog",
+      "HEADER": "Update Scaffold",
+      "SUCCESS": "Update successful",
+      "ERROR": "Update failed",
+      "FORM": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      }
+    },
+    "DELETE": {
+      "CHANGE_ME": "ACTION D3: Adjust translation keys for delete dialog",
+      "HEADER": "Delete Scaffold",
+      "MESSAGE": "Please confirm that you want to delete this Scaffold item.",
+      "CONFIRM": "Confirm",
+      "CANCEL": "Cancel",
+      "SUCCESS": "Scaffold deleted successfully",
+      "ERROR": "Could not delete Scaffold"
+    }
+  },
+  "SCAFFOLD_SEARCH": {
+    "HEADER": "Scaffold Search",
+    "SUB_HEADER": "Searching and displaying of Scaffolds",
+    "HELP_ARTICLE_ID": "Help Article",
+    "EMPTY_RESULTS": "No results.",
+    "BREADCRUMB": "Search",
+    "DIAGRAM": {
+      "SUM": "Total",
+      "ARIA_LABEL": "Diagram for Search Results"
+    },
+    "HEADER_ACTIONS": {
+      "EXPORT_ALL": "Export all",
+      "SHOW_CHART": "Show chart",
+      "HIDE_CHART": "Hide chart",
+      "CREATE_SEARCH_CONFIG": "Create search configuration",
+      "UPDATE_SEARCH_CONFIG": "Update search configuration",
+      "DIALOG_CONFIRM": "Confirm",
+      "DIALOG_CANCEL": "Cancel"
+    },
+    "ERROR_MESSAGES": {
+      "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed.",
+      "SEARCH_CONFIG_CREATION_FAILED": "Create search configuration failed.",
+      "SEARCH_CONFIG_UPDATE_FAILED": "Update search configuration failed.",
+      "SEARCH_CONFIGS_LOADING_FAILED": "Loading search configurations failed."
+    },
+    "HEADER_ARIA_LABEL": "Page Header with Search",
+    "PREDEFINED_GROUP": {
+      "DEFAULT": "Default",
+      "EXTENDED": "Extended",
+      "FULL": "Full"
+    },
+    "RESULTS_ARIA_LABEL": "Search Results",
+    "RESULTS": {
+      "NAME": "Name",
+      "SOURCE": "Source",
+      "SOURCE_PRODUCT": "Source Product",
+      "SYSTEM_PROMPT": "System Prompt"
+    },
+    "CRITERIA": {
+      "NAME": {
+        "LABEL": "Name",
+        "ARIA_LABEL": "Name",
+        "TOOLTIP": "Name"
+      },
+      "SOURCE_PRODUCT": {
+        "LABEL": "Source Product",
+        "ARIA_LABEL": "Source Product",
+        "TOOLTIP": "Source Product"
+      }
+    }
+  },
   "SKILL_CREATE_UPDATE": {
     "ACTION": {
       "CREATE": "Create"
@@ -326,7 +428,7 @@
   },
   "DASHBOARD": {
     "HEADER": "Agent Plane Dashboard",
-    "SUBHEADER": "Navigate to primary agent scaffold entities",
+    "SUBHEADER": "Navigate to primary agent components",
     "ACTIONS": {
       "OPEN_SEARCH": "Manage"
     },
