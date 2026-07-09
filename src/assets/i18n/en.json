@@ -50,6 +50,12 @@
       "SYSTEM_PROMPT": "System Prompt",
       "SOURCE": "Source",
       "SOURCE_PRODUCT": "Source Product",
+      "SKILLS": "Skills",
+      "TOOLS": "Tools (MCP)"
+    },
+    "TABS": {
+      "GENERAL": "General",
+      "TOOLS": "Tools (MCP)",
       "SKILLS": "Skills"
     },
     "CANCEL": {
@@ -126,6 +132,32 @@
         "ARIA_LABEL": "Source Product",
         "TOOLTIP": "Source Product"
       }
+    }
+  },
+  "SCAFFOLD_CREATE_UPDATE": {
+    "ACTION": {
+      "CREATE": "Create"
+    },
+    "CREATE": {
+      "HEADER": "Create Scaffold",
+      "SUCCESS": "Creation successful",
+      "ERROR": "Creation failed",
+      "FORM": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      }
+    },
+    "UPDATE": {
+      "HEADER": "Update Scaffold",
+      "SUCCESS": "Update successful",
+      "ERROR": "Update failed",
+      "FORM": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      }
+    },
+    "FORM": {
+      "NAME": "Name"
     }
   },
   "SKILL_CREATE_UPDATE": {
