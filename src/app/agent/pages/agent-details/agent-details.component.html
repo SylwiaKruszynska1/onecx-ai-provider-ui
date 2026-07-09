@@ -196,21 +196,23 @@
 
                 <div formArrayName="filters" class="flex flex-column gap-2">
                   <div
-                    class="flex align-items-center gap-2"
+                    class="flex align-items-center gap-2 flex-wrap"
                     *ngFor="let filterGroup of filtersFormArray.controls; let i = index"
                     [formGroupName]="i"
                   >
-                    <p-autoComplete
-                      formControlName="key"
-                      [suggestions]="filterKeySuggestions"
-                      (completeMethod)="searchFilterKeys($any($event))"
-                      [dropdown]="true"
-                      [inputId]="'agent_detail_filter_key_' + i"
-                      class="w-full"
-                      [forceSelection]="true"
-                    ></p-autoComplete>
+                    <div style="flex: 1 1 14rem; min-width: 14rem">
+                      <p-autoComplete
+                        formControlName="key"
+                        [suggestions]="filterKeySuggestions"
+                        (completeMethod)="searchFilterKeys($any($event))"
+                        [dropdown]="true"
+                        [inputId]="'agent_detail_filter_key_' + i"
+                        class="w-full"
+                        [forceSelection]="true"
+                      ></p-autoComplete>
+                    </div>
                     <span class="font-medium">:</span>
-                    <p-floatlabel variant="on" controlErrorAnchor class="flex-1">
+                    <p-floatlabel variant="on" controlErrorAnchor class="flex-1" style="flex: 2 1 20rem; min-width: 18rem">
                       <input
                         pInputText
                         type="text"
