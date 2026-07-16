@@ -103,7 +103,7 @@ export const ProviderDetailsReducer = createReducer(
   ),
   on(
     ProviderDetailsActions.providerDetailsEditModeSet,
-    (state: ProviderDetailsState, {editMode}): ProviderDetailsState => ({
+    (state: ProviderDetailsState, { editMode }): ProviderDetailsState => ({
       ...state,
       editMode
     })

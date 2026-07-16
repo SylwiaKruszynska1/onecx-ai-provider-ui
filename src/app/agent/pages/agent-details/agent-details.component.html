@@ -48,9 +48,7 @@
                     rows="3"
                     formControlName="description"
                   ></textarea>
-                  <label for="agent_detail_description">
-                    {{ 'AGENT_DETAILS.FORM.DESCRIPTION' | translate }}
-                  </label>
+                  <label for="agent_detail_description"> {{ 'AGENT_DETAILS.FORM.DESCRIPTION' | translate }} </label>
                 </p-floatlabel>
 
                 <p-floatlabel variant="on" controlErrorAnchor>
@@ -78,9 +76,7 @@
                     (onChange)="onProviderChanged()"
                   >
                   </p-select>
-                  <label for="agent_detail_provider">
-                    {{ 'AGENT_DETAILS.FORM.PROVIDER' | translate }}
-                  </label>
+                  <label for="agent_detail_provider"> {{ 'AGENT_DETAILS.FORM.PROVIDER' | translate }} </label>
                 </p-floatlabel>
 
                 <p-floatlabel variant="on" controlErrorAnchor>
@@ -94,9 +90,7 @@
                     class="w-full"
                   >
                   </p-select>
-                  <label for="agent_detail_model">
-                    {{ 'AGENT_DETAILS.FORM.MODEL' | translate }}
-                  </label>
+                  <label for="agent_detail_model"> {{ 'AGENT_DETAILS.FORM.MODEL' | translate }} </label>
                 </p-floatlabel>
 
                 <p-floatlabel variant="on" controlErrorAnchor>
@@ -110,9 +104,7 @@
                     class="w-full"
                   >
                   </p-select>
-                  <label for="agent_detail_scaffold">
-                    {{ 'AGENT_DETAILS.FORM.SCAFFOLD' | translate }}
-                  </label>
+                  <label for="agent_detail_scaffold"> {{ 'AGENT_DETAILS.FORM.SCAFFOLD' | translate }} </label>
                 </p-floatlabel>
 
                 <p-floatlabel variant="on" controlErrorAnchor>
@@ -121,13 +113,11 @@
                     formControlName="tools"
                     [options]="vm.tools"
                     [optionLabel]="'name'"
-                    [filter]="true"                    
+                    [filter]="true"
                     class="w-full"
                   >
                   </p-multiSelect>
-                  <label for="agent_detail_tools">
-                    {{ 'AGENT_DETAILS.FORM.ADDITIONAL_TOOLS' | translate }}
-                  </label>
+                  <label for="agent_detail_tools"> {{ 'AGENT_DETAILS.FORM.ADDITIONAL_TOOLS' | translate }} </label>
                 </p-floatlabel>
               </div>
             </p-tabPanel>
@@ -144,13 +134,11 @@
                     formControlName="groups"
                     [options]="vm.groups"
                     [optionLabel]="'name'"
-                    [filter]="true"                    
+                    [filter]="true"
                     class="w-full"
                   >
                   </p-multiSelect>
-                  <label for="agent_detail_groups">
-                    {{ 'AGENT_DETAILS.ASSIGNMENTS.GROUPS' | translate }}
-                  </label>
+                  <label for="agent_detail_groups"> {{ 'AGENT_DETAILS.ASSIGNMENTS.GROUPS' | translate }} </label>
                 </p-floatlabel>
 
                 <div class="flex align-items-center gap-2">
@@ -183,13 +171,7 @@
                 </h3>
 
                 <div class="flex justify-content-end">
-                  <button
-                    pButton
-                    type="button"
-                    icon="pi pi-plus"
-                    [disabled]="!vm.editMode"
-                    (click)="addFilter()"
-                  >
+                  <button pButton type="button" icon="pi pi-plus" [disabled]="!vm.editMode" (click)="addFilter()">
                     {{ 'AGENT_DETAILS.ASSIGNMENTS.ADD_FILTER' | translate }}
                   </button>
                 </div>
@@ -212,7 +194,12 @@
                       ></p-autoComplete>
                     </div>
                     <span class="font-medium">:</span>
-                    <p-floatlabel variant="on" controlErrorAnchor class="flex-1" style="flex: 2 1 20rem; min-width: 18rem">
+                    <p-floatlabel
+                      variant="on"
+                      controlErrorAnchor
+                      class="flex-1"
+                      style="flex: 2 1 20rem; min-width: 18rem"
+                    >
                       <input
                         pInputText
                         type="text"

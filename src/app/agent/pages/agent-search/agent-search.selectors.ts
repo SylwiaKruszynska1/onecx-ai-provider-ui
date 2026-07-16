@@ -42,7 +42,8 @@ export const selectAgentSearchViewModel = createSelector(
     chartVisible,
     searchLoadingIndicator,
     searchExecuted
-  ): AgentSearchViewModel => ({ // NOSONAR - NgRx createSelector projector requires one parameter per input selector.
+  ): AgentSearchViewModel => ({
+    // NOSONAR - NgRx createSelector projector requires one parameter per input selector.
     columns,
     searchCriteria,
     results,

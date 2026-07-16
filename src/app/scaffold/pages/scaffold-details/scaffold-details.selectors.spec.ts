@@ -31,7 +31,7 @@ describe('ScaffoldDetails selectors', () => {
           detailsLoaded,
           editMode,
           isSubmitting,
-          collections,
+          collections
         )
       ).toEqual({
         details,

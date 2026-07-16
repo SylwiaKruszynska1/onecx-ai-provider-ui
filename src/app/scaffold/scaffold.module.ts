@@ -27,7 +27,12 @@ import { routes } from './scaffold.routes'
 
 @NgModule({
   providers: [providePortalDialogService(), PermissionService],
-  declarations: [ScaffoldCreateUpdateComponent, ScaffoldDetailsComponent, ScaffoldDetailsComponent, ScaffoldSearchComponent],
+  declarations: [
+    ScaffoldCreateUpdateComponent,
+    ScaffoldDetailsComponent,
+    ScaffoldDetailsComponent,
+    ScaffoldSearchComponent
+  ],
   imports: [
     FloatLabelModule,
     InputTextModule,

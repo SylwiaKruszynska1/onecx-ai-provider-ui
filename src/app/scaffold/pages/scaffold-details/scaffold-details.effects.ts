@@ -13,7 +13,14 @@ import { filterForNavigatedTo } from '@onecx/ngrx-accelerator'
 
 import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.selectors'
 import { selectRouteParam, selectUrl } from 'src/app/shared/selectors/router.selectors'
-import { Scaffold, ScaffoldService, SkillService, Tool, ToolService, UpdateScaffoldRequest } from '../../../shared/generated'
+import {
+  Scaffold,
+  ScaffoldService,
+  SkillService,
+  Tool,
+  ToolService,
+  UpdateScaffoldRequest
+} from '../../../shared/generated'
 import { scaffoldDetailsActions } from './scaffold-details.actions'
 import { ScaffoldDetailsComponent } from './scaffold-details.component'
 import { scaffoldDetailsSelectors } from './scaffold-details.selectors'

@@ -139,7 +139,9 @@ export const agentDetailsReducer = createReducer(
     agentDetailsActions.createGroupInPlaceSucceeded,
     (state: AgentDetailsState, { group }): AgentDetailsState => ({
       ...state,
-      groups: state.groups.some((existingGroup) => existingGroup.id === group.id) ? state.groups : [...state.groups, group]
+      groups: state.groups.some((existingGroup) => existingGroup.id === group.id)
+        ? state.groups
+        : [...state.groups, group]
     })
   ),
   on(

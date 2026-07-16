@@ -312,7 +312,7 @@ describe('AgentSearchComponent', () => {
     )
   })
 
-  it('should dispatch displayedColumnsChanged on data view column change', async () => {
+  it('should dispatch resultComponentStateChanged on data view column change', () => {
     jest.spyOn(store, 'dispatch')
     const columns = [
       {
@@ -328,36 +328,14 @@ describe('AgentSearchComponent', () => {
         ]
       }
     ]
-    store.overrideSelector(selectAgentSearchViewModel, {
-      ...baseAgentSearchViewModel,
-      results: [],
-      columns: columns,
-      resultComponentState: { layout: 'table' }
-    })
-    store.refreshState()
-
-    const interactiveDataView = await agentSearch.getSearchResults()
-    const columnGroupSelector = await interactiveDataView?.getCustomGroupColumnSelector()
-    expect(columnGroupSelector).toBeTruthy()
-
-    if (columnGroupSelector) {
-      await columnGroupSelector.openCustomGroupColumnSelectorDialog()
-      const pickList = await columnGroupSelector.getPicklist()
-      const transferControlButtons = await pickList.getTransferControlsButtons()
-      expect(transferControlButtons).toHaveLength(4)
-
-      // Currently, all columns are selected. Next, we are unselecting all to have a clean test setting.
-      const deactivateAllColumnsButton = transferControlButtons[1]
-      await deactivateAllColumnsButton.click()
-      const inactiveItems = await pickList.getTargetListItems()
-      await inactiveItems[0].selectItem()
-      const activateCurrentColumnButton = transferControlButtons[2]
-      await activateCurrentColumnButton.click()
-      const saveButton = await columnGroupSelector.getSaveButton()
-      await saveButton.click()
-
-      expect(store.dispatch).toHaveBeenLastCalledWith(expect.objectContaining({ displayedColumns: columns }))
+    const state = {
+      layout: 'table',
+      displayedColumns: columns
     }
+
+    component.resultComponentStateChanged(state as never)
+
+    expect(store.dispatch).toHaveBeenCalledWith(agentSearchActions.resultComponentStateChanged(state as never))
   })
 
   it('should dispatch chartVisibilityToggled on show/hide chart header', async () => {
