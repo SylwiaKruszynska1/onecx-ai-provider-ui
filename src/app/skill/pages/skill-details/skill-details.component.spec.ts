@@ -164,7 +164,7 @@ describe('SkillDetailsComponent', () => {
   it('should show available header actions', async () => {
     const pageHeader = await skillDetails.getHeader()
     const inlineActions = await pageHeader.getInlineActionButtons()
-    expect(inlineActions.length).toBe(3)
+    expect(inlineActions).toHaveLength(3)
 
     const backAction = await pageHeader.getInlineActionButtonByLabel('Back')
     expect(backAction).toBeTruthy()

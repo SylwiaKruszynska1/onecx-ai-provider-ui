@@ -179,7 +179,8 @@ describe('ScaffoldSearchComponent', () => {
   })
 
   it('should dispatch resetButtonClicked action on resetSearch', (done) => {
-    store.scannedActions$.pipe(ofType(scaffoldSearchActions.resetButtonClicked)).subscribe(() => {
+    store.scannedActions$.pipe(ofType(scaffoldSearchActions.resetButtonClicked)).subscribe((action) => {
+      expect(action).toEqual(scaffoldSearchActions.resetButtonClicked())
       done()
     })
 
@@ -343,7 +344,7 @@ describe('ScaffoldSearchComponent', () => {
       await columnGroupSelector.openCustomGroupColumnSelectorDialog()
       const pickList = await columnGroupSelector.getPicklist()
       const transferControlButtons = await pickList.getTransferControlsButtons()
-      expect(transferControlButtons.length).toBe(4)
+      expect(transferControlButtons).toHaveLength(4)
 
       // Currently, all columns are selected. Next, we are unselecting all to have a clean test setting.
       const deactivateAllColumnsButton = transferControlButtons[1]
