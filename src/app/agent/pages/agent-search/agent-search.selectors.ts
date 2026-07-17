@@ -22,36 +22,44 @@ export const selectResults = createSelector(
   }
 )
 
-export const selectAgentSearchViewModel = createSelector(
+const selectSearchCriteria = createSelector(
   agentSearchSelectors.selectColumns,
   agentSearchSelectors.selectCriteria,
-  selectResults,
+  (columns, searchCriteria) => ({ columns, searchCriteria })
+)
+
+const selectComponentStates = createSelector(
   agentSearchSelectors.selectResultComponentState,
   agentSearchSelectors.selectSearchHeaderComponentState,
   agentSearchSelectors.selectDiagramComponentState,
+  (resultComponentState, searchHeaderComponentState, diagramComponentState) => ({
+    resultComponentState,
+    searchHeaderComponentState,
+    diagramComponentState
+  })
+)
+
+const selectUiState = createSelector(
   agentSearchSelectors.selectChartVisible,
   agentSearchSelectors.selectSearchLoadingIndicator,
   agentSearchSelectors.selectSearchExecuted,
-  (
-    columns,
-    searchCriteria,
-    results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
+  (chartVisible, searchLoadingIndicator, searchExecuted) => ({
     chartVisible,
     searchLoadingIndicator,
     searchExecuted
-  ): AgentSearchViewModel => ({
+  })
+)
+
+export const selectAgentSearchViewModel = createSelector(
+  selectSearchCriteria,
+  selectResults,
+  selectComponentStates,
+  selectUiState,
+  (searchCriteria, results, componentStates, uiState): AgentSearchViewModel => ({
     // NOSONAR - NgRx createSelector projector requires one parameter per input selector.
-    columns,
-    searchCriteria,
+    ...searchCriteria,
     results,
-    resultComponentState,
-    searchHeaderComponentState,
-    diagramComponentState,
-    chartVisible,
-    searchLoadingIndicator,
-    searchExecuted
+    ...componentStates,
+    ...uiState
   })
 )

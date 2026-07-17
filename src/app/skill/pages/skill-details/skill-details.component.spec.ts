@@ -313,7 +313,7 @@ describe('SkillDetailsComponent', () => {
 
     const pageHeader = await skillDetails.getHeader()
     const objectDetails = await pageHeader.getObjectInfos()
-    expect(objectDetails.length).toBe(5)
+    expect(objectDetails).toHaveLength(5)
 
     const label = TestBed.inject(TranslateService).instant('SKILL_DETAILS.FORM.CHANGE_ME')
     const testDetailItem = await pageHeader.getObjectInfoByLabel(label)

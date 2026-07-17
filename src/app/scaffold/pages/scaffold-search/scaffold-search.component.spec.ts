@@ -193,7 +193,7 @@ describe('ScaffoldSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
     expect(exportAllActionItem).not.toBeNull()
@@ -217,7 +217,7 @@ describe('ScaffoldSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const showHideChartActionItem = await pageHeader.getOverFlowMenuItem('Hide chart')
     expect(showHideChartActionItem).not.toBeNull()

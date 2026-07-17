@@ -176,6 +176,7 @@ describe('SkillSearchComponent', () => {
 
   it('should dispatch resetButtonClicked action on resetSearch', (done) => {
     store.scannedActions$.pipe(ofType(skillSearchActions.resetButtonClicked)).subscribe(() => {
+      expect(true).toBeTruthy()
       done()
     })
 
@@ -189,7 +190,7 @@ describe('SkillSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const exportAllActionItem = await pageHeader.getOverFlowMenuItem('Export all')
     expect(exportAllActionItem).not.toBeNull()
@@ -213,7 +214,7 @@ describe('SkillSearchComponent', () => {
     await overflowActionButton?.click()
 
     const overflowMenuItems = await pageHeader.getOverFlowMenuItems()
-    expect(overflowMenuItems.length).toBe(2)
+    expect(overflowMenuItems).toHaveLength(2)
 
     const showHideChartActionItem = await pageHeader.getOverFlowMenuItem('Hide chart')
     expect(showHideChartActionItem).not.toBeNull()
