@@ -1,3 +1,6 @@
+import { routerNavigatedAction } from '@ngrx/router-store'
+import { ZodError } from 'zod'
+
 import {
   DiagramType,
   GroupByCountDiagramComponentState,
@@ -6,6 +9,7 @@ import {
 } from '@onecx/angular-accelerator'
 
 import { agentSearchActions } from './agent-search.actions'
+import { agentSearchCriteriasSchema } from './agent-search.parameters'
 import * as reducers from './agent-search.reducers'
 
 // ACTION S11: Change test data in the whole document
@@ -103,28 +107,29 @@ describe('agentSearchReducer', () => {
   })
 
   it('should set criteria and searchLoadingIndicator=true when routerNavigatedAction succeeds and queryParams present', () => {
-    const { routerNavigatedAction } = require('@ngrx/router-store')
-    const mockSchema = require('./agent-search.parameters')
-    jest.spyOn(mockSchema.agentSearchCriteriasSchema, 'safeParse').mockReturnValue({
+    jest.spyOn(agentSearchCriteriasSchema, 'safeParse').mockReturnValue({
       success: true,
-      data: { foo: 'bar' }
+      data: { name: 'bar' }
     })
     const preState = { ...reducers.initialState, criteria: {}, searchLoadingIndicator: false }
-    const action = routerNavigatedAction({ payload: { routerState: { root: { queryParams: { foo: 'bar' } } } } })
+    const action = routerNavigatedAction({
+      payload: { routerState: { root: { queryParams: { name: 'bar' } } } } as any
+    })
     const nextState = reducers.agentSearchReducer(preState, action)
 
-    expect(nextState.criteria).toEqual({ foo: 'bar' })
+    expect(nextState.criteria).toEqual({ name: 'bar' })
     expect(nextState.searchLoadingIndicator).toBe(true)
   })
 
   it('should not change state when routerNavigatedAction fails schema parse', () => {
-    const { routerNavigatedAction } = require('@ngrx/router-store')
-    const mockSchema = require('./agent-search.parameters')
-    jest.spyOn(mockSchema.agentSearchCriteriasSchema, 'safeParse').mockReturnValue({
-      success: false
+    jest.spyOn(agentSearchCriteriasSchema, 'safeParse').mockReturnValue({
+      success: false,
+      error: new ZodError([])
     })
     const preState = { ...reducers.initialState, criteria: { name: 'bar' }, searchLoadingIndicator: true }
-    const action = routerNavigatedAction({ payload: { routerState: { root: { queryParams: { foo: 'bar' } } } } })
+    const action = routerNavigatedAction({
+      payload: { routerState: { root: { queryParams: { name: 'bar' } } } } as any
+    })
     const nextState = reducers.agentSearchReducer(preState, action)
 
     expect(nextState).toBe(preState)

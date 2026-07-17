@@ -1,6 +1,9 @@
 import { routerNavigatedAction } from '@ngrx/router-store'
+import { ZodError } from 'zod'
+
 import { ProviderSearchActions } from './provider-search.actions'
 import { ProviderSearchReducer, initialState } from './provider-search.reducers'
+import { ProviderSearchCriteriasSchema } from './provider-search.parameters'
 
 describe('ProviderSearchReducer', () => {
   it('should parse query params on routerNavigatedAction (success)', () => {
@@ -28,9 +31,7 @@ describe('ProviderSearchReducer', () => {
         }
       }
     } as any)
-    jest
-      .spyOn(require('./provider-search.parameters').ProviderSearchCriteriasSchema, 'safeParse')
-      .mockReturnValue({ success: false })
+    jest.spyOn(ProviderSearchCriteriasSchema, 'safeParse').mockReturnValue({ success: false, error: new ZodError([]) })
     const state = ProviderSearchReducer(initialState, action)
     expect(state).toEqual(initialState)
   })

@@ -31,47 +31,32 @@ export const skillSearchReducer = createReducer(
     }
     return state
   }),
-  on(
-    skillSearchActions.resetButtonClicked,
-    (state: SkillSearchState): SkillSearchState => ({
-      ...state,
-      results: initialState.results,
-      criteria: {},
-      searchExecuted: false
-    })
-  ),
-  on(
-    skillSearchActions.searchButtonClicked,
-    (state: SkillSearchState, { searchCriteria }): SkillSearchState => ({
-      ...state,
-      searchLoadingIndicator: true,
-      criteria: searchCriteria
-    })
-  ),
-  on(
-    skillSearchActions.skillSearchResultsReceived,
-    (state: SkillSearchState, { stream }): SkillSearchState => ({
-      ...state,
-      results: stream,
-      searchLoadingIndicator: false,
-      searchExecuted: true
-    })
-  ),
-  on(
-    skillSearchActions.skillSearchResultsLoadingFailed,
-    (state: SkillSearchState): SkillSearchState => ({
-      ...state,
-      results: [],
-      searchLoadingIndicator: false
-    })
-  ),
-  on(
-    skillSearchActions.chartVisibilityToggled,
-    (state: SkillSearchState): SkillSearchState => ({
-      ...state,
-      chartVisible: !state.chartVisible
-    })
-  ),
+  on(skillSearchActions.resetButtonClicked, (state: SkillSearchState): SkillSearchState => ({
+    ...state,
+    results: initialState.results,
+    criteria: {},
+    searchExecuted: false
+  })),
+  on(skillSearchActions.searchButtonClicked, (state: SkillSearchState, { searchCriteria }): SkillSearchState => ({
+    ...state,
+    searchLoadingIndicator: true,
+    criteria: searchCriteria
+  })),
+  on(skillSearchActions.skillSearchResultsReceived, (state: SkillSearchState, { stream }): SkillSearchState => ({
+    ...state,
+    results: stream,
+    searchLoadingIndicator: false,
+    searchExecuted: true
+  })),
+  on(skillSearchActions.skillSearchResultsLoadingFailed, (state: SkillSearchState): SkillSearchState => ({
+    ...state,
+    results: [],
+    searchLoadingIndicator: false
+  })),
+  on(skillSearchActions.chartVisibilityToggled, (state: SkillSearchState): SkillSearchState => ({
+    ...state,
+    chartVisible: !state.chartVisible
+  })),
   on(
     skillSearchActions.resultComponentStateChanged,
     (state: SkillSearchState, resultComponentState): SkillSearchState => ({

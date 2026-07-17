@@ -121,7 +121,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
     const actions = await firstValueFrom(component.headerActions$)
     const deleteAction = actions.find((a) => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
     expect(deleteAction).toBeDefined()
-    deleteAction!.actionCallback()
+    deleteAction!.actionCallback?.()
     expect(deleteSpy).toHaveBeenCalledWith('')
   })
 
@@ -206,7 +206,7 @@ describe('ProviderDetailsComponent actions & dispatch', () => {
     const deleteAction = actions.find((a) => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
 
     expect(deleteAction).toBeDefined()
-    deleteAction!.actionCallback()
+    deleteAction!.actionCallback?.()
 
     expect(deleteSpy).toHaveBeenCalledWith('1')
   })

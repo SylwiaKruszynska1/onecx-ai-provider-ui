@@ -31,47 +31,32 @@ export const agentSearchReducer = createReducer(
     }
     return state
   }),
-  on(
-    agentSearchActions.resetButtonClicked,
-    (state: AgentSearchState): AgentSearchState => ({
-      ...state,
-      results: initialState.results,
-      criteria: {},
-      searchExecuted: false
-    })
-  ),
-  on(
-    agentSearchActions.searchButtonClicked,
-    (state: AgentSearchState, { searchCriteria }): AgentSearchState => ({
-      ...state,
-      searchLoadingIndicator: true,
-      criteria: searchCriteria
-    })
-  ),
-  on(
-    agentSearchActions.agentSearchResultsReceived,
-    (state: AgentSearchState, { stream }): AgentSearchState => ({
-      ...state,
-      results: stream,
-      searchLoadingIndicator: false,
-      searchExecuted: true
-    })
-  ),
-  on(
-    agentSearchActions.agentSearchResultsLoadingFailed,
-    (state: AgentSearchState): AgentSearchState => ({
-      ...state,
-      results: [],
-      searchLoadingIndicator: false
-    })
-  ),
-  on(
-    agentSearchActions.chartVisibilityToggled,
-    (state: AgentSearchState): AgentSearchState => ({
-      ...state,
-      chartVisible: !state.chartVisible
-    })
-  ),
+  on(agentSearchActions.resetButtonClicked, (state: AgentSearchState): AgentSearchState => ({
+    ...state,
+    results: initialState.results,
+    criteria: {},
+    searchExecuted: false
+  })),
+  on(agentSearchActions.searchButtonClicked, (state: AgentSearchState, { searchCriteria }): AgentSearchState => ({
+    ...state,
+    searchLoadingIndicator: true,
+    criteria: searchCriteria
+  })),
+  on(agentSearchActions.agentSearchResultsReceived, (state: AgentSearchState, { stream }): AgentSearchState => ({
+    ...state,
+    results: stream,
+    searchLoadingIndicator: false,
+    searchExecuted: true
+  })),
+  on(agentSearchActions.agentSearchResultsLoadingFailed, (state: AgentSearchState): AgentSearchState => ({
+    ...state,
+    results: [],
+    searchLoadingIndicator: false
+  })),
+  on(agentSearchActions.chartVisibilityToggled, (state: AgentSearchState): AgentSearchState => ({
+    ...state,
+    chartVisible: !state.chartVisible
+  })),
   on(
     agentSearchActions.resultComponentStateChanged,
     (state: AgentSearchState, resultComponentState): AgentSearchState => ({
