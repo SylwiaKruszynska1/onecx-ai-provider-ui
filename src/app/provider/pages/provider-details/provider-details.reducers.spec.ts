@@ -20,7 +20,7 @@ describe('ProviderDetailsReducer', () => {
   it('should set isSubmitting on providerUpdateRequested', () => {
     const action = ProviderDetailsActions.providerUpdateRequested({ details: { name: 'Test' } as any })
     const state = ProviderDetailsReducer(initialState, action)
-    
+
     expect(state.isSubmitting).toBe(true)
   })
 

@@ -8,6 +8,7 @@
     "build": "nx build",
     "format": "nx format:write --uncommitted",
     "lint": "nx lint --cache=true && npx prettier -c --cache .",
+    "lint-fix": "npx prettier --write .",
     "test": "nx test",
     "test:ci": "NO_COLOR=1 FORCE_COLOR=0 nx test --watch=false --browsers=ChromeHeadless --code-coverage",
     "prepare": "husky || true",
