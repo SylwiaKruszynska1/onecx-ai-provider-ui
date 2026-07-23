@@ -179,8 +179,8 @@ describe('ScaffoldSearchComponent', () => {
   })
 
   it('should dispatch resetButtonClicked action on resetSearch', (done) => {
-    store.scannedActions$.pipe(ofType(scaffoldSearchActions.resetButtonClicked)).subscribe((action) => {
-      expect(action).toEqual(scaffoldSearchActions.resetButtonClicked())
+    store.scannedActions$.pipe(ofType(scaffoldSearchActions.resetButtonClicked)).subscribe(() => {
+      expect(store.dispatch).toHaveBeenCalledWith(scaffoldSearchActions.resetButtonClicked())
       done()
     })
 

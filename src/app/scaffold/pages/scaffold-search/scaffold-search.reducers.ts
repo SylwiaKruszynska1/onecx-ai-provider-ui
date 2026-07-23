@@ -15,7 +15,8 @@ export const initialState: ScaffoldSearchState = {
   diagramComponentState: null,
   searchLoadingIndicator: false,
   criteria: {},
-  searchExecuted: false
+  searchExecuted: false,
+  skills: []
 }
 
 export const scaffoldSearchReducer = createReducer(
@@ -83,5 +84,13 @@ export const scaffoldSearchReducer = createReducer(
       ...state,
       diagramComponentState
     })
-  )
+  ),
+  on(scaffoldSearchActions.scaffoldSkillsReceived, (state: ScaffoldSearchState, { skills }): ScaffoldSearchState => ({
+    ...state,
+    skills
+  })),
+  on(scaffoldSearchActions.scaffoldSkillsLoadingFailed, (state: ScaffoldSearchState): ScaffoldSearchState => ({
+    ...state,
+    skills: []
+  }))
 )
