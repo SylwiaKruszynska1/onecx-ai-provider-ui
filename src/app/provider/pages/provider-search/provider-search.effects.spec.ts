@@ -251,7 +251,9 @@ describe('ProviderSearchEffects', () => {
     })
 
     it('should default missing response fields to empty results and zero counts', (done) => {
-      providerService.findProviderBySearchCriteria.mockReturnValueOnce(of({} as unknown as HttpEvent<ProviderPageResult>))
+      providerService.findProviderBySearchCriteria.mockReturnValueOnce(
+        of({} as unknown as HttpEvent<ProviderPageResult>)
+      )
 
       effects
         .performSearch(mockCriteria)
