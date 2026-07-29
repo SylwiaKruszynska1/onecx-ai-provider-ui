@@ -2,35 +2,6 @@ import { scaffoldDetailsActions } from './scaffold-details.actions'
 import { initialState, scaffoldDetailsReducer } from './scaffold-details.reducers'
 
 describe('scaffoldDetailsReducer', () => {
-  it('should set skills on scaffoldSkillsReceived', () => {
-    const skills = [{ id: 'skill-1' }]
-    const action = scaffoldDetailsActions.scaffoldSkillsReceived({
-      skills
-    })
-    const nextState = scaffoldDetailsReducer(initialState, action)
-
-    expect(nextState).toEqual({
-      ...initialState,
-      skills,
-      skillsLoadingIndicator: false,
-      skillsLoaded: true
-    })
-  })
-
-  it('should handle scaffoldSkillsLoadingFailed action', () => {
-    const action = scaffoldDetailsActions.scaffoldSkillsLoadingFailed({
-      error: null
-    })
-    const nextState = scaffoldDetailsReducer(initialState, action)
-
-    expect(nextState).toEqual({
-      ...initialState,
-      skills: [],
-      skillsLoadingIndicator: false,
-      skillsLoaded: false
-    })
-  })
-
   it('should set details on scaffoldDetailsReceived', () => {
     const details = { id: '1' }
     const action = scaffoldDetailsActions.scaffoldDetailsReceived({
