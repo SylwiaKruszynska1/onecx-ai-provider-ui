@@ -1,19 +1,14 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
-import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { FloatLabelModule } from 'primeng/floatlabel'
-import { InputTextModule } from 'primeng/inputtext'
-import { ScaffoldCreateUpdateComponent } from './scaffold-create-update.component'
 import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER } from '@onecx/angular-utils'
+import { BreadcrumbService, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { AgentCreateUpdateComponent } from './agent-create-update.component'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { MultiSelectModule } from 'primeng/multiselect'
-import { TextareaModule } from 'primeng/textarea'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -29,43 +24,40 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-describe('ScaffoldCreateUpdateComponent', () => {
-  let component: ScaffoldCreateUpdateComponent
-  let fixture: ComponentFixture<ScaffoldCreateUpdateComponent>
+describe('AgentCreateUpdateComponent', () => {
+  let component: AgentCreateUpdateComponent
+  let fixture: ComponentFixture<AgentCreateUpdateComponent>
 
   const mockActivatedRoute = {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ScaffoldCreateUpdateComponent],
+      declarations: [],
       imports: [
         AngularAcceleratorModule,
-        FloatLabelModule,
-        InputTextModule,
         FormsModule,
-        LetDirective,
+        AgentCreateUpdateComponent,
         ReactiveFormsModule,
+        LetDirective,
         TranslateTestingModule.withTranslations({
-          de: require('../../../../../../assets/i18n/de.json'),
-          en: require('../../../../../../assets/i18n/en.json')
-        }).withDefaultLanguage('en'),
-        MultiSelectModule,
-        TextareaModule
+          en: require('./src/assets/i18n/en.json'),
+          de: require('./src/assets/i18n/de.json')
+        }).withDefaultLanguage('en')
       ],
       providers: [
-        provideHttpClientTesting(),
+        BreadcrumbService,
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
         provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
         provideUserServiceMock(),
         {
           provide: HAS_PERMISSION_CHECKER,
           useClass: AlwaysGrantPermissionChecker
-        },
-        BreadcrumbService,
-        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+        }
       ]
     }).compileComponents()
 
-    fixture = TestBed.createComponent(ScaffoldCreateUpdateComponent)
+    fixture = TestBed.createComponent(AgentCreateUpdateComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
@@ -78,26 +70,17 @@ describe('ScaffoldCreateUpdateComponent', () => {
     component.vm.itemToEdit = {
       id: '1',
       name: 'Old',
-      systemPrompt: 'systemPrompt',
-      skills: [{ id: 'skill1', name: 'Skill 1' }]
+      description: 'OldDesc'
     } as any
     component.formGroup.setValue({
       name: 'New',
-      systemPrompt: 'NewSystemPrompt',
-      skills: [
-        { id: 'skill1', name: 'Skill 1' },
-        { id: 'skill2', name: 'Skill 2' }
-      ]
+      description: 'NewDesc'
     })
     component.ocxDialogButtonClicked()
     expect(component.dialogResult).toEqual({
       id: '1',
       name: 'New',
-      systemPrompt: 'NewSystemPrompt',
-      skills: [
-        { id: 'skill1', name: 'Skill 1' },
-        { id: 'skill2', name: 'Skill 2' }
-      ]
+      description: 'NewDesc'
     })
   })
 
@@ -105,25 +88,31 @@ describe('ScaffoldCreateUpdateComponent', () => {
     component.vm.itemToEdit = {
       id: '2',
       name: 'Patched',
-      systemPrompt: 'PatchedSystemPrompt',
-      skills: [{ id: 'skill1', name: 'Skill 1' }]
+      description: 'PatchedDesc'
     } as any
-    component.formGroup.setValue({ name: null, systemPrompt: null, skills: null })
+    component.formGroup.setValue({ name: null, description: null })
     component.ngOnInit()
     expect(component.formGroup.value).toEqual({
       name: 'Patched',
-      systemPrompt: 'PatchedSystemPrompt',
-      skills: [{ id: 'skill1', name: 'Skill 1' }]
+      description: 'PatchedDesc'
     })
   })
 
-  it('should default skills to an empty array when itemToEdit has no skills ngOnInit', () => {
-    component.vm.itemToEdit = {
-      id: '3',
-      name: 'NoSkills',
-      systemPrompt: 'NoSkillsSystemPrompt'
-    } as any
+  it('should not patch formGroup on ngOnInit when there is no itemToEdit', () => {
+    component.vm.itemToEdit = undefined
+    component.formGroup.setValue({ name: null, description: null })
     component.ngOnInit()
-    expect(component.formGroup.value.skills).toEqual([])
+    expect(component.formGroup.value).toEqual({ name: null, description: null })
+  })
+
+  it('should emit primaryButtonEnabled based on form validity', () => {
+    const emissions: boolean[] = []
+    component.primaryButtonEnabled.subscribe((enabled) => emissions.push(enabled))
+
+    component.formGroup.setValue({ name: null, description: null })
+    expect(emissions[emissions.length - 1]).toBe(false)
+
+    component.formGroup.setValue({ name: 'Valid', description: null })
+    expect(emissions[emissions.length - 1]).toBe(true)
   })
 })
