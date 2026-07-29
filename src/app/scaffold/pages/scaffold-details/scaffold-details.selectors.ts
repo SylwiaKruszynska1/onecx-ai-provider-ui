@@ -9,7 +9,7 @@ import { selectBackNavigationPossible } from 'src/app/shared/selectors/onecx.sel
 
 export const scaffoldDetailsSelectors = createChildSelectors(scaffoldFeature.selectDetails, initialState)
 
-const selectScaffoldDetailsCollections = createSelector(
+export const selectScaffoldDetailsCollections = createSelector(
   scaffoldDetailsSelectors.selectSkills,
   scaffoldDetailsSelectors.selectSkillsLoadingIndicator,
   scaffoldDetailsSelectors.selectSkillsLoaded,

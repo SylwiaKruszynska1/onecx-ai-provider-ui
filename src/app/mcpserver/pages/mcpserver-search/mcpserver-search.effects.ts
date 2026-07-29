@@ -110,7 +110,7 @@ export class MCPServerSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(MCPServerSearchActions.updateMcpserverCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('DialogResult was not set as expected!')
         }
         if (!dialogResult.result.id) {
@@ -169,7 +169,7 @@ export class MCPServerSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(MCPServerSearchActions.createMcpserverCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('DialogResult was not set as expected!')
         }
         const toCreateItem: CreateToolRequest = {

@@ -370,4 +370,34 @@ describe('ScaffoldDetailsComponent', () => {
     expect(component.formGroup.disabled).toBe(true)
     expect(component.formGroup.getRawValue()).toEqual(scaffoldForm)
   })
+
+  it('should default tools to an empty array when their control value is null', () => {
+    jest.spyOn(store, 'dispatch')
+    component.formGroup.get('tools')?.setValue(null)
+
+    component.save()
+
+    expect(store.dispatch).toHaveBeenCalledWith(
+      scaffoldDetailsActions.saveButtonClicked({
+        details: expect.objectContaining({
+          tools: []
+        })
+      })
+    )
+  })
+
+  it('should default tools to an empty array when the tools control is missing', () => {
+    jest.spyOn(store, 'dispatch')
+    component.formGroup.removeControl('tools')
+
+    component.save()
+
+    expect(store.dispatch).toHaveBeenCalledWith(
+      scaffoldDetailsActions.saveButtonClicked({
+        details: expect.objectContaining({
+          tools: []
+        })
+      })
+    )
+  })
 })

@@ -1,4 +1,4 @@
-import { Injectable, SkipSelf } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
@@ -24,16 +24,14 @@ import { CreateProviderRequest, Provider, ProviderService, UpdateProviderRequest
 
 @Injectable()
 export class ProviderSearchEffects {
-  constructor(
-    private readonly portalDialogService: PortalDialogService,
-    private readonly actions$: Actions,
-    @SkipSelf() private readonly route: ActivatedRoute,
-    private readonly providerService: ProviderService,
-    private readonly router: Router,
-    private readonly store: Store,
-    private readonly messageService: PortalMessageService,
-    private readonly exportDataService: ExportDataService
-  ) {}
+  private readonly portalDialogService = inject(PortalDialogService)
+  private readonly actions$ = inject(Actions)
+  private readonly route = inject(ActivatedRoute)
+  private readonly providerService = inject(ProviderService)
+  private readonly router = inject(Router)
+  private readonly store = inject(Store)
+  private readonly messageService = inject(PortalMessageService)
+  private readonly exportDataService = inject(ExportDataService)
 
   syncParamsToUrl$ = createEffect(
     () => {
@@ -112,7 +110,7 @@ export class ProviderSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(ProviderSearchActions.updateProviderCancelled())
         }
-        if (!dialogResult?.result?.id) {
+        if (!dialogResult.result?.id) {
           throw new Error('DialogResult was not set as expected!')
         }
         const itemToEditId = dialogResult.result.id
@@ -166,7 +164,7 @@ export class ProviderSearchEffects {
         if (!dialogResult || dialogResult.button == 'secondary') {
           return of(ProviderSearchActions.createProviderCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('DialogResult was not set as expected!')
         }
         const toCreateItem = {
@@ -202,10 +200,10 @@ export class ProviderSearchEffects {
         return results.find((item) => item.id == action.id)
       }),
       switchMap((result) => {
-        if (!result) {
-          throw new Error('DialogResult was not set as expected!')
+        if (!result?.id) {
+          throw new Error('Item id was not set as expected!')
         }
-        const itemToEditId = result.id ?? ''
+        const itemToEditId = result.id
         const itemToEdit = {
           ...result
         } as UpdateProviderRequest
