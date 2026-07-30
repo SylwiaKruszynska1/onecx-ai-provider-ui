@@ -23,6 +23,14 @@ describe('AgentSearch selectors', () => {
           { imagePath: '', id: 'agent-0', name: 'A' },
           { imagePath: '', id: 'agent-1', name: 'B' }
         ]
+      },
+      {
+        desc: 'should use the index-based fallback when item.id is undefined',
+        input: [{ name: 'A' }, { name: 'B' }] as never[],
+        expected: [
+          { imagePath: '', id: 'agent-0', name: 'A' },
+          { imagePath: '', id: 'agent-1', name: 'B' }
+        ]
       }
     ]
 
@@ -45,15 +53,18 @@ describe('AgentSearch selectors', () => {
     const chartVisible = true
 
     const result = selectors.selectAgentSearchViewModel.projector(
-      columns,
-      searchCriteria,
+      { columns, searchCriteria },
       results,
-      null,
-      null,
-      null,
-      chartVisible,
-      false,
-      true
+      {
+        resultComponentState: null,
+        searchHeaderComponentState: null,
+        diagramComponentState: null
+      },
+      {
+        chartVisible,
+        searchLoadingIndicator: false,
+        searchExecuted: true
+      }
     )
 
     expect(result).toEqual({

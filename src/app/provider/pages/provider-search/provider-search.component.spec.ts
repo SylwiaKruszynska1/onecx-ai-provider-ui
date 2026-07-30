@@ -511,7 +511,7 @@ describe('ProviderSearchComponent', () => {
     component.headerActions$.subscribe((actions) => {
       const createAction = actions.find((a) => a.labelKey === 'PROVIDER_CREATE_UPDATE.ACTION.CREATE')
       expect(createAction).toBeTruthy()
-      createAction!.actionCallback()
+      createAction!.actionCallback!()
       expect(component.create).toHaveBeenCalled()
       expect(store.dispatch).toHaveBeenCalledWith(ProviderSearchActions.createProviderButtonClicked())
       done()

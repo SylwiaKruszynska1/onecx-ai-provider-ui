@@ -1,11 +1,7 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
-import {
-  DialogButtonClicked,
-  DialogPrimaryButtonDisabled,
-  DialogResult
-} from '@onecx/angular-accelerator'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputTextModule } from 'primeng/inputtext'
 import { map } from 'rxjs'

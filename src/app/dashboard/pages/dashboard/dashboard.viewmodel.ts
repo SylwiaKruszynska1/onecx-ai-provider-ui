@@ -1,2 +1,1 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface DashboardViewModel {}
+export type DashboardViewModel = Record<string, never>

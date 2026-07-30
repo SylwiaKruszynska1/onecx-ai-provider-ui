@@ -22,42 +22,27 @@ export const mcpserverDetailsReducer = createReducer(
       detailsLoaded: true
     })
   ),
-  on(
-    MCPServerDetailsActions.mCPServerDetailsLoadingFailed,
-    (state: MCPServerDetailsState): MCPServerDetailsState => ({
-      ...state,
-      details: undefined,
-      detailsLoadingIndicator: false,
-      detailsLoaded: false
-    })
-  ),
-  on(
-    MCPServerDetailsActions.navigatedToDetailsPage,
-    (): MCPServerDetailsState => ({
-      ...initialState
-    })
-  ),
-  on(
-    MCPServerDetailsActions.editButtonClicked,
-    (state: MCPServerDetailsState): MCPServerDetailsState => ({
-      ...state,
-      editMode: true
-    })
-  ),
-  on(
-    MCPServerDetailsActions.saveButtonClicked,
-    (state: MCPServerDetailsState): MCPServerDetailsState => ({
-      ...state,
-      isSubmitting: true
-    })
-  ),
-  on(
-    MCPServerDetailsActions.cancelButtonClicked,
-    (state: MCPServerDetailsState, { dirty }): MCPServerDetailsState => ({
-      ...state,
-      editMode: dirty ? state.editMode : false
-    })
-  ),
+  on(MCPServerDetailsActions.mCPServerDetailsLoadingFailed, (state: MCPServerDetailsState): MCPServerDetailsState => ({
+    ...state,
+    details: undefined,
+    detailsLoadingIndicator: false,
+    detailsLoaded: false
+  })),
+  on(MCPServerDetailsActions.navigatedToDetailsPage, (): MCPServerDetailsState => ({
+    ...initialState
+  })),
+  on(MCPServerDetailsActions.editButtonClicked, (state: MCPServerDetailsState): MCPServerDetailsState => ({
+    ...state,
+    editMode: true
+  })),
+  on(MCPServerDetailsActions.saveButtonClicked, (state: MCPServerDetailsState): MCPServerDetailsState => ({
+    ...state,
+    isSubmitting: true
+  })),
+  on(MCPServerDetailsActions.cancelButtonClicked, (state: MCPServerDetailsState, { dirty }): MCPServerDetailsState => ({
+    ...state,
+    editMode: dirty ? state.editMode : false
+  })),
   on(
     MCPServerDetailsActions.cancelEditConfirmClicked,
     MCPServerDetailsActions.updateMCPServerCancelled,
@@ -67,18 +52,12 @@ export const mcpserverDetailsReducer = createReducer(
       editMode: false
     })
   ),
-  on(
-    MCPServerDetailsActions.updateMCPServerFailed,
-    (state: MCPServerDetailsState): MCPServerDetailsState => ({
-      ...state,
-      isSubmitting: false
-    })
-  ),
-  on(
-    MCPServerDetailsActions.apiKeyVisibilityToggled,
-    (state: MCPServerDetailsState): MCPServerDetailsState => ({
-      ...state,
-      isApiKeyHidden: !state.isApiKeyHidden
-    })
-  )
+  on(MCPServerDetailsActions.updateMCPServerFailed, (state: MCPServerDetailsState): MCPServerDetailsState => ({
+    ...state,
+    isSubmitting: false
+  })),
+  on(MCPServerDetailsActions.apiKeyVisibilityToggled, (state: MCPServerDetailsState): MCPServerDetailsState => ({
+    ...state,
+    isApiKeyHidden: !state.isApiKeyHidden
+  }))
 )

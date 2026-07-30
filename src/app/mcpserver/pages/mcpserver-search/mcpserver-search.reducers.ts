@@ -30,15 +30,12 @@ export const mcpserverSearchReducer = createReducer(
     }
     return state
   }),
-  on(
-    MCPServerSearchActions.resetButtonClicked,
-    (state: MCPServerSearchState): MCPServerSearchState => ({
-      ...state,
-      results: initialState.results,
-      criteria: {},
-      searchExecuted: false
-    })
-  ),
+  on(MCPServerSearchActions.resetButtonClicked, (state: MCPServerSearchState): MCPServerSearchState => ({
+    ...state,
+    results: initialState.results,
+    criteria: {},
+    searchExecuted: false
+  })),
   on(
     MCPServerSearchActions.searchButtonClicked,
     (state: MCPServerSearchState, { searchCriteria }): MCPServerSearchState => ({
@@ -63,13 +60,10 @@ export const mcpserverSearchReducer = createReducer(
       searchLoadingIndicator: false
     })
   ),
-  on(
-    MCPServerSearchActions.chartVisibilityToggled,
-    (state: MCPServerSearchState): MCPServerSearchState => ({
-      ...state,
-      chartVisible: !state.chartVisible
-    })
-  ),
+  on(MCPServerSearchActions.chartVisibilityToggled, (state: MCPServerSearchState): MCPServerSearchState => ({
+    ...state,
+    chartVisible: !state.chartVisible
+  })),
   on(
     MCPServerSearchActions.resultComponentStateChanged,
     (state: MCPServerSearchState, resultComponentState): MCPServerSearchState => ({

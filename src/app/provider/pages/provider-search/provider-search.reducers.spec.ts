@@ -1,6 +1,9 @@
-import { routerNavigatedAction } from "@ngrx/router-store"
-import { ProviderSearchActions } from "./provider-search.actions"
-import { ProviderSearchReducer, initialState } from "./provider-search.reducers"
+import { routerNavigatedAction } from '@ngrx/router-store'
+import { ZodError } from 'zod'
+
+import { ProviderSearchActions } from './provider-search.actions'
+import { ProviderSearchReducer, initialState } from './provider-search.reducers'
+import { ProviderSearchCriteriasSchema } from './provider-search.parameters'
 
 describe('ProviderSearchReducer', () => {
   it('should parse query params on routerNavigatedAction (success)', () => {
@@ -28,13 +31,17 @@ describe('ProviderSearchReducer', () => {
         }
       }
     } as any)
-    jest.spyOn(require('./provider-search.parameters').ProviderSearchCriteriasSchema, 'safeParse').mockReturnValue({ success: false })
+    jest.spyOn(ProviderSearchCriteriasSchema, 'safeParse').mockReturnValue({ success: false, error: new ZodError([]) })
     const state = ProviderSearchReducer(initialState, action)
     expect(state).toEqual(initialState)
   })
 
   it('should reset results and criteria on resetButtonClicked', () => {
-    const prevState = { ...initialState, results: [{ id: '1', name: 'Test', description: 'model' }], criteria: { name: 'Test' } }
+    const prevState = {
+      ...initialState,
+      results: [{ id: '1', name: 'Test', description: 'model' }],
+      criteria: { name: 'Test' }
+    }
     const action = ProviderSearchActions.resetButtonClicked()
     const state = ProviderSearchReducer(prevState, action)
     expect(state.results).toEqual([])
@@ -85,10 +92,7 @@ describe('ProviderSearchReducer', () => {
 
   it('should set displayedColumns on displayedColumnsChanged', () => {
     const action = ProviderSearchActions.displayedColumnsChanged({
-      displayedColumns: [
-        { id: 'col1' },
-        { id: 'col2' }
-      ] as any
+      displayedColumns: [{ id: 'col1' }, { id: 'col2' }] as any
     })
     const state = ProviderSearchReducer(initialState, action)
     expect(state.displayedColumns).toEqual(['col1', 'col2'])

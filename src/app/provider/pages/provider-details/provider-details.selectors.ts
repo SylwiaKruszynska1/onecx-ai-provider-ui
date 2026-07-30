@@ -16,7 +16,7 @@ export const selectProviderDetailsViewModel = createSelector(
   ProviderDetailsSelectors.selectEditMode,
   ProviderDetailsSelectors.selectIsApiKeyHidden,
   (
-    details: Provider | undefined, 
+    details: Provider | undefined,
     models,
     modelsLoadingIndicator,
     modelMutationInProgress,

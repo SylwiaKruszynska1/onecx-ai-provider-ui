@@ -41,7 +41,9 @@ describe('MCPServerSearchComponent', () => {
     listeners.forEach((l) =>
       l({
         data: m,
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         stopImmediatePropagation: () => {},
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         stopPropagation: () => {}
       })
     )
@@ -676,7 +678,7 @@ describe('MCPServerSearchComponent', () => {
     component.headerActions$.subscribe((actions) => {
       const createAction = actions.find((a) => a.labelKey === 'MCPSERVER_CREATE_UPDATE.ACTION.CREATE')
       expect(createAction).toBeTruthy()
-      createAction!.actionCallback()
+      createAction!.actionCallback!()
       expect(component.create).toHaveBeenCalled()
       expect(store.dispatch).toHaveBeenCalledWith(MCPServerSearchActions.createMcpserverButtonClicked())
       done()

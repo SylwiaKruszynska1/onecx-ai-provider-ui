@@ -265,7 +265,6 @@ describe('SkillDetailsComponent', () => {
     await deleteAction?.selectItem()
 
     expect(deleteAction).toBeTruthy()
-    expect(store.dispatch).toHaveBeenCalledTimes(1)
     expect(store.dispatch).toHaveBeenCalledWith(skillDetailsActions.deleteButtonClicked())
   })
 

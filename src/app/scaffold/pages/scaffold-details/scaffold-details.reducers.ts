@@ -36,63 +36,42 @@ export const scaffoldDetailsReducer = createReducer(
       skillsLoaded: true
     })
   ),
-  on(
-    scaffoldDetailsActions.scaffoldSkillsLoadingFailed,
-    (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
-      ...state,
-      skills: [],
-      skillsLoadingIndicator: false,
-      skillsLoaded: false
-    })
-  ),
-  on(
-    scaffoldDetailsActions.scaffoldToolsReceived,
-    (state: ScaffoldDetailsState, { tools }): ScaffoldDetailsState => ({
-      ...state,
-      tools,
-      toolsLoadingIndicator: false,
-      toolsLoaded: true
-    })
-  ),
-  on(
-    scaffoldDetailsActions.scaffoldToolsLoadingFailed,
-    (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
-      ...state,
-      tools: [],
-      toolsLoadingIndicator: false,
-      toolsLoaded: false
-    })
-  ),
-  on(
-    scaffoldDetailsActions.scaffoldDetailsLoadingFailed,
-    (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
-      ...state,
-      details: undefined,
-      detailsLoadingIndicator: false,
-      detailsLoaded: false
-    })
-  ),
-  on(
-    scaffoldDetailsActions.navigatedToDetailsPage,
-    (): ScaffoldDetailsState => ({
-      ...initialState,
-      detailsLoadingIndicator: true
-    })
-  ),
-  on(
-    scaffoldDetailsActions.editButtonClicked,
-    (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
-      ...state,
-      editMode: true
-    })
-  ),
-  on(
-    scaffoldDetailsActions.saveButtonClicked,
-    (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
-      ...state,
-      isSubmitting: true
-    })
-  ),
+  on(scaffoldDetailsActions.scaffoldSkillsLoadingFailed, (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
+    ...state,
+    skills: [],
+    skillsLoadingIndicator: false,
+    skillsLoaded: false
+  })),
+  on(scaffoldDetailsActions.scaffoldToolsReceived, (state: ScaffoldDetailsState, { tools }): ScaffoldDetailsState => ({
+    ...state,
+    tools,
+    toolsLoadingIndicator: false,
+    toolsLoaded: true
+  })),
+  on(scaffoldDetailsActions.scaffoldToolsLoadingFailed, (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
+    ...state,
+    tools: [],
+    toolsLoadingIndicator: false,
+    toolsLoaded: false
+  })),
+  on(scaffoldDetailsActions.scaffoldDetailsLoadingFailed, (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
+    ...state,
+    details: undefined,
+    detailsLoadingIndicator: false,
+    detailsLoaded: false
+  })),
+  on(scaffoldDetailsActions.navigatedToDetailsPage, (): ScaffoldDetailsState => ({
+    ...initialState,
+    detailsLoadingIndicator: true
+  })),
+  on(scaffoldDetailsActions.editButtonClicked, (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
+    ...state,
+    editMode: true
+  })),
+  on(scaffoldDetailsActions.saveButtonClicked, (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
+    ...state,
+    isSubmitting: true
+  })),
   on(
     scaffoldDetailsActions.cancelEditConfirmClicked,
     scaffoldDetailsActions.cancelEditNotDirty,
@@ -111,11 +90,8 @@ export const scaffoldDetailsReducer = createReducer(
       isSubmitting: false
     })
   ),
-  on(
-    scaffoldDetailsActions.updateScaffoldFailed,
-    (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
-      ...state,
-      isSubmitting: false
-    })
-  )
+  on(scaffoldDetailsActions.updateScaffoldFailed, (state: ScaffoldDetailsState): ScaffoldDetailsState => ({
+    ...state,
+    isSubmitting: false
+  }))
 )

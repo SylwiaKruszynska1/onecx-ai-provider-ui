@@ -71,7 +71,14 @@ export const selectAgentDetailsCoreState = createSelector(
   agentDetailsSelectors.selectEditMode,
   agentDetailsSelectors.selectIsSubmitting,
   selectBackNavigationPossible,
-  (details: Agent | undefined, detailsLoadingIndicator, detailsLoaded, editMode, isSubmitting, backNavigationPossible) => ({
+  (
+    details: Agent | undefined,
+    detailsLoadingIndicator,
+    detailsLoaded,
+    editMode,
+    isSubmitting,
+    backNavigationPossible
+  ) => ({
     details,
     detailsLoadingIndicator,
     detailsLoaded,
@@ -88,14 +95,7 @@ export const selectAgentDetailsViewModel = createSelector(
   selectScaffoldsState,
   selectToolsState,
   selectGroupsState,
-  (
-    coreState,
-    providersState,
-    modelsState,
-    scaffoldsState,
-    toolsState,
-    groupsState
-  ): AgentDetailsViewModel => ({
+  (coreState, providersState, modelsState, scaffoldsState, toolsState, groupsState): AgentDetailsViewModel => ({
     ...coreState,
     ...providersState,
     ...modelsState,

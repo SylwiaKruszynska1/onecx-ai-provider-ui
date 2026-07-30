@@ -28,14 +28,11 @@ export const ProviderSearchReducer = createReducer(
     }
     return state
   }),
-  on(
-    ProviderSearchActions.resetButtonClicked,
-    (state: ProviderSearchState): ProviderSearchState => ({
-      ...state,
-      results: initialState.results,
-      criteria: {}
-    })
-  ),
+  on(ProviderSearchActions.resetButtonClicked, (state: ProviderSearchState): ProviderSearchState => ({
+    ...state,
+    results: initialState.results,
+    criteria: {}
+  })),
   on(
     ProviderSearchActions.searchButtonClicked,
     (state: ProviderSearchState, { searchCriteria }): ProviderSearchState => ({
@@ -51,13 +48,10 @@ export const ProviderSearchReducer = createReducer(
       results
     })
   ),
-  on(
-    ProviderSearchActions.providerSearchResultsLoadingFailed,
-    (state: ProviderSearchState): ProviderSearchState => ({
-      ...state,
-      results: []
-    })
-  ),
+  on(ProviderSearchActions.providerSearchResultsLoadingFailed, (state: ProviderSearchState): ProviderSearchState => ({
+    ...state,
+    results: []
+  })),
   on(
     ProviderSearchActions.chartVisibilityRehydrated,
     (state: ProviderSearchState, { visible }): ProviderSearchState => ({
@@ -65,20 +59,14 @@ export const ProviderSearchReducer = createReducer(
       chartVisible: visible
     })
   ),
-  on(
-    ProviderSearchActions.chartVisibilityToggled,
-    (state: ProviderSearchState): ProviderSearchState => ({
-      ...state,
-      chartVisible: !state.chartVisible
-    })
-  ),
-  on(
-    ProviderSearchActions.viewModeChanged,
-    (state: ProviderSearchState, { viewMode }): ProviderSearchState => ({
-      ...state,
-      viewMode: viewMode
-    })
-  ),
+  on(ProviderSearchActions.chartVisibilityToggled, (state: ProviderSearchState): ProviderSearchState => ({
+    ...state,
+    chartVisible: !state.chartVisible
+  })),
+  on(ProviderSearchActions.viewModeChanged, (state: ProviderSearchState, { viewMode }): ProviderSearchState => ({
+    ...state,
+    viewMode: viewMode
+  })),
   on(
     ProviderSearchActions.displayedColumnsChanged,
     (state: ProviderSearchState, { displayedColumns }): ProviderSearchState => ({

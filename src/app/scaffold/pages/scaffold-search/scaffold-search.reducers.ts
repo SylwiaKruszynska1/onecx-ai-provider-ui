@@ -32,15 +32,12 @@ export const scaffoldSearchReducer = createReducer(
     }
     return state
   }),
-  on(
-    scaffoldSearchActions.resetButtonClicked,
-    (state: ScaffoldSearchState): ScaffoldSearchState => ({
-      ...state,
-      results: initialState.results,
-      criteria: {},
-      searchExecuted: false
-    })
-  ),
+  on(scaffoldSearchActions.resetButtonClicked, (state: ScaffoldSearchState): ScaffoldSearchState => ({
+    ...state,
+    results: initialState.results,
+    criteria: {},
+    searchExecuted: false
+  })),
   on(
     scaffoldSearchActions.searchButtonClicked,
     (state: ScaffoldSearchState, { searchCriteria }): ScaffoldSearchState => ({
@@ -58,21 +55,15 @@ export const scaffoldSearchReducer = createReducer(
       searchExecuted: true
     })
   ),
-  on(
-    scaffoldSearchActions.scaffoldSearchResultsLoadingFailed,
-    (state: ScaffoldSearchState): ScaffoldSearchState => ({
-      ...state,
-      results: [],
-      searchLoadingIndicator: false
-    })
-  ),
-  on(
-    scaffoldSearchActions.chartVisibilityToggled,
-    (state: ScaffoldSearchState): ScaffoldSearchState => ({
-      ...state,
-      chartVisible: !state.chartVisible
-    })
-  ),
+  on(scaffoldSearchActions.scaffoldSearchResultsLoadingFailed, (state: ScaffoldSearchState): ScaffoldSearchState => ({
+    ...state,
+    results: [],
+    searchLoadingIndicator: false
+  })),
+  on(scaffoldSearchActions.chartVisibilityToggled, (state: ScaffoldSearchState): ScaffoldSearchState => ({
+    ...state,
+    chartVisible: !state.chartVisible
+  })),
   on(
     scaffoldSearchActions.resultComponentStateChanged,
     (state: ScaffoldSearchState, resultComponentState): ScaffoldSearchState => ({
@@ -94,18 +85,12 @@ export const scaffoldSearchReducer = createReducer(
       diagramComponentState
     })
   ),
-  on(
-    scaffoldSearchActions.scaffoldSkillsReceived,
-    (state: ScaffoldSearchState, { skills }): ScaffoldSearchState => ({
-      ...state,
-      skills
-    })
-  ),
-  on(
-    scaffoldSearchActions.scaffoldSkillsLoadingFailed,
-    (state: ScaffoldSearchState): ScaffoldSearchState => ({
-      ...state,
-      skills: []
-    })
-  )
+  on(scaffoldSearchActions.scaffoldSkillsReceived, (state: ScaffoldSearchState, { skills }): ScaffoldSearchState => ({
+    ...state,
+    skills
+  })),
+  on(scaffoldSearchActions.scaffoldSkillsLoadingFailed, (state: ScaffoldSearchState): ScaffoldSearchState => ({
+    ...state,
+    skills: []
+  }))
 )

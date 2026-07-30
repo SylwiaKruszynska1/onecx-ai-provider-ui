@@ -22,20 +22,14 @@ export const ProviderDetailsReducer = createReducer(
       details
     })
   ),
-  on(
-    ProviderDetailsActions.providerDetailsLoadingFailed,
-    (state: ProviderDetailsState): ProviderDetailsState => ({
-      ...state,
-      details: undefined
-    })
-  ),
-  on(
-    ProviderDetailsActions.providerUpdateRequested,
-    (state: ProviderDetailsState): ProviderDetailsState => ({
-      ...state,
-      isSubmitting: true
-    })
-  ),
+  on(ProviderDetailsActions.providerDetailsLoadingFailed, (state: ProviderDetailsState): ProviderDetailsState => ({
+    ...state,
+    details: undefined
+  })),
+  on(ProviderDetailsActions.providerUpdateRequested, (state: ProviderDetailsState): ProviderDetailsState => ({
+    ...state,
+    isSubmitting: true
+  })),
   on(
     ProviderDetailsActions.providerUpdateSucceeded,
     (state: ProviderDetailsState, { details }): ProviderDetailsState => ({
@@ -45,20 +39,14 @@ export const ProviderDetailsReducer = createReducer(
       isSubmitting: false
     })
   ),
-  on(
-    ProviderDetailsActions.providerUpdateFailed,
-    (state: ProviderDetailsState): ProviderDetailsState => ({
-      ...state,
-      isSubmitting: false
-    })
-  ),
-  on(
-    ProviderDetailsActions.providerModelsLoadRequested,
-    (state: ProviderDetailsState): ProviderDetailsState => ({
-      ...state,
-      modelsLoadingIndicator: true
-    })
-  ),
+  on(ProviderDetailsActions.providerUpdateFailed, (state: ProviderDetailsState): ProviderDetailsState => ({
+    ...state,
+    isSubmitting: false
+  })),
+  on(ProviderDetailsActions.providerModelsLoadRequested, (state: ProviderDetailsState): ProviderDetailsState => ({
+    ...state,
+    modelsLoadingIndicator: true
+  })),
   on(
     ProviderDetailsActions.providerModelsReceived,
     (state: ProviderDetailsState, { models }): ProviderDetailsState => ({
@@ -68,15 +56,12 @@ export const ProviderDetailsReducer = createReducer(
       modelsLoaded: true
     })
   ),
-  on(
-    ProviderDetailsActions.providerModelsLoadingFailed,
-    (state: ProviderDetailsState): ProviderDetailsState => ({
-      ...state,
-      models: [],
-      modelsLoadingIndicator: false,
-      modelsLoaded: false
-    })
-  ),
+  on(ProviderDetailsActions.providerModelsLoadingFailed, (state: ProviderDetailsState): ProviderDetailsState => ({
+    ...state,
+    models: [],
+    modelsLoadingIndicator: false,
+    modelsLoaded: false
+  })),
   on(
     ProviderDetailsActions.providerModelCreateClicked,
     ProviderDetailsActions.providerModelDeleteClicked,
@@ -95,24 +80,18 @@ export const ProviderDetailsReducer = createReducer(
       modelMutationInProgress: false
     })
   ),
-  on(
-    ProviderDetailsActions.navigatedToDetailsPage,
-    (): ProviderDetailsState => ({
-      ...initialState
-    })
-  ),
+  on(ProviderDetailsActions.navigatedToDetailsPage, (): ProviderDetailsState => ({
+    ...initialState
+  })),
   on(
     ProviderDetailsActions.providerDetailsEditModeSet,
-    (state: ProviderDetailsState, {editMode}): ProviderDetailsState => ({
+    (state: ProviderDetailsState, { editMode }): ProviderDetailsState => ({
       ...state,
       editMode
     })
   ),
-  on(
-    ProviderDetailsActions.apiKeyVisibilityToggled,
-    (state: ProviderDetailsState): ProviderDetailsState => ({
-      ...state,
-      isApiKeyHidden: !state.isApiKeyHidden
-    })
-  )
+  on(ProviderDetailsActions.apiKeyVisibilityToggled, (state: ProviderDetailsState): ProviderDetailsState => ({
+    ...state,
+    isApiKeyHidden: !state.isApiKeyHidden
+  }))
 )

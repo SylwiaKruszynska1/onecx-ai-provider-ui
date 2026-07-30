@@ -1,10 +1,25 @@
-// @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
-globalThis.ngJest = {
-  testEnvironmentOptions: {
-    errorOnUnknownElements: true,
-    errorOnUnknownProperties: true
-  }
-}
+import { jest } from '@jest/globals'
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'
+
+setupZoneTestEnv({
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true
+})
+
+/* Mock matchMedia for tests */
+Object.defineProperty(globalThis, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn()
+  }))
+})
 
 // Suppress CSS stylesheet parsing errors
 const originalConsoleError = console.error
@@ -17,10 +32,11 @@ console.error = function (...data) {
 
 if (typeof globalThis.ResizeObserver === 'undefined') {
   globalThis.ResizeObserver = class ResizeObserver {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     observe() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     unobserve() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     disconnect() {}
   }
 }
-
-import 'jest-preset-angular/setup-jest'
