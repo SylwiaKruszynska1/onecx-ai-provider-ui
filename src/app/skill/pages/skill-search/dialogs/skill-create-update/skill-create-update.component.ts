@@ -12,9 +12,9 @@ import { SkillCreateUpdateViewModel } from './skill-create-update.viewmodel'
 
 @Component({
   selector: 'app-skill-create-update',
+  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule, InputTextModule],
   templateUrl: './skill-create-update.component.html',
-  styleUrls: ['./skill-create-update.component.scss'],
-  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule, InputTextModule]
+  styleUrls: ['./skill-create-update.component.scss']
 })
 export class SkillCreateUpdateComponent
   implements

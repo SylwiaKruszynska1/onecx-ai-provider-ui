@@ -1,9 +1,12 @@
 import { jest } from '@jest/globals'
-import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'
-
-setupZoneTestEnv({
-  errorOnUnknownElements: true,
-  errorOnUnknownProperties: true
+Object.defineProperty(HTMLElement.prototype, 'ariaLabel', {
+  get() {
+    return this.getAttribute('aria-label')
+  },
+  set(value) {
+    this.setAttribute('aria-label', value)
+  },
+  configurable: true
 })
 
 /* Mock matchMedia for tests */
@@ -21,13 +24,30 @@ Object.defineProperty(globalThis, 'matchMedia', {
   }))
 })
 
-// Suppress CSS stylesheet parsing errors
+// @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
+globalThis.ngJest = {
+  testEnvironmentOptions: {
+    errorOnUnknownElements: true,
+    errorOnUnknownProperties: true
+  }
+}
+
+// setup-jest.ts
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'
+
+setupZoneTestEnv()
+
+/* fixes a bug with jsdom: ignoring this error message in log */
 const originalConsoleError = console.error
-console.error = function (...data) {
-  if (typeof data[0]?.toString === 'function' && data[0].toString().includes('Error: Could not parse CSS stylesheet')) {
+type Err = { message: string }
+console.error = (message, ...optionalParams) => {
+  try {
+    if (message?.includes('Error: Could not parse CSS stylesheet')) return
+  } catch (err) {
+    ;(err as Err).message = `Error in console.error`
     return
   }
-  originalConsoleError(...data)
+  originalConsoleError(message, ...optionalParams)
 }
 
 if (typeof globalThis.ResizeObserver === 'undefined') {

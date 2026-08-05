@@ -1,31 +1,32 @@
-import { Component, OnInit } from '@angular/core'
-import { Store } from '@ngrx/store'
-import { Action, AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
-import { UserService } from '@onecx/angular-integration-interface'
-import { map, Observable } from 'rxjs'
-import { PrimeIcons } from 'primeng/api'
-import { selectProviderDetailsViewModel } from './provider-details.selectors'
-import { ProviderDetailsViewModel } from './provider-details.viewmodel'
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
-import { ProviderSearchActions } from '../provider-search/provider-search.actions'
-import { ProviderDetailsActions } from './provider-details.actions'
-import { TranslateModule } from '@ngx-translate/core'
 import { CommonModule } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
-import { PortalPageComponent } from '@onecx/angular-utils'
+import { Store } from '@ngrx/store'
+import { TranslateModule } from '@ngx-translate/core'
+import { map, Observable } from 'rxjs'
+
+import { PrimeIcons } from 'primeng/api'
 import { InputTextModule } from 'primeng/inputtext'
 import { PasswordModule } from 'primeng/password'
 import { TooltipModule } from 'primeng/tooltip'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { SelectModule } from 'primeng/select'
-import { TabViewModule } from 'primeng/tabview'
+import { TabsModule } from 'primeng/tabs'
 import { ButtonModule } from 'primeng/button'
+
+import { Action, AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
+import { PortalPageComponent } from '@onecx/angular-utils'
+
 import { AuthMode, Model, Provider, ProviderType } from 'src/app/shared/generated'
+import { selectProviderDetailsViewModel } from './provider-details.selectors'
+import { ProviderDetailsViewModel } from './provider-details.viewmodel'
+import { ProviderDetailsActions } from './provider-details.actions'
+import { ProviderSearchActions } from '../provider-search/provider-search.actions'
 
 @Component({
   selector: 'app-provider-details',
-  templateUrl: './provider-details.component.html',
-  styleUrls: ['./provider-details.component.scss'],
   imports: [
     AngularAcceleratorModule,
     CommonModule,
@@ -39,9 +40,11 @@ import { AuthMode, Model, Provider, ProviderType } from 'src/app/shared/generate
     PortalPageComponent,
     TooltipModule,
     SelectModule,
-    TabViewModule,
+    TabsModule,
     ButtonModule
-  ]
+  ],
+  templateUrl: './provider-details.component.html',
+  styleUrls: ['./provider-details.component.scss']
 })
 export class ProviderDetailsComponent implements OnInit {
   viewModel$!: Observable<ProviderDetailsViewModel>

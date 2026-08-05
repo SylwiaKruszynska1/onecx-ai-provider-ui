@@ -4,32 +4,33 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { ActivatedRoute } from '@angular/router'
-import { RowListGridData } from '@onecx/angular-accelerator'
-
 import { provideHttpClient } from '@angular/common/http'
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+
+import { DialogService } from 'primeng/dynamicdialog'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
+import { TooltipModule } from 'primeng/tooltip'
+
+import { UserService } from '@onecx/angular-integration-interface'
+import { provideUserServiceMock, UserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import {
   AngularAcceleratorModule,
   BreadcrumbService,
   ColumnType,
-  providePortalDialogService
+  providePortalDialogService,
+  RowListGridData
 } from '@onecx/angular-accelerator'
-import { UserService } from '@onecx/angular-integration-interface'
-import { provideUserServiceMock, UserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import {
   HAS_PERMISSION_CHECKER,
   PermissionService,
   PortalPageComponent,
   TranslationConnectionService
 } from '@onecx/angular-utils'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { DialogService } from 'primeng/dynamicdialog'
-import { FloatLabelModule } from 'primeng/floatlabel'
-import { InputTextModule } from 'primeng/inputtext'
-import { TooltipModule } from 'primeng/tooltip'
 
 import { scaffoldSearchActions } from './scaffold-search.actions'
 import { scaffoldSearchColumns } from './scaffold-search.columns'
@@ -110,8 +111,8 @@ describe('ScaffoldSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ScaffoldSearchComponent],
       imports: [
+        ScaffoldSearchComponent,
         AngularAcceleratorModule,
         PortalPageComponent,
         LetDirective,
@@ -272,13 +273,13 @@ describe('ScaffoldSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
-    jest.spyOn(breadcrumbService, 'setItems')
+    const breadcrumbService = component['breadcrumbService'] as BreadcrumbService
+    const spy = jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
     fixture.detectChanges()
 
-    expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledTimes(1)
     const searchHeader = await scaffoldSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
     const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
@@ -655,7 +656,9 @@ describe('ScaffoldSearchComponent', () => {
 
     component.headerActions$.subscribe((actions) => {
       const createAction = actions.find((a) => a.labelKey === 'SCAFFOLD_CREATE_UPDATE.ACTION.CREATE')
-      createAction!.actionCallback!()
+      const callback = createAction?.actionCallback
+      callback?.()
+
       expect(createSpy).toHaveBeenCalled()
       done()
     })

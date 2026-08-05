@@ -1,25 +1,23 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of } from 'rxjs'
-
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { of } from 'rxjs'
+
 import { PrimeIcons } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { ButtonModule } from 'primeng/button'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { SelectModule } from 'primeng/select'
 import { TabViewModule } from 'primeng/tabview'
-import { AgentFilterKeyEnum, AgentGroupService, AgentStatus } from 'src/app/shared/generated'
 
 import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
@@ -31,6 +29,7 @@ import {
   TranslationConnectionService
 } from '@onecx/angular-utils'
 
+import { AgentFilterKeyEnum, AgentGroupService, AgentStatus } from 'src/app/shared/generated'
 import { agentDetailsActions } from './agent-details.actions'
 import { AgentDetailsComponent } from './agent-details.component'
 import { AgentDetailsHarness } from './agent-details.harness'
@@ -83,7 +82,6 @@ describe('AgentDetailsComponent', () => {
   let component: AgentDetailsComponent
   let fixture: ComponentFixture<AgentDetailsComponent>
   let store: MockStore<Store>
-  let breadcrumbService: BreadcrumbService
   let agentDetails: AgentDetailsHarness
   const agentGroupService = {
     findAgentGroupByCriteria: jest.fn(),
@@ -121,8 +119,8 @@ describe('AgentDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AgentDetailsComponent],
       imports: [
+        AgentDetailsComponent,
         AngularAcceleratorModule,
         PortalPageComponent,
         LetDirective,
@@ -137,7 +135,6 @@ describe('AgentDetailsComponent', () => {
           en: require('./src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -177,7 +174,6 @@ describe('AgentDetailsComponent', () => {
 
     fixture = TestBed.createComponent(AgentDetailsComponent)
     component = fixture.componentInstance
-    breadcrumbService = TestBed.inject(BreadcrumbService)
     fixture.detectChanges()
     agentDetails = await TestbedHarnessEnvironment.harnessForFixture(fixture, AgentDetailsHarness)
   })
@@ -187,12 +183,13 @@ describe('AgentDetailsComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    jest.spyOn(breadcrumbService, 'setItems')
+    const breadcrumbService = component['breadcrumbService'] as BreadcrumbService
+    const spy = jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
     fixture.detectChanges()
 
-    expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledTimes(1)
     const pageHeader = await agentDetails.getHeader()
     const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Details')
     expect(await searchBreadcrumbItem?.getText()).toEqual('Details')

@@ -1,19 +1,21 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputTextModule } from 'primeng/inputtext'
 import { SelectModule } from 'primeng/select'
 import { map } from 'rxjs'
+
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
+
 import { Agent, AgentStatus } from 'src/app/shared/generated'
 import { AgentCreateUpdateViewModel } from './agent-create-update.viewmodel'
 
 @Component({
   selector: 'app-agent-create-update',
+  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule, InputTextModule, SelectModule],
   templateUrl: './agent-create-update.component.html',
-  styleUrls: ['./agent-create-update.component.scss'],
-  imports: [TranslateModule, ReactiveFormsModule, FloatLabelModule, InputTextModule, SelectModule]
+  styleUrls: ['./agent-create-update.component.scss']
 })
 export class AgentCreateUpdateComponent
   implements

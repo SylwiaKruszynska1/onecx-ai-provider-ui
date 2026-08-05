@@ -1,21 +1,26 @@
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
+import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { ActivatedRoute } from '@angular/router'
-import { RowListGridData } from '@onecx/angular-accelerator'
-
-import { provideHttpClient } from '@angular/common/http'
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { DialogService } from 'primeng/dynamicdialog'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
+import { TooltipModule } from 'primeng/tooltip'
+
 import {
   AngularAcceleratorModule,
   BreadcrumbService,
   ColumnType,
-  providePortalDialogService
+  providePortalDialogService,
+  RowListGridData
 } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
 import { provideUserServiceMock, UserServiceMock } from '@onecx/angular-integration-interface/mocks'
@@ -25,11 +30,6 @@ import {
   PortalPageComponent,
   TranslationConnectionService
 } from '@onecx/angular-utils'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { DialogService } from 'primeng/dynamicdialog'
-import { FloatLabelModule } from 'primeng/floatlabel'
-import { InputTextModule } from 'primeng/inputtext'
-import { TooltipModule } from 'primeng/tooltip'
 
 import { agentSearchActions } from './agent-search.actions'
 import { agentSearchColumns } from './agent-search.columns'
@@ -110,8 +110,8 @@ describe('AgentSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AgentSearchComponent],
       imports: [
+        AgentSearchComponent,
         AngularAcceleratorModule,
         PortalPageComponent,
         LetDirective,
@@ -272,13 +272,13 @@ describe('AgentSearchComponent', () => {
   })
 
   it('should display correct breadcrumbs', async () => {
-    const breadcrumbService = TestBed.inject(BreadcrumbService)
-    jest.spyOn(breadcrumbService, 'setItems')
+    const breadcrumbService = component['breadcrumbService'] as BreadcrumbService
+    const spy = jest.spyOn(breadcrumbService, 'setItems')
 
     component.ngOnInit()
     fixture.detectChanges()
 
-    expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledTimes(1)
     const searchHeader = await agentSearch.getHeader()
     const pageHeader = await searchHeader.getPageHeader()
     const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Search')
@@ -623,8 +623,9 @@ describe('AgentSearchComponent', () => {
 
     component.headerActions$.subscribe((actions) => {
       const createAction = actions.find((a) => a.labelKey === 'AGENT_CREATE_UPDATE.ACTION.CREATE')
-      expect(createAction).toBeTruthy()
-      createAction!.actionCallback!()
+      const callback = createAction?.actionCallback
+      callback?.()
+
       expect(component.create).toHaveBeenCalled()
       expect(store.dispatch).toHaveBeenCalledWith(agentSearchActions.createAgentButtonClicked())
       done()

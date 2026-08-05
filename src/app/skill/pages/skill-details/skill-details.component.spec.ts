@@ -1,7 +1,6 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
@@ -9,12 +8,11 @@ import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
-import { of } from 'rxjs'
-
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PrimeIcons } from 'primeng/api'
+import { of } from 'rxjs'
 
 import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
@@ -96,7 +94,6 @@ describe('SkillDetailsComponent', () => {
           en: require('./src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

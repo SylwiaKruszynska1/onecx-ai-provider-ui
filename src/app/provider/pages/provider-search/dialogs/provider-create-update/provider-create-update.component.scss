@@ -1,1 +1,3 @@
-// empty file, use for dialogs styles
+@use '/src/app/_provider-mixins.scss' as *;
+
+@include ocx-required-label;

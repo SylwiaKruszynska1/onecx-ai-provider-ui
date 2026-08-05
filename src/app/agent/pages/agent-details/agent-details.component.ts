@@ -1,12 +1,20 @@
-import { DatePipe } from '@angular/common'
+import { AsyncPipe, DatePipe } from '@angular/common'
 import { Component, OnInit, inject } from '@angular/core'
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
-import { TranslatePipe } from '@ngx-translate/core'
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
+import { ButtonModule } from 'primeng/button'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { AutoCompleteModule } from 'primeng/autocomplete'
+import { MultiSelectModule } from 'primeng/multiselect'
+import { TabsModule } from 'primeng/tabs'
+import { SelectModule } from 'primeng/select'
 import { Observable, map } from 'rxjs'
 
-import { Action, BreadcrumbService, ObjectDetailItem } from '@onecx/angular-accelerator'
+import { Action, AngularAcceleratorModule, BreadcrumbService, ObjectDetailItem } from '@onecx/angular-accelerator'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import {
   Agent,
@@ -25,10 +33,22 @@ import { AgentDetailsViewModel } from './agent-details.viewmodel'
 
 @Component({
   selector: 'app-agent-details',
+  imports: [
+    TranslateModule,
+    ButtonModule,
+    FloatLabelModule,
+    AutoCompleteModule,
+    ReactiveFormsModule,
+    MultiSelectModule,
+    TabsModule,
+    SelectModule,
+    AsyncPipe,
+    AngularAcceleratorModule,
+    PortalPageComponent,
+    LetDirective
+  ],
   templateUrl: './agent-details.component.html',
-  styleUrls: ['./agent-details.component.scss'],
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false
+  styleUrls: ['./agent-details.component.scss']
 })
 export class AgentDetailsComponent implements OnInit {
   private readonly store = inject(Store)

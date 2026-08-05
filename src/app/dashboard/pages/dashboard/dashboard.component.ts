@@ -1,6 +1,13 @@
 import { Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
+import { TranslateModule } from '@ngx-translate/core'
+import { CardModule } from 'primeng/card'
 import { Observable } from 'rxjs'
+
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { selectDashboardViewModel } from './dashboard.selectors'
 import { DashboardViewModel } from './dashboard.viewmodel'
@@ -15,10 +22,9 @@ interface DashboardPanel {
 
 @Component({
   selector: 'app-dashboard',
+  imports: [TranslateModule, CardModule, PortalPageComponent, RouterModule, AngularAcceleratorModule, LetDirective],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
   viewModel$: Observable<DashboardViewModel>

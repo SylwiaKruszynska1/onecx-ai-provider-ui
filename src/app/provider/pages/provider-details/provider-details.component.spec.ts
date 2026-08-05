@@ -1,26 +1,28 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { ReactiveFormsModule } from '@angular/forms'
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { firstValueFrom } from 'rxjs'
+
 import { AlwaysGrantPermissionChecker, HAS_PERMISSION_CHECKER, providePermissionService } from '@onecx/angular-utils'
 import { AngularAcceleratorModule, BreadcrumbService } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
-import { TranslateTestingModule } from 'ngx-translate-testing'
+import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
+
 import { ProviderDetailsComponent } from './provider-details.component'
 import { ProviderDetailsHarness } from './provider-details.harness'
 import { initialState } from './provider-details.reducers'
 import { selectProviderDetailsViewModel } from './provider-details.selectors'
 import { ProviderDetailsViewModel } from './provider-details.viewmodel'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { ReactiveFormsModule } from '@angular/forms'
-import { provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { ProviderSearchActions } from '../provider-search/provider-search.actions'
 import { ProviderDetailsActions } from './provider-details.actions'
-import { firstValueFrom } from 'rxjs'
 
 describe('ProviderDetailsComponent', () => {
   const origAddEventListener = window.addEventListener
@@ -85,7 +87,6 @@ describe('ProviderDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
       imports: [
         AngularAcceleratorModule,
         LetDirective,
@@ -144,7 +145,9 @@ describe('ProviderDetailsComponent', () => {
       expect(breadcrumbService.setItems).toHaveBeenCalledTimes(1)
       const pageHeader = await ProviderDetails.getHeader()
       const searchBreadcrumbItem = await pageHeader.getBreadcrumbItem('Details')
-      expect(await searchBreadcrumbItem!.getText()).toEqual('Details')
+
+      const searchBreadcrumbItemText = searchBreadcrumbItem ? await searchBreadcrumbItem.getText() : ''
+      expect(searchBreadcrumbItemText).toEqual('Details')
     })
 
     it('should display translated headers', async () => {
@@ -217,7 +220,7 @@ describe('ProviderDetailsComponent', () => {
       const actions = await firstValueFrom(component.headerActions$)
       const deleteAction = actions.find((a) => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
       expect(deleteAction).toBeDefined()
-      deleteAction!.actionCallback!()
+      deleteAction?.actionCallback?.()
       expect(deleteSpy).toHaveBeenCalledWith('')
     })
 
@@ -251,7 +254,7 @@ describe('ProviderDetailsComponent', () => {
       const deleteAction = actions.find((a) => a.labelKey === 'PROVIDER_DETAILS.GENERAL.DELETE')
 
       expect(deleteAction).toBeDefined()
-      deleteAction!.actionCallback!()
+      deleteAction?.actionCallback?.()
 
       expect(deleteSpy).toHaveBeenCalledWith('1')
     })
@@ -472,7 +475,8 @@ describe('ProviderDetailsComponent', () => {
 
     it('should disable apiKey asynchronously when permission promise resolves to false', fakeAsync(() => {
       jest.spyOn(component['user'], 'hasPermission').mockReturnValue(Promise.resolve(false))
-      const disableSpy = jest.spyOn(component.formGroup.get('apiKey')!, 'disable')
+      const apiKeyControl = component.formGroup.get('apiKey')
+      const disableSpy = apiKeyControl ? jest.spyOn(apiKeyControl, 'disable') : jest.fn()
 
       component.toggleEditMode(true)
       tick()
@@ -483,7 +487,8 @@ describe('ProviderDetailsComponent', () => {
 
     it('should keep apiKey enabled asynchronously when permission promise resolves to true', fakeAsync(() => {
       jest.spyOn(component['user'], 'hasPermission').mockReturnValue(Promise.resolve(true))
-      const disableSpy = jest.spyOn(component.formGroup.get('apiKey')!, 'disable')
+      const apiKeyControl = component.formGroup.get('apiKey')
+      const disableSpy = apiKeyControl ? jest.spyOn(apiKeyControl, 'disable') : jest.fn()
 
       component.toggleEditMode(true)
       tick()
@@ -506,9 +511,10 @@ describe('ProviderDetailsComponent', () => {
     it('should safely call disable on apiKey control if it exists', () => {
       const userMock = { hasPermission: () => false }
       const component = new ProviderDetailsComponent(store, breadcrumbService, userMock as any)
-      jest.spyOn(component.formGroup.get('apiKey')!, 'disable')
+      const apiKeyControl = component.formGroup.get('apiKey')
+      const disableSpy = apiKeyControl ? jest.spyOn(apiKeyControl, 'disable') : jest.fn()
       component.toggleEditMode(true)
-      expect(component.formGroup.get('apiKey')?.disable).toHaveBeenCalled()
+      expect(disableSpy).toHaveBeenCalled()
     })
 
     it('should not throw if apiKey control does not exist', () => {

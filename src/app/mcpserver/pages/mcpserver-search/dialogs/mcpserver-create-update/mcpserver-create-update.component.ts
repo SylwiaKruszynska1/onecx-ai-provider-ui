@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
+import { InputTextModule } from 'primeng/inputtext'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { map } from 'rxjs'
 
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
@@ -9,10 +12,9 @@ import { McpserverCreateUpdateViewModel } from './mcpserver-create-update.viewmo
 
 @Component({
   selector: 'app-mcpserver-create-update',
+  imports: [InputTextModule, TranslateModule, FloatLabelModule, ReactiveFormsModule],
   templateUrl: './mcpserver-create-update.component.html',
-  styleUrls: ['./mcpserver-create-update.component.scss'],
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
-  standalone: false
+  styleUrls: ['./mcpserver-create-update.component.scss']
 })
 export class McpserverCreateUpdateComponent
   implements

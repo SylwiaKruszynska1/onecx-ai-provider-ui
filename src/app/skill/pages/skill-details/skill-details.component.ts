@@ -4,14 +4,15 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Store } from '@ngrx/store'
 import { LetDirective } from '@ngrx/component'
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core'
-import { Action, AngularAcceleratorModule, BreadcrumbService, ObjectDetailItem } from '@onecx/angular-accelerator'
-import { PortalPageComponent } from '@onecx/angular-utils'
 import { PrimeIcons } from 'primeng/api'
 import { FloatLabelModule } from 'primeng/floatlabel'
-import { InputTextarea } from 'primeng/inputtextarea'
 import { InputTextModule } from 'primeng/inputtext'
+import { Textarea } from 'primeng/textarea'
 import { TooltipModule } from 'primeng/tooltip'
 import { Observable, map } from 'rxjs'
+
+import { Action, AngularAcceleratorModule, BreadcrumbService, ObjectDetailItem } from '@onecx/angular-accelerator'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { Skill } from 'src/app/shared/generated'
 import { skillDetailsActions } from './skill-details.actions'
@@ -20,8 +21,6 @@ import { SkillDetailsViewModel } from './skill-details.viewmodel'
 
 @Component({
   selector: 'app-skill-details',
-  templateUrl: './skill-details.component.html',
-  styleUrls: ['./skill-details.component.scss'],
   imports: [
     AngularAcceleratorModule,
     CommonModule,
@@ -31,10 +30,12 @@ import { SkillDetailsViewModel } from './skill-details.viewmodel'
     ReactiveFormsModule,
     LetDirective,
     InputTextModule,
-    InputTextarea,
+    Textarea,
     PortalPageComponent,
     TooltipModule
-  ]
+  ],
+  templateUrl: './skill-details.component.html',
+  styleUrls: ['./skill-details.component.scss']
 })
 export class SkillDetailsComponent implements OnInit {
   private readonly store = inject(Store)
