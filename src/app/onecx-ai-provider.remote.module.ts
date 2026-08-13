@@ -16,7 +16,6 @@ import { createTranslateLoader, provideThemeConfig, provideTranslationPathFromMe
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 
 import { APIConfiguration } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 import { apiConfigProvider } from 'src/app/shared/utils/apiConfigProvider.utils'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
@@ -42,7 +41,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
         deps: [HttpClient, AppStateService]
       }
     }),
-    SharedModule,
     BrowserModule,
     BrowserAnimationsModule,
     AngularAuthModule,

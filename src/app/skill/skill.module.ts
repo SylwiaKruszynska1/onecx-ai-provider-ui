@@ -14,7 +14,6 @@ import { TooltipModule } from 'primeng/tooltip'
 import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { providePermissionService } from '@onecx/angular-utils'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { SkillDetailsComponent } from './pages/skill-details/skill-details.component'
 import { SkillDetailsEffects } from './pages/skill-details/skill-details.effects'
 import { SkillCreateUpdateComponent } from './pages/skill-search/dialogs/skill-create-update/skill-create-update.component'
@@ -30,7 +29,6 @@ import { routes } from './skill.routes'
     SkillCreateUpdateComponent,
     SkillDetailsComponent,
     SkillSearchComponent,
-    SharedModule,
     LetDirective,
     AngularAcceleratorModule,
     RouterModule.forChild(routes),

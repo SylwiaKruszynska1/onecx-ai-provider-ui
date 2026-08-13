@@ -11,7 +11,6 @@ import { DatePickerModule } from 'primeng/datepicker'
 import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { providePermissionService } from '@onecx/angular-utils'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { ProviderFeature } from './provider.reducers'
 import { routes } from './provider.routes'
 import { ProviderDetailsComponent } from './pages/provider-details/provider-details.component'
@@ -24,7 +23,6 @@ import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/p
   providers: [providePortalDialogService(), ...providePermissionService()],
   imports: [
     CommonModule,
-    SharedModule,
     LetDirective,
     AngularAcceleratorModule,
     RouterModule.forChild(routes),

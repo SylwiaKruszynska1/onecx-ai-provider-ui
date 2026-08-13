@@ -20,7 +20,6 @@ import { TooltipModule } from 'primeng/tooltip'
 import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { PermissionService, PortalPageComponent } from '@onecx/angular-utils'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { AgentDetailsComponent } from './pages/agent-details/agent-details.component'
 import { AgentDetailsEffects } from './pages/agent-details/agent-details.effects'
 import { AgentSearchComponent } from './pages/agent-search/agent-search.component'
@@ -42,7 +41,6 @@ import { routes } from './agent.routes'
     ButtonModule,
     InputTextModule,
     CommonModule,
-    SharedModule,
     LetDirective,
     AngularAcceleratorModule,
     PortalPageComponent,
