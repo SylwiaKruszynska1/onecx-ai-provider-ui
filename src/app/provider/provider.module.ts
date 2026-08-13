@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
@@ -22,7 +21,6 @@ import { ProviderCreateUpdateComponent } from './pages/provider-search/dialogs/p
 @NgModule({
   providers: [providePortalDialogService(), ...providePermissionService()],
   imports: [
-    CommonModule,
     LetDirective,
     AngularAcceleratorModule,
     RouterModule.forChild(routes),

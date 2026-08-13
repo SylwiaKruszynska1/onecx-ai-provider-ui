@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
@@ -28,8 +28,8 @@ import { ProviderSearchActions } from '../provider-search/provider-search.action
 @Component({
   selector: 'app-provider-details',
   imports: [
+    AsyncPipe,
     AngularAcceleratorModule,
-    CommonModule,
     TranslateModule,
     FormsModule,
     FloatLabelModule,

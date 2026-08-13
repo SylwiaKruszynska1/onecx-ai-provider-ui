@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
@@ -28,11 +27,8 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { metaReducers, reducers } from './app.reducers'
 
-export const commonImports = [CommonModule]
-
 @NgModule({
   imports: [
-    ...commonImports,
     AngularAuthModule,
     AppComponent,
     BrowserModule,

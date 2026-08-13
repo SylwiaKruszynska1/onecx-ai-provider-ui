@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
@@ -21,8 +21,8 @@ import { MCPServerDetailsViewModel } from './mcpserver-details.viewmodel'
 @Component({
   selector: 'app-mcpserver-details',
   imports: [
+    AsyncPipe,
     AngularAcceleratorModule,
-    CommonModule,
     LetDirective,
     FloatLabelModule,
     InputTextModule,

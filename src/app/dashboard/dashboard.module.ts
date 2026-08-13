@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
@@ -23,7 +22,6 @@ import { routes } from './dashboard.routes'
   providers: [providePortalDialogService(), PermissionService],
   imports: [
     DashboardComponent,
-    CommonModule,
     LetDirective,
     AngularAcceleratorModule,
     PortalPageComponent,

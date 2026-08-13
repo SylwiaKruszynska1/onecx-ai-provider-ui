@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
@@ -29,7 +28,6 @@ import { MCPServerSearchEffects } from './pages/mcpserver-search/mcpserver-searc
     McpserverCreateUpdateComponent,
     FloatLabelModule,
     InputTextModule,
-    CommonModule,
     LetDirective,
     AngularAcceleratorModule,
     RouterModule.forChild(routes),

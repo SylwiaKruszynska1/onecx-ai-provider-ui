@@ -1,5 +1,5 @@
+import { AsyncPipe } from '@angular/common'
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
@@ -30,9 +30,9 @@ import { ProviderSearchViewModel } from './provider-search.viewmodel'
   templateUrl: './provider-search.component.html',
   styleUrls: ['./provider-search.component.scss'],
   imports: [
+    AsyncPipe,
     AngularAcceleratorModule,
     TranslateModule,
-    CommonModule,
     FormsModule,
     FloatLabelModule,
     ReactiveFormsModule,

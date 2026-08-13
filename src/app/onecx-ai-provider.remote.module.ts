@@ -19,7 +19,6 @@ import { APIConfiguration } from 'src/app/shared/generated'
 import { apiConfigProvider } from 'src/app/shared/utils/apiConfigProvider.utils'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
-import { commonImports } from './app.module'
 import { metaReducers, reducers } from './app.reducers'
 
 // Workaround for the following issue:
@@ -29,7 +28,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
 
 @NgModule({
   imports: [
-    ...commonImports,
     AngularAcceleratorModule,
     AppEntrypointComponent,
     RouterModule.forRoot(routes),

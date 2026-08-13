@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
@@ -36,8 +36,8 @@ import { MCPServerSearchViewModel } from './mcpserver-search.viewmodel'
   templateUrl: './mcpserver-search.component.html',
   styleUrls: ['./mcpserver-search.component.scss'],
   imports: [
+    AsyncPipe,
     AngularAcceleratorModule,
-    CommonModule,
     TranslateModule,
     FormsModule,
     FloatLabelModule,
