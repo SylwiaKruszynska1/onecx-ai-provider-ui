@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common'
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
@@ -27,8 +27,6 @@ import { ProviderSearchViewModel } from './provider-search.viewmodel'
 
 @Component({
   selector: 'app-provider-search',
-  templateUrl: './provider-search.component.html',
-  styleUrls: ['./provider-search.component.scss'],
   imports: [
     AsyncPipe,
     AngularAcceleratorModule,
@@ -39,7 +37,10 @@ import { ProviderSearchViewModel } from './provider-search.viewmodel'
     LetDirective,
     InputTextModule,
     PortalPageComponent
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './provider-search.component.html',
+  styleUrls: ['./provider-search.component.scss']
 })
 export class ProviderSearchComponent implements OnInit {
   viewModel$!: Observable<ProviderSearchViewModel>

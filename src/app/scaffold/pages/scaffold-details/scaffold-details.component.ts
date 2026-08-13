@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
@@ -33,6 +33,7 @@ type ScaffoldWithTools = Scaffold & { tools?: Tool[] }
     PortalPageComponent,
     LetDirective
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './scaffold-details.component.html',
   styleUrls: ['./scaffold-details.component.scss']
 })

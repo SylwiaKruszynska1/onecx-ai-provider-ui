@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
@@ -31,6 +31,7 @@ import { MCPServerDetailsViewModel } from './mcpserver-details.viewmodel'
     ReactiveFormsModule,
     PortalPageComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mcpserver-details.component.html',
   styleUrls: ['./mcpserver-details.component.scss']
 })

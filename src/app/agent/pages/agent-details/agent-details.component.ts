@@ -1,5 +1,5 @@
 import { AsyncPipe, DatePipe } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
@@ -47,6 +47,7 @@ import { AgentDetailsViewModel } from './agent-details.viewmodel'
     PortalPageComponent,
     LetDirective
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './agent-details.component.html',
   styleUrls: ['./agent-details.component.scss']
 })
