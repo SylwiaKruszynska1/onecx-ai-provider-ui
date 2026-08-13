@@ -1,6 +1,5 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { isDevMode, NgModule } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
@@ -31,7 +30,6 @@ import { metaReducers, reducers } from './app.reducers'
   imports: [
     AngularAuthModule,
     AppComponent,
-    BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     LetDirective,
