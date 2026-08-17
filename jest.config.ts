@@ -12,7 +12,7 @@ const ignoredPathPatterns: string[] = [
 ]
 
 const config: Config = {
-  displayName: 'onecx-document-ui',
+  displayName: 'onecx-ai-provider-ui',
   testEnvironment: 'jsdom',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
