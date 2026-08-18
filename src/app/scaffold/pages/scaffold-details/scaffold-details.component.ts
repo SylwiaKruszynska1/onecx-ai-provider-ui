@@ -1,11 +1,12 @@
 import { AsyncPipe } from '@angular/common'
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { TabsModule } from 'primeng/tabs'
 import { Observable, map } from 'rxjs'
@@ -26,6 +27,7 @@ type ScaffoldWithTools = Scaffold & { tools?: Tool[] }
     TranslateModule,
     MultiSelectModule,
     FloatLabelModule,
+    InputTextModule,
     TabsModule,
     ReactiveFormsModule,
     AsyncPipe,
@@ -33,7 +35,6 @@ type ScaffoldWithTools = Scaffold & { tools?: Tool[] }
     PortalPageComponent,
     LetDirective
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './scaffold-details.component.html',
   styleUrls: ['./scaffold-details.component.scss']
 })

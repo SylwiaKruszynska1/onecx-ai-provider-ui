@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common'
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { LetDirective } from '@ngrx/component'
@@ -34,7 +34,6 @@ import { SkillDetailsViewModel } from './skill-details.viewmodel'
     PortalPageComponent,
     TooltipModule
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './skill-details.component.html',
   styleUrls: ['./skill-details.component.scss']
 })

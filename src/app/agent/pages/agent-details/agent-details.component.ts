@@ -1,5 +1,5 @@
 import { AsyncPipe, DatePipe } from '@angular/common'
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { LetDirective } from '@ngrx/component'
 import { Store } from '@ngrx/store'
@@ -7,6 +7,7 @@ import { TranslateModule, TranslatePipe } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { TabsModule } from 'primeng/tabs'
@@ -36,6 +37,7 @@ import { AgentDetailsViewModel } from './agent-details.viewmodel'
   imports: [
     TranslateModule,
     ButtonModule,
+    InputTextModule,
     FloatLabelModule,
     AutoCompleteModule,
     ReactiveFormsModule,
@@ -47,7 +49,6 @@ import { AgentDetailsViewModel } from './agent-details.viewmodel'
     PortalPageComponent,
     LetDirective
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './agent-details.component.html',
   styleUrls: ['./agent-details.component.scss']
 })
