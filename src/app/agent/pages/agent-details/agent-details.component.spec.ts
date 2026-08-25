@@ -11,6 +11,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
+import { By } from '@angular/platform-browser'
 
 import { PrimeIcons } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
@@ -180,6 +181,21 @@ describe('AgentDetailsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should keep floatlabel spacing on the container instead of the controls', () => {
+    fixture.detectChanges()
+
+    const floatlabels = fixture.debugElement.queryAll(By.css('p-floatlabel'))
+
+    expect(floatlabels.some((label) => label.nativeElement.classList.contains('pt-3'))).toBe(true)
+    expect(floatlabels.some((label) => label.nativeElement.classList.contains('pb-2'))).toBe(true)
+    expect(fixture.debugElement.query(By.css('#agent_detail_name')).nativeElement.classList.contains('pt-3')).toBe(
+      false,
+    )
+    expect(
+      fixture.debugElement.query(By.css('#agent_detail_name')).nativeElement.classList.contains('pb-2'),
+    ).toBe(false)
   })
 
   it('should display correct breadcrumbs', async () => {

@@ -37,12 +37,12 @@
                 <p-tabpanel value="0">
                   <div class="flex flex-column gap-4 mt-3">
                     <div class="flex flex-column md:flex-row gap-4">
-                      <p-floatlabel variant="on" controlErrorAnchor class="flex-1">
+                      <p-floatlabel variant="on" controlErrorAnchor class="flex-1 pt-3 pb-2">
                         <input
                           pInputText
                           type="text"
                           id="agent_detail_name"
-                          class="w-full pt-3 pb-2 text-responsive"
+                          class="w-full text-responsive"
                           formControlName="name"
                           required
                           aria-required="true"
@@ -52,7 +52,7 @@
                         </label>
                       </p-floatlabel>
 
-                      <p-floatlabel variant="on" controlErrorAnchor class="flex-1">
+                      <p-floatlabel variant="on" controlErrorAnchor class="flex-1 pt-3 pb-2">
                         <p-select
                           inputId="agent_detail_status"
                           formControlName="status"
@@ -77,7 +77,7 @@
                       <textarea
                         pInputText
                         id="agent_detail_description"
-                        class="w-full pt-3 pb-2 text-responsive"
+                        class="w-full text-responsive"
                         rows="3"
                         formControlName="description"
                       ></textarea>
@@ -88,7 +88,7 @@
                       <textarea
                         pInputText
                         id="agent_detail_additional_prompt"
-                        class="w-full pt-3 pb-2 text-responsive"
+                        class="w-full text-responsive"
                         rows="4"
                         formControlName="additionalPrompt"
                       ></textarea>
@@ -175,12 +175,12 @@
                     </p-floatlabel>
 
                     <div class="flex align-items-center gap-2">
-                      <p-floatlabel variant="on" controlErrorAnchor class="flex-1">
+                      <p-floatlabel variant="on" controlErrorAnchor class="flex-1 pt-3 pb-2">
                         <input
                           pInputText
                           type="text"
                           id="agent_detail_new_group_name"
-                          class="w-full pt-3 pb-2 text-responsive"
+                          class="w-full text-responsive"
                           formControlName="newGroupName"
                         />
                         <label for="agent_detail_new_group_name">
@@ -227,14 +227,14 @@
                           <p-floatlabel
                             variant="on"
                             controlErrorAnchor
-                            class="flex-1"
+                            class="flex-1 pt-3 pb-2"
                             style="flex: 2 1 20rem; min-width: 18rem"
                           >
                             <input
                               pInputText
                               type="text"
                               [id]="'agent_detail_filter_value_' + i"
-                              class="w-full pt-3 pb-2 text-responsive"
+                              class="w-full text-responsive"
                               formControlName="value"
                             />
                             <label [for]="'agent_detail_filter_value_' + i">
